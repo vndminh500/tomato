@@ -9,7 +9,6 @@ const FoodDisplay = ({category, currentPage, setCurrentPage}) => {
     const foodDisplayRef = useRef(null);
     const isInitialRender = useRef(true);
 
-    // Pagination Logic
     const itemsPerPage = 12;
     const filteredFoodList = food_list.filter(item => category === "All" || category === item.category);
     const indexOfLastItem = currentPage * itemsPerPage;

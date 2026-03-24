@@ -1,7 +1,6 @@
 import commentModel from '../models/commentModel.js';
 import userModel from '../models/userModel.js';
 
-// Add a new comment
 const addComment = async (req, res) => {
     const { productId, rating, comment } = req.body;
     const userId = req.body.userId;
@@ -29,7 +28,6 @@ const addComment = async (req, res) => {
     }
 };
 
-// Get all comments for a product
 const listComments = async (req, res) => {
     const { productId } = req.params;
 

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const ThankYou = () => {
     const navigate = useNavigate();
 
-    // Generate a random order ID for demonstration
     const orderId = Math.floor(Math.random() * 1000000);
 
     return (

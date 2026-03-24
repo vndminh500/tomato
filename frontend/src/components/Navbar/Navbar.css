@@ -48,10 +48,10 @@
 }
 
 .search-container {
-    position: relative; /* Establish a positioning context */
+    position: relative; 
     display: flex;
     align-items: center;
-    background-color: #f0f0f0; /* Neutral background */
+    background-color: #f0f0f0; 
     border-radius: 25px;
     padding: 8px 12px;
     transition: background-color 0.3s;
@@ -76,19 +76,18 @@
 
 .search-input.active {
     width: 200px;
-    padding-right: 10px; /* Space between text and icon */
+    padding-right: 10px; 
 }
 
 .search-icon {
     width: 20px;
     cursor: pointer;
 }
-/* === Search Bar Styles End === */
 
-/* === Suggestions List Styles Start === */
+
 .suggestions-list {
   position: absolute;
-  top: 45px; /* Adjust this value to position it right below the search bar */
+  top: 45px; 
   left: 0;
   width: 100%;
   background-color: white;
@@ -98,8 +97,8 @@
   z-index: 10;
   max-height: 250px;
   overflow-y: auto;
-  border-radius: 8px; /* Softer corners */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add shadow for depth */
+  border-radius: 8px; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
   border: 1px solid #eee;
   border-top: 1px solid #eee;
 }
@@ -107,14 +106,14 @@
 .suggestions-list li {
   display: flex;
   align-items: center;
-  padding: 12px 15px; /* Increase padding for more space */
+  padding: 12px 15px; 
   cursor: pointer;
-  transition: background-color 0.2s; /* Smooth hover effect */
+  transition: background-color 0.2s; 
 }
 
 .suggestions-list li:hover,
 .suggestions-list li.active {
-  background-color: #f0f0f0; /* Lighter hover color */
+  background-color: #f0f0f0; 
 }
 
 .suggestions-list li:first-child {
@@ -129,9 +128,9 @@
 
 
 .suggestions-list img {
-  width: 45px; /* Slightly smaller image */
+  width: 45px; 
   height: 45px;
-  margin-right: 15px; /* More space between image and text */
+  margin-right: 15px; 
   object-fit: cover;
   border-radius: 5px;
 }
@@ -146,7 +145,6 @@
     color: #888;
     text-align: center;
 }
-/* === Suggestions List Styles End === */
 
 .navbar-search-icon {
     position: relative;
@@ -201,7 +199,6 @@
     color: tomato;
 }
 
-/* === Media Queries === */
 @media (max-width:1050px) {
     .navbar .logo {
         width: 140px;

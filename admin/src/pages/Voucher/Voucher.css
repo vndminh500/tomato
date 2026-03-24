@@ -1,6 +1,3 @@
-/* Voucher.css */
-
-/* Kế thừa style từ trang Add để đồng bộ margin và màu sắc */
 .voucher.add {
     width: 70%;
     margin-left: max(5vw, 25px);
@@ -37,10 +34,8 @@
     background-color: #e5533d;
 }
 
-/* Định dạng bảng Voucher - Đồng bộ Grid với trang List */
 .list-table-format {
     display: grid;
-    /* Chia 5 cột: Code | Discount | Date | Min Order | Remove */
     grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 0.5fr;
     gap: 10px;
     padding: 12px 15px;
@@ -55,7 +50,6 @@
     font-weight: 600;
 }
 
-/* Nút Remove (X) chuyên nghiệp */
 .remove-voucher-btn {
     cursor: pointer;
     
@@ -82,7 +76,6 @@
     z-index: 1000;
 }
 
-/* Form trong Popup */
 .add-voucher-form {
     background-color: white;
     padding: 30px;
@@ -110,7 +103,7 @@
     color: #555;
 }
 
-/* Form Group đồng bộ với các ô Input ở trang Add */
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -129,7 +122,6 @@
     outline-color: tomato;
 }
 
-/* Nút submit trong form */
 .add-voucher-form button[type='submit'] {
     background-color: tomato;
     color: white;
@@ -151,7 +143,6 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .list-table-format {
         grid-template-columns: 1fr 0.5fr 1fr 0.5fr;
@@ -159,6 +150,6 @@
     }
     .list-table-format b:nth-child(4), 
     .list-table-format p:nth-child(4) {
-        display: none; /* Ẩn cột Min Order trên mobile */
+        display: none;
     }
 }

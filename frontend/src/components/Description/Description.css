@@ -1,18 +1,14 @@
-/* Description.css */
-
 .product-description {
     margin: 60px 0;
     padding: 40px;
     background-color: #fff;
     border-radius: 15px;
-    /* Đổ bóng nhẹ tông Tomato */
     box-shadow: 0 5px 25px rgba(255, 99, 71, 0.08);
     border: 1px solid #f1f1f1;
     line-height: 1.8;
     color: #444;
 }
 
-/* Tiêu đề chính: Detailed Description */
 .product-description h2 {
     color: tomato;
     font-size: 2rem;
@@ -32,7 +28,6 @@
     border-radius: 2px;
 }
 
-/* Các tiêu đề phụ: Nutritional, Allergen, Cooking Process */
 .product-description h3 {
     color: #333;
     font-size: 1.4rem;
@@ -42,7 +37,6 @@
     align-items: center;
 }
 
-/* Thêm một dấu chấm nhỏ màu Tomato trước h3 */
 .product-description h3::before {
     content: '';
     width: 8px;
@@ -52,7 +46,6 @@
     margin-right: 12px;
 }
 
-/* Nội dung văn bản */
 .product-description p {
     margin-bottom: 20px;
     font-size: 1.05rem;
@@ -60,14 +53,13 @@
     text-align: justify;
 }
 
-/* Danh sách dinh dưỡng */
 .product-description ul {
     list-style: none;
     padding-left: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
-    background: rgba(255, 99, 71, 0.03); /* Nền cực nhạt */
+    background: rgba(255, 99, 71, 0.03); 
     padding: 20px;
     border-radius: 10px;
 }
@@ -76,10 +68,9 @@
     font-weight: 500;
     color: #444;
     padding: 5px 10px;
-    border-left: 3px solid tomato; /* Vạch cam bên cạnh mỗi chỉ số */
+    border-left: 3px solid tomato; 
 }
 
-/* Responsive cho điện thoại */
 @media (max-width: 768px) {
     .product-description {
         padding: 25px;

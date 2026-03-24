@@ -1,9 +1,8 @@
-/* Privacy.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 .privacy-policy {
     font-family: 'Poppins', sans-serif;
-    max-width: 850px; /* Rộng hơn một chút để dễ đọc văn bản pháp lý */
+    max-width: 850px;
     margin: 50px auto;
     padding: 40px;
     background-color: #ffffff;
@@ -14,13 +13,11 @@
     transition: all 0.3s ease;
 }
 
-/* Hiệu ứng đổ bóng nhẹ khi hover để đồng bộ với trang Delivery */
 .privacy-policy:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(255, 99, 71, 0.15);
 }
 
-/* Tiêu đề chính */
 .privacy-policy h1 {
     color: tomato;
     font-size: 2.5rem;
@@ -39,9 +36,8 @@
     border-radius: 10px;
 }
 
-/* Tiêu đề phụ - Giữ nguyên phong cách border-left của Delivery */
 .privacy-policy h2 {
-    color: #2c3e50; /* Màu tối hơn một chút tạo cảm giác tin cậy */
+    color: #2c3e50; 
     font-size: 1.4rem;
     margin-top: 35px;
     margin-bottom: 15px;
@@ -54,22 +50,19 @@
     color: tomato;
 }
 
-/* Nội dung văn bản */
 .privacy-policy p {
     margin-bottom: 20px;
     color: #555;
     font-size: 1.05rem;
 }
 
-/* Tạo khối nhẹ cho các phần nội dung quan trọng */
 .privacy-policy h2 + p {
-    background: rgba(255, 99, 71, 0.03); /* Màu nền siêu nhạt */
+    background: rgba(255, 99, 71, 0.03); 
     padding: 20px;
     border-radius: 12px;
     border: 1px solid rgba(255, 99, 71, 0.1);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .privacy-policy {
         margin: 20px;

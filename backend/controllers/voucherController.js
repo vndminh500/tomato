@@ -1,6 +1,5 @@
 import VoucherModel from '../models/voucherModel.js';
 
-// Add a new voucher
 const addVoucher = async (req, res) => {
     const { code, discountPercent, expiryDate, minOrderAmount } = req.body;
 
@@ -30,7 +29,7 @@ const addVoucher = async (req, res) => {
     }
 };
 
-// List all vouchers
+
 const listVouchers = async (req, res) => {
     try {
         const vouchers = await VoucherModel.find({});
@@ -41,7 +40,7 @@ const listVouchers = async (req, res) => {
     }
 };
 
-// Validate a voucher
+
 const validateVoucher = async (req, res) => {
     const { code, minOrderAmount } = req.body;
 
@@ -70,7 +69,7 @@ const validateVoucher = async (req, res) => {
     }
 };
 
-// Remove a voucher
+
 const removeVoucher = async (req, res) => {
     try {
         const { id } = req.body;

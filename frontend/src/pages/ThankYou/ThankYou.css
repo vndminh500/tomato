@@ -1,5 +1,3 @@
-/* ThankYou.css */
-
 .thank-you {
     display: flex;
     flex-direction: column;
@@ -21,11 +19,10 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Biểu tượng Checkmark */
 .thank-you .icon {
     width: 80px;
     height: 80px;
-    background-color: #4CAF50; /* Màu xanh lá thành công */
+    background-color: #4CAF50;
     color: white;
     border-radius: 50%;
     display: flex;
@@ -42,7 +39,6 @@
     to { transform: scale(1); }
 }
 
-/* Tiêu đề và văn bản */
 .thank-you h1 {
     color: #333;
     font-size: 2rem;
@@ -57,10 +53,9 @@
 }
 
 .thank-you p strong {
-    color: tomato; /* Nhấn mạnh mã đơn hàng bằng màu Tomato */
+    color: tomato;
 }
 
-/* Khu vực nút bấm */
 .thank-you .buttons {
     display: flex;
     gap: 20px;
@@ -76,7 +71,7 @@
     transition: all 0.3s ease;
 }
 
-/* Nút Về trang chủ - Viền Tomato */
+
 .thank-you .home-btn {
     background-color: transparent;
     color: tomato;
@@ -90,7 +85,6 @@
     box-shadow: 0 5px 15px rgba(255, 99, 71, 0.3);
 }
 
-/* Nút Xem đơn hàng - Nền Tomato */
 .thank-you .orders-btn {
     background-color: transparent;
     color: tomato;
@@ -105,7 +99,6 @@
     box-shadow: 0 5px 15px rgba(255, 99, 71, 0.3);
 }
 
-/* Responsive cho Mobile */
 @media (max-width: 480px) {
     .thank-you {
         margin: 20px;

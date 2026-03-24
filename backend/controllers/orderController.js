@@ -5,7 +5,6 @@ import vnpay from "../config/vnpay.js";
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
 
-//placing user order for frontend
 const placeOrder = async (req,res) =>{
     try {
         const newOrder = new orderModel({
@@ -52,7 +51,6 @@ const placeOrder = async (req,res) =>{
     }
 }
 
-//user orders for frontend
 const userOrders = async (req,res) => {
     try {
         const orders = await orderModel.find({
@@ -69,7 +67,6 @@ const userOrders = async (req,res) => {
     }
 }   
 
-//listing orders for admin panel
 const listOrders = async (req,res)=> {
     try {
         const orders = await orderModel.find({});
@@ -80,7 +77,6 @@ const listOrders = async (req,res)=> {
     }
 }
 
-// api for updating order status
 const updateStatus = async (req,res) => {
     try {
         await orderModel.findByIdAndUpdate(req.body.orderId,{status:req.body.status});

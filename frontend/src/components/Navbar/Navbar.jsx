@@ -42,7 +42,7 @@ const Navbar = ({ setShowLogin }) => {
     } else {
       setFilteredFood([]);
     }
-    setActiveIndex(-1); // Reset active index when search value changes
+    setActiveIndex(-1); 
   }, [debouncedSearchValue, food_list]);
 
   const logout = () => {
