@@ -1,0 +1,77 @@
+.sidebar {
+    width: 18%;
+    min-height: 100vh;
+    border: 1.5px solid #a9a9a9;
+    border-top: none;
+    font-size: max(1vw, 10px);
+}
+
+.sidebar-options {
+    padding-top: 50px;
+    padding-left: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #a9a9a9;
+    border-right: 0;
+    padding: 8px 10px;
+    border-radius: 3px 0 0 3px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.sidebar-option img {
+    width: 25px;
+}
+
+.sidebar-option p {
+    display: block; /* Mặc định hiện chữ */
+}
+
+/* --- TRẠNG THÁI ACTIVE (Quan trọng nhất) --- */
+
+/* NavLink tự động thêm class .active khi đường dẫn khớp */
+.sidebar-option.active {
+    background-color: #fff4f2; /* Nền hồng nhạt cực nhẹ */
+    color: tomato;
+    border-color: tomato;
+    font-weight: 600;
+}
+
+.sidebar-option.active img {
+    /* Nếu icon là SVG đơn sắc, bạn có thể dùng filter để đổi màu icon sang tomato */
+    /* filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(341deg) brightness(101%) contrast(101%); */
+}
+
+/* Hiệu ứng hover cho các mục chưa chọn */
+.sidebar-option:hover:not(.active) {
+    background-color: #f9f9f9;
+    border-color: #888;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 900px) {
+    .sidebar {
+        width: 15%;
+    }
+    .sidebar-option p {
+        display: none; /* Ẩn chữ trên mobile, chỉ để lại icon */
+    }
+    .sidebar-options {
+        padding-left: 15%;
+    }
+}
+
+@media (max-width: 600px) {
+    .sidebar {
+        width: 20%;
+    }
+}

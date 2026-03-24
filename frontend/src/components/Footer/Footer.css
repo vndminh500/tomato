@@ -27,12 +27,18 @@
     margin-bottom: 10px;
     cursor: pointer;
 }
+.footer-content-left img {
+    cursor: pointer;
+}
 
 .footer-content-right li:hover, .footer-content-center li:hover {
-    font-size: 17px;
+    font-size: 16px;
+    color: tomato;
+    font-weight: 500;
+    transition: 0.3s;
 }
 .footer-content-right h2 , .footer-content-center h2 {
-    color: white;
+    color: rgb(255, 79, 48);
 }
 
 .footer-social-icons img {

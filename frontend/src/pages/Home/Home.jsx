@@ -7,13 +7,14 @@ import AppDownload from '../../components/AppDownload/AppDownload'
 
 const Home = () => {
 
-    const [category, setCategory] = useState("All")
+    const [category, setCategory] = useState("All");
+    const [currentPage, setCurrentPage] = useState(1);
 
   return (
     <div>
       <Header/>
       <ExploreMenu category={category} setCategory = {setCategory} />
-      <FoodDisplay category={category}/>
+      <FoodDisplay category={category} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
       <AppDownload/>
     </div>
   )

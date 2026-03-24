@@ -13,4 +13,51 @@
     margin-top: 30px;
     gap: 30px;
     row-gap: 50px;
+    animation: fadeIn 1s;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 40px 0;
+}
+
+.pagination button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination button.active {
+    background-color: tomato;
+    color: #fff;
+    border-color: tomato;
+}
+
+.pagination button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .pagination button {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
 }

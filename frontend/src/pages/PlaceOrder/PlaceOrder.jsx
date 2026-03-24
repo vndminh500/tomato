@@ -1,13 +1,13 @@
-import React ,{useContext, useEffect, useState} from 'react'
-import './PlaceOrder.css'
-import { StoreContext } from '../../context/StoreContext'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-
+import React, { useContext, useEffect, useState } from 'react';
+import './PlaceOrder.css';
+import { StoreContext } from '../../context/StoreContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const PlaceOrder = () => {
 
-  const {getTotalCartAmount,token,food_list,cartItems,url} = useContext(StoreContext)
+  const {getTotalCartAmount,token,food_list,cartItems,url, clearCart} = useContext(StoreContext)
 
   const [data,setData] = useState({
     firstName:"",
@@ -27,28 +27,50 @@ const PlaceOrder = () => {
     setData(data=>({...data,[name]:value}))
   }
 
-  const PlaceOrder = async (event) => {
+  const [paymentMethod, setPaymentMethod] = useState('stripe');
+
+  const placeOrder = async (event) => {
     event.preventDefault();
+    if (!paymentMethod) {
+      toast.error("Please select a payment method");
+      return;
+    }
+
     let orderItems = [];
-    food_list.map((item)=>{
-      if (cartItems[item._id]>0) {
+    food_list.map((item) => {
+      if (cartItems[item._id] > 0) {
         let itemInfo = item;
         itemInfo["quantity"] = cartItems[item._id];
         orderItems.push(itemInfo)
       }
     })
     let orderData = {
-      address:data,
-      items:orderItems,
-      amount:getTotalCartAmount() +2,
+      address: data,
+      items: orderItems,
+      amount: getTotalCartAmount() + 2,
+      paymentMethod: paymentMethod
     }
-    let response = await axios.post(url+"/api/order/place",orderData,{headers:{token}})
-    if (response.data.success) {
-      const {session_url} = response.data;
-      window.location.replace(session_url);
+
+    if (paymentMethod === 'stripe') {
+      let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } })
+      if (response.data.success) {
+        const { session_url } = response.data;
+        window.location.replace(session_url);
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     }
-    else {
-      alert("Please log in before making a purchase.");
+    else if (paymentMethod === 'cod') {
+      let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } })
+      if (response.data.success) {
+        toast.success("Order placed successfully");
+        navigate('/thank-you');
+        clearCart();
+      }
+      else {
+        toast.error("Something went wrong");
+      }
     }
   }
 
@@ -63,9 +85,9 @@ const PlaceOrder = () => {
   },[token])
 
   return (
-    <form onSubmit={PlaceOrder} className='place-order'>
+    <form onSubmit={placeOrder} className='place-order'>
       <div className="place-order-left">
-        <p className="title">Thông tin vận chuyển</p>
+        <p className="title">Delivery Information</p>
         <div className='multi-fields'>
           <input required name='firstName' onChange={onChangeHandler} value={data.firstName} type="text" placeholder='First name' />
           <input required name='lastName' onChange={onChangeHandler} value={data.lastName} type="text" placeholder='Last name' />
@@ -84,6 +106,19 @@ const PlaceOrder = () => {
         </div>
 
         <input required name='phone' onChange={onChangeHandler} value={data.phone} type="text" placeholder='Phone number' />
+        <div className="place-order-payment">
+          <p className="title">Payment Method</p>
+          <div className="payment-options">
+            <label>
+              <input type="radio" name="paymentMethod" value="stripe" checked={paymentMethod === 'stripe'} onChange={() => setPaymentMethod('stripe')} />
+              Online Payment
+            </label>
+            <label>
+              <input type="radio" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} />
+              Cash on Delivery
+            </label>
+          </div>
+        </div>
       </div>
       
       <div className="place-order-right">

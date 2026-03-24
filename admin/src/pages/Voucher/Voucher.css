@@ -1,0 +1,103 @@
+.voucher-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+.voucher-header p {
+    font-size: 18px;
+    font-weight: 600;
+    color: #505050;
+}
+
+.voucher-header button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: tomato; 
+    color: white;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.3s;
+}
+.voucher-header button:hover {
+    background-color: #e5533d;
+}
+.add-voucher-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.add-voucher-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: max(30vw, 350px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    animation: fadeIn 0.3s outline;
+}
+
+.add-voucher-form h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #404040;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 25px;
+    cursor: pointer;
+    color: #555;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #6d6d6d;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #cacaca;
+    border-radius: 4px;
+    outline-color: tomato;
+}
+
+.add-voucher-form button[type="submit"] {
+    margin-top: 10px;
+    padding: 12px;
+    background-color: tomato;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.add-voucher-form button[type="submit"]:hover {
+    background-color: rgb(240, 69, 39);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}

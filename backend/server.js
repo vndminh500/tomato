@@ -6,6 +6,8 @@ import userRouter from "./routes/userRoute.js"
 import 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
+import commentRouter from "./routes/commentRoute.js"
+import voucherRouter from './routes/voucherRoute.js';
 
 
 
@@ -27,6 +29,8 @@ app.use("/images",express.static('uploads'))
 app.use("/api/user",userRouter)
 app.use("/api/cart",cartRouter)
 app.use("/api/order",orderRouter)
+app.use("/api/comment",commentRouter)
+app.use('/api/voucher', voucherRouter);
 
 // Kiểm tra xem server có đang hoạt động hay không
 app.get("/",(req,res)=> {

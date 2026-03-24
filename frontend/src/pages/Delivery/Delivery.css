@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+.delivery-policy {
+    font-family: 'Poppins', sans-serif;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    line-height: 1.6;
+    color: #333;
+    transition: transform 0.3s ease;
+}
+
+.delivery-policy:hover {
+    transform: translateY(-5px);
+}
+
+.delivery-policy h1 {
+    color: tomato;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    font-weight: 600;
+}
+
+.delivery-policy h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: tomato;
+    margin: 10px auto;
+    border-radius: 2px;
+}
+
+
+.delivery-policy h2 {
+    color: #444;
+    font-size: 1.4rem;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    border-left: 5px solid tomato;
+    padding-left: 15px;
+}
+
+
+.delivery-policy p {
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 1.05rem;
+}
+
+
+.delivery-policy h2 + p {
+    background: rgba(255, 99, 71, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+
+@media (max-width: 768px) {
+    .delivery-policy {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    .delivery-policy h1 {
+        font-size: 1.8rem;
+    }
+
+    .delivery-policy h2 {
+        font-size: 1.2rem;
+    }
+}

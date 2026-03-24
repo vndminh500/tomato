@@ -35,10 +35,10 @@
 }
 
 .navbar button:hover {
-    background-color: tomato;
+    background-color: #fff4f2;
 }
 
-.navbar .active {
+.navbar-menu .active {
     padding-bottom: 2px;
     border-bottom: 2px solid #49557e ;
 }
@@ -46,6 +46,107 @@
 .navbar li {
     cursor: pointer;
 }
+
+.search-container {
+    position: relative; /* Establish a positioning context */
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; /* Neutral background */
+    border-radius: 25px;
+    padding: 8px 12px;
+    transition: background-color 0.3s;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    width: 0;
+    padding: 0;
+    transition: width 0.4s ease-in-out;
+    font-size: 16px;
+    color: #49557e;
+}
+
+.search-input::placeholder {
+    color: #9a9a9a;
+}
+
+.search-input.active {
+    width: 200px;
+    padding-right: 10px; /* Space between text and icon */
+}
+
+.search-icon {
+    width: 20px;
+    cursor: pointer;
+}
+/* === Search Bar Styles End === */
+
+/* === Suggestions List Styles Start === */
+.suggestions-list {
+  position: absolute;
+  top: 45px; /* Adjust this value to position it right below the search bar */
+  left: 0;
+  width: 100%;
+  background-color: white;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 8px; /* Softer corners */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add shadow for depth */
+  border: 1px solid #eee;
+  border-top: 1px solid #eee;
+}
+
+.suggestions-list li {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px; /* Increase padding for more space */
+  cursor: pointer;
+  transition: background-color 0.2s; /* Smooth hover effect */
+}
+
+.suggestions-list li:hover,
+.suggestions-list li.active {
+  background-color: #f0f0f0; /* Lighter hover color */
+}
+
+.suggestions-list li:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.suggestions-list li:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+.suggestions-list img {
+  width: 45px; /* Slightly smaller image */
+  height: 45px;
+  margin-right: 15px; /* More space between image and text */
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.suggestions-list span {
+    color: #333;
+    font-size: 15px;
+}
+
+.no-suggestions {
+    padding: 12px 15px;
+    color: #888;
+    text-align: center;
+}
+/* === Suggestions List Styles End === */
 
 .navbar-search-icon {
     position: relative;
@@ -61,6 +162,46 @@
     right: -8px;
 }
 
+.navbar-profile {
+    position: relative;
+}
+
+.navbar-profile-dropdown {
+    position: absolute;
+    display: none;
+    right: 0;
+    z-index: 1;
+}
+
+.navbar-profile:hover .navbar-profile-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff2ef;
+    padding: 12px 25px;
+    border-radius: 4px;
+    border: 1px solid tomato;
+    outline: 0.1px solid white;
+    list-style: none;
+}
+
+.navbar-profile-dropdown li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.navbar-profile-dropdown img {
+    width: 20px;
+}
+
+.navbar-profile-dropdown li:hover {
+    color: tomato;
+}
+
+/* === Media Queries === */
 @media (max-width:1050px) {
     .navbar .logo {
         width: 140px;
@@ -106,45 +247,10 @@
         padding: 7px 20px;
         font-size: 15px;
     }
-}
 
-.navbar-profile {
-    position: relative;
-}
-
-.navbar-profile-dropdown {
-    position: absolute;
-    display: none;
-    right: 0;
-    z-index: 1;
-}
-
-.navbar-profile:hover .navbar-profile-dropdown {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #fff2ef;
-    padding: 12px 25px;
-    border-radius: 4px;
-    border: 1px solid tomato;
-    outline: 0.1px solid white;
-    list-style: none;
-}
-
-.navbar-profile-dropdown li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.navbar-profile-dropdown img {
-    width: 20px;
-}
-
-.navbar-profile-dropdown li:hover {
-    color: tomato;
+    .search-input.active {
+        width: 150px;
+    }
 }
 
 @media (max-width:750px) {
