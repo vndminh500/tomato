@@ -11,9 +11,39 @@ const StoreContextProvider = (props) => {
     const url = "http://localhost:4000"
 
     const [token,setToken] = useState("")
-
     const [food_list,setFoodList] = useState([])
+    const [promoCode, setPromoCode] = useState('');
+    const [discount, setDiscount] = useState(0);
+    const [discountAmount, setDiscountAmount] = useState(0);
+    const [message, setMessage] = useState('');
 
+
+    const applyPromoCode = async (code) => {
+        try {
+            const response = await axios.post(`${url}/api/voucher/validate`, {
+                code,
+                minOrderAmount: getTotalCartAmount()
+            }, { headers: { token } });
+    
+            if (response.data.success) {
+                const discountValue = parseFloat(response.data.voucher.discountPercent);
+                setDiscount(discountValue);
+                setDiscountAmount(getTotalCartAmount() * discountValue / 100);
+                setMessage('Voucher successfully applied.');
+                setPromoCode(code);
+            } else {
+                setDiscount(0);
+                setDiscountAmount(0);
+                setMessage(response.data.message);
+                setPromoCode('');
+            }
+        } catch (error) {
+            setDiscount(0);
+            setDiscountAmount(0);
+            setMessage('Voucher code does not exist or is ineligible.');
+            setPromoCode('');
+        }
+    };
 
     const addToCart = async (itemId) => {
         if (!cartItems[itemId]) {
@@ -35,25 +65,12 @@ const StoreContextProvider = (props) => {
         }
     }
 
-    // const getTotalCartAmount = () => {
-    //     let totalAmount =0;
-    //     for(const item in cartItems) {
-    //         if (cartItems[item]>0){
-    //             let itemInfo = food_list.find((product)=>product._id ===item);
-    //             totalAmount += itemInfo.price * cartItems[item];
-    //         }
-    //     }
-    //     return totalAmount;
-    // }
-
     const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
         if (cartItems[item] > 0) {
-            // Tìm sản phẩm trong food_list
             let itemInfo = food_list.find((product) => product._id === item);
             
-            // CHỖ SỬA: Chỉ cộng tiền nếu tìm thấy thông tin sản phẩm
             if (itemInfo) {
                 totalAmount += itemInfo.price * cartItems[item];
             }
@@ -71,6 +88,13 @@ const StoreContextProvider = (props) => {
         const response = await axios.post(url+"/api/cart/get",{},{headers:{token}})
         setCartItems(response.data.cartData);
     }
+
+    useEffect(()=>{
+        if (discount > 0) {
+          const discountValue = parseFloat(discount);
+          setDiscountAmount(getTotalCartAmount() * discountValue / 100);
+        }
+      }, [cartItems, discount, getTotalCartAmount]);
 
     useEffect(()=>{
 
@@ -99,7 +123,14 @@ const StoreContextProvider = (props) => {
         url,
         token,
         setToken,
-        clearCart
+        clearCart,
+        promoCode,
+        discount,
+        discountAmount,
+        message,
+        applyPromoCode,
+        setPromoCode,
+        setMessage
     }
     return (
         <StoreContext.Provider value={contextValue}>

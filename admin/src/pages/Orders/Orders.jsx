@@ -69,11 +69,15 @@ const Orders = ({url}) => {
             </div>
             <p>Items: {order.items.length}</p>
             <p>${order.amount}</p>
-            <select onChange={(event)=>statusHandler(event,order._id)} value={order.status}>
-              <option value="Food Processing">Food Processing</option>
-              <option value="Out for delivery">Out for delivery</option>
-              <option value="Delivered">Delivered</option>
-            </select>
+            {order.paymentMethod === "vnpay" && !order.payment ? (
+              <div className="order-failed-box">Giao dịch thất bại</div>
+            ) : (
+              <select onChange={(event)=>statusHandler(event,order._id)} value={order.status}>
+                <option value="Food Processing">Food Processing</option>
+                <option value="Out for delivery">Out for delivery</option>
+                <option value="Delivered">Delivered</option>
+              </select>
+            )}
           </div>
         ))}
       </div>

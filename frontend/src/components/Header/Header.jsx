@@ -12,9 +12,11 @@ const Header = () => {
              culinary expertise. Our mission is to satisfy your cravings and elevate your dining experience, 
              one delicious meal at a time.
             </p>
-            <button>
+            <a href="/#explore-menu">
+              <button>
                 View Menu
-            </button>
+              </button>
+            </a>
         </h2>
       </div>
     </div>

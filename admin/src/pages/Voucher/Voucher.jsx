@@ -53,6 +53,20 @@ const Voucher = ({ url }) => {
         setNewVoucher({ ...newVoucher, [name]: value });
     };
 
+    const handleRemoveVoucher = async (voucherId) => {
+        try {
+            const response = await axios.post(`${url}/api/voucher/remove`, { id: voucherId });
+            if (response.data.success) {
+                toast.success('Voucher removed successfully');
+                fetchVouchers();
+            } else {
+                toast.error(response.data.message || 'Error removing voucher');
+            }
+        } catch (error) {
+            toast.error('Error removing voucher');
+        }
+    };
+
     useEffect(() => {
         fetchVouchers();
     }, []);
@@ -69,6 +83,7 @@ const Voucher = ({ url }) => {
                     <b>Discount (%)</b>
                     <b>Date</b>
                     <b>Min Order Amount ($)</b>
+                    <b>Remove</b>
                 </div>
                 {vouchers.map((item, index) => (
                     <div key={index} className='list-table-format'>
@@ -76,6 +91,7 @@ const Voucher = ({ url }) => {
                         <p>{item.discountPercent}</p>
                         <p>{new Date(item.expiryDate).toLocaleDateString()}</p>
                         <p>{item.minOrderAmount}</p>
+                        <p className='remove-voucher-btn' onClick={() => handleRemoveVoucher(item._id)}>X</p>
                     </div>
                 ))}
             </div>

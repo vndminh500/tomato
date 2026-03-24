@@ -7,7 +7,7 @@ import { toast } from 'react-hot-toast';
 
 const PlaceOrder = () => {
 
-  const {getTotalCartAmount,token,food_list,cartItems,url, clearCart} = useContext(StoreContext)
+  const {getTotalCartAmount,token,food_list,cartItems,url, clearCart, discountAmount} = useContext(StoreContext)
 
   const [data,setData] = useState({
     firstName:"",
@@ -27,7 +27,7 @@ const PlaceOrder = () => {
     setData(data=>({...data,[name]:value}))
   }
 
-  const [paymentMethod, setPaymentMethod] = useState('stripe');
+  const [paymentMethod, setPaymentMethod] = useState('vnpay');
 
   const placeOrder = async (event) => {
     event.preventDefault();
@@ -47,15 +47,17 @@ const PlaceOrder = () => {
     let orderData = {
       address: data,
       items: orderItems,
-      amount: getTotalCartAmount() + 2,
+      amount: getTotalCartAmount() - discountAmount + 2,
       paymentMethod: paymentMethod
     }
+    console.log("Placing order with payment method:", paymentMethod);
+    console.log("Order data:", orderData);
 
-    if (paymentMethod === 'stripe') {
+    if (paymentMethod === 'vnpay') {
       let response = await axios.post(url + "/api/order/place", orderData, { headers: { token } })
       if (response.data.success) {
-        const { session_url } = response.data;
-        window.location.replace(session_url);
+        const { vnpayUrl } = response.data;
+        window.location.replace(vnpayUrl);
       }
       else {
         toast.error("Something went wrong");
@@ -110,7 +112,7 @@ const PlaceOrder = () => {
           <p className="title">Payment Method</p>
           <div className="payment-options">
             <label>
-              <input type="radio" name="paymentMethod" value="stripe" checked={paymentMethod === 'stripe'} onChange={() => setPaymentMethod('stripe')} />
+              <input type="radio" name="paymentMethod" value="vnpay" checked={paymentMethod === 'vnpay'} onChange={() => setPaymentMethod('vnpay')} />
               Online Payment
             </label>
             <label>
@@ -130,6 +132,15 @@ const PlaceOrder = () => {
               <p>${getTotalCartAmount()}</p>
             </div>
             <hr />
+            {discountAmount > 0 && (
+              <>
+                <div className="cart-total-details">
+                  <p>Discount</p>
+                  <p>- ${discountAmount.toFixed(2)}</p>
+                </div>
+                <hr />
+              </>
+            )}
             <div className="cart-total-details">
               <p>Delivery Fee</p>
               <p>${2}</p>
@@ -137,7 +148,7 @@ const PlaceOrder = () => {
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>${getTotalCartAmount()+2}</b>
+              <b>${(getTotalCartAmount() - discountAmount + 2).toFixed(2)}</b>
             </div>
           </div>
           <button type='submit'>PROCEED TO PAYMENT</button>

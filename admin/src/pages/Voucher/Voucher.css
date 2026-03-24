@@ -1,103 +1,164 @@
+/* Voucher.css */
+
+/* Kế thừa style từ trang Add để đồng bộ margin và màu sắc */
+.voucher.add {
+    width: 70%;
+    margin-left: max(5vw, 25px);
+    margin-top: 50px;
+    color: #6d6d6d;
+}
+
 .voucher-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
+    width: 100%;
     margin-bottom: 20px;
 }
 
 .voucher-header p {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
-    color: #505050;
+    color: #404040;
 }
 
 .voucher-header button {
     padding: 10px 20px;
+    background-color: tomato;
+    color: white;
     border: none;
     border-radius: 5px;
-    background-color: tomato; 
-    color: white;
     cursor: pointer;
     font-weight: 500;
     transition: 0.3s;
 }
+
 .voucher-header button:hover {
     background-color: #e5533d;
 }
+
+/* Định dạng bảng Voucher - Đồng bộ Grid với trang List */
+.list-table-format {
+    display: grid;
+    /* Chia 5 cột: Code | Discount | Date | Min Order | Remove */
+    grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 0.5fr;
+    gap: 10px;
+    padding: 12px 15px;
+    border: 1px solid #cacaca;
+    align-items: center;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.list-table-format.title {
+    background-color: #f9f9f9;
+    font-weight: 600;
+}
+
+/* Nút Remove (X) chuyên nghiệp */
+.remove-voucher-btn {
+    cursor: pointer;
+    
+    color: #555;
+    transition: 0.2s;
+}
+
+.remove-voucher-btn:hover {
+    color: tomato;
+    font-weight: 700;
+}
+
+/* Popup Overlay */
 .add-voucher-popup {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
+/* Form trong Popup */
 .add-voucher-form {
     background-color: white;
     padding: 30px;
     border-radius: 10px;
-    width: max(30vw, 350px);
-    position: relative;
+    width: max(30vw, 400px);
     display: flex;
     flex-direction: column;
     gap: 15px;
-    animation: fadeIn 0.3s outline;
+    position: relative;
+    animation: fadeIn 0.3s ease;
 }
 
 .add-voucher-form h2 {
+    color: #404040;
     font-size: 20px;
     margin-bottom: 10px;
-    color: #404040;
 }
 
 .close-btn {
     position: absolute;
     top: 15px;
     right: 20px;
-    font-size: 25px;
+    font-size: 28px;
     cursor: pointer;
     color: #555;
 }
 
+/* Form Group đồng bộ với các ô Input ở trang Add */
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 5px;
 }
 
 .form-group label {
     font-size: 14px;
-    color: #6d6d6d;
+    font-weight: 500;
 }
 
 .form-group input {
     padding: 10px;
-    border: 1px solid #cacaca;
+    border: 1px solid #c9c9c9;
     border-radius: 4px;
     outline-color: tomato;
 }
 
-.add-voucher-form button[type="submit"] {
-    margin-top: 10px;
-    padding: 12px;
+/* Nút submit trong form */
+.add-voucher-form button[type='submit'] {
     background-color: tomato;
     color: white;
+    padding: 12px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
 }
-.add-voucher-form button[type="submit"]:hover {
-    background-color: rgb(240, 69, 39);
+
+.add-voucher-form button[type='submit']:hover {
+    background-color: #e5533d;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .list-table-format {
+        grid-template-columns: 1fr 0.5fr 1fr 0.5fr;
+        font-size: 12px;
+    }
+    .list-table-format b:nth-child(4), 
+    .list-table-format p:nth-child(4) {
+        display: none; /* Ẩn cột Min Order trên mobile */
+    }
 }

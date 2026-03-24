@@ -8,6 +8,9 @@ const FoodItem = ({id,name,price,description,image}) => {
 
     const {cartItems,addToCart,removeFromCart,url} = useContext(StoreContext);
 
+    if (!cartItems) {
+        return null; // or a loading indicator
+    }
 
   return (
     <div className='food-item'>

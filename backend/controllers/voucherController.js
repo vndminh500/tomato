@@ -70,4 +70,24 @@ const validateVoucher = async (req, res) => {
     }
 };
 
-export { addVoucher, listVouchers, validateVoucher };
+// Remove a voucher
+const removeVoucher = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).json({ success: false, message: 'Voucher id is required.' });
+        }
+
+        const deletedVoucher = await VoucherModel.findByIdAndDelete(id);
+        if (!deletedVoucher) {
+            return res.status(404).json({ success: false, message: 'Voucher not found.' });
+        }
+
+        return res.json({ success: true, message: 'Voucher removed successfully.' });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
+    }
+};
+
+export { addVoucher, listVouchers, validateVoucher, removeVoucher };

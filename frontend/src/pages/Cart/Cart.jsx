@@ -6,44 +6,21 @@ import axios from 'axios';
 
 const Cart = () => {
 
-  const {cartItems, food_list,removeFromCart,getTotalCartAmount, url, token} = useContext(StoreContext);
-  const [promoCode, setPromoCode] = useState('');
-  const [discount, setDiscount] = useState(0);
-  const [message, setMessage] = useState('');
-  const [discountAmount, setDiscountAmount] = useState(0);
+  const {cartItems, food_list,removeFromCart,getTotalCartAmount, url, token, promoCode, discount, discountAmount, message, applyPromoCode, setPromoCode, setMessage} = useContext(StoreContext);
+  const [inputPromoCode, setInputPromoCode] = useState('');
 
   const navigate = useNavigate();
 
-  const applyPromoCode = async () => {
-    try {
-        const response = await axios.post(`${url}/api/voucher/validate`, {
-            code: promoCode,
-            minOrderAmount: getTotalCartAmount()
-        }, { headers: { token } });
+  const handleApplyPromoCode = () => {
+    applyPromoCode(inputPromoCode);
+  };
 
-        if (response.data.success) {
-            const discountValue = parseFloat(response.data.voucher.discountPercent);
-            setDiscount(discountValue);
-            setDiscountAmount(getTotalCartAmount() * discountValue / 100);
-            setMessage('Voucher successfully applied.');
-        } else {
-            setDiscount(0);
-            setDiscountAmount(0);
-            setMessage(response.data.message);
-        }
-    } catch (error) {
-        setDiscount(0);
-        setDiscountAmount(0);
-        setMessage('Voucher code does not exist or is ineligible.');
-    }
-};
-
-useEffect(() => {
-  if (discount > 0) {
-    const discountValue = parseFloat(discount);
-    setDiscountAmount(getTotalCartAmount() * discountValue / 100);
-  }
-}, [cartItems, discount, getTotalCartAmount]);
+  useEffect(() => {
+    return () => {
+        setMessage('');
+        setPromoCode('');
+    };
+}, [navigate, setMessage, setPromoCode]);
 
   return (
     <div className='cart'>
@@ -119,10 +96,10 @@ useEffect(() => {
               <input 
                                 type="text" 
                                 placeholder='Voucher Code' 
-                                value={promoCode} 
-                                onChange={(e) => setPromoCode(e.target.value)} 
+                                value={inputPromoCode} 
+                                onChange={(e) => setInputPromoCode(e.target.value)} 
                             />
-                            <button onClick={applyPromoCode}>Submit</button>
+                            <button onClick={handleApplyPromoCode}>Submit</button>
               </div>
               {message && <p style={{ color: discount > 0 ? 'green' : 'red' }}>{message}</p>}
             </div>

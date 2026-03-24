@@ -7,6 +7,7 @@ const FoodDisplay = ({category, currentPage, setCurrentPage}) => {
 
     const {food_list} = useContext(StoreContext)
     const foodDisplayRef = useRef(null);
+    const isInitialRender = useRef(true);
 
     // Pagination Logic
     const itemsPerPage = 12;
@@ -21,6 +22,11 @@ const FoodDisplay = ({category, currentPage, setCurrentPage}) => {
     }
 
     useEffect(() => {
+      if (isInitialRender.current) {
+        isInitialRender.current = false;
+        return;
+      }
+
       if (foodDisplayRef.current) {
         foodDisplayRef.current.scrollIntoView({ behavior: 'smooth' });
       }

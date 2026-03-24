@@ -8,6 +8,7 @@ import Footer from './components/Footer/Footer'
 import LoginPopup from './components/LoginPopup/LoginPopup'
 import { useState } from 'react'
 import Verify from './pages/Verify/Verify'
+import VerifyVnpay from './pages/Verify/VerifyVnpay'
 import MyOrders from './pages/MyOrders/MyOrders'
 import Product from './pages/Product/Product'
 import About from './pages/About/About'
@@ -31,6 +32,7 @@ const App = () => {
         < Route path ='/cart' element = {<Cart/>} />
         < Route path ='/order' element = {<PlaceOrder/>} />
         <Route path='/verify' element ={<Verify/>} />
+        <Route path='/verifyVnpay' element={<VerifyVnpay />} />
         <Route path='/myorders' element ={<MyOrders/>} />
         <Route path='/product/:productId' element={<Product/>} />
         <Route path='/about' element={<About />} />

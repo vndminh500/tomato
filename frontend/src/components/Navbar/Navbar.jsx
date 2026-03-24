@@ -16,6 +16,13 @@ const Navbar = ({ setShowLogin }) => {
   const { getTotalCartAmount, token, setToken, food_list, url } = useContext(StoreContext);
   const navigate = useNavigate();
 
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    setMenu('home');
+    navigate({ pathname: '/', hash: '' });
+    window.scrollTo(0, 0);
+  };
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchValue(searchValue);
@@ -112,26 +119,26 @@ const Navbar = ({ setShowLogin }) => {
 
   return (
     <div className='navbar'>
-      <Link to='/'>
+      <Link to='/' onClick={handleHomeClick}>
         <img src={assets.logo} alt='' className='logo' />
       </Link>
       <ul className='navbar-menu'>
         <Link
           to='/'
-          onClick={() => setMenu('home')}
+          onClick={handleHomeClick}
           className={menu === 'home' ? 'active' : ''}
         >
           Home
         </Link>
         <a
-          href='#explore-menu'
+          href='/#explore-menu'
           onClick={() => setMenu('menu')}
           className={menu === 'menu' ? 'active' : ''}
         >
           Menu
         </a>
         <a
-          href='#app-download'
+          href='/#app-download'
           onClick={() => setMenu('mobile-app')}
           className={menu === 'mobile-app' ? 'active' : ''}
         >
