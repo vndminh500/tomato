@@ -1,9 +1,30 @@
 .header {
     height: 34vw;
     margin: 30px auto;
-    background: url('/header_img.png') no-repeat;
-    background-size: contain ;
     position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.header-slides {
+    position: absolute;
+    inset: 0;
+}
+
+.header-slide {
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: translateX(16px) scale(1.02);
+    transition: opacity 900ms ease, transform 900ms ease;
+}
+
+.header-slide.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
 }
 
 .header-contents {
@@ -16,28 +37,64 @@
     bottom:  10%;
     left: 6vw;
     animation: fadeIn 3s;
+    z-index: 1;
 }
 
 .header-contents h2 {
     font-weight: 500;
-    color: white;
     font-size: max(4.5vw, 22px);
+    transition: color 450ms ease;
 }
 
 .header-contents p {
-    color: white;
     font-size: 1vw;
+    transition: color 450ms ease;
+    line-height: 1.45;
 }
 
-.header-contents button {
+.header-contents-light h2,
+.header-contents-light p {
+    color: #ffffff;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+
+.header-contents-dark h2,
+.header-contents-dark p {
+    color: #1f2937;
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+.header-btn {
     border: none;
-    color: #747474;
     font-weight: 500;
     padding: 1vw 2.3vw;
-    background-color: white;
     font-size: max(1vw, 13px);
     border-radius: 50px;
     cursor: pointer;
+    transition: all 300ms ease;
+}
+
+.header-btn-light {
+    color: #374151;
+    background-color: #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.header-btn-dark {
+    color: #ffffff;
+    background-color: #1f2937;
+    box-shadow: 0 6px 20px rgba(31, 41, 55, 0.3);
+}
+
+.header-btn-warm {
+    color: #ffffff;
+    background-color: #ea580c;
+    box-shadow: 0 6px 20px rgba(234, 88, 12, 0.34);
+}
+
+.header-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
 }
 
 @media (max-width:1050px) {

@@ -68,4 +68,61 @@ const registerUser = async (req,res) => {
     }
 }
 
-export {loginUser, registerUser}
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.body.userId).select("name email");
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        return res.json({
+            success: true,
+            data: {
+                username: user.name,
+                email: user.email
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
+const changePassword = async (req, res) => {
+    const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+    try {
+        if (!oldPassword || !newPassword || !confirmNewPassword) {
+            return res.json({ success: false, message: "Please fill all password fields" });
+        }
+
+        if (newPassword.length < 8) {
+            return res.json({ success: false, message: "Please enter a strong password" });
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            return res.json({ success: false, message: "Confirm password does not match" });
+        }
+
+        const user = await userModel.findById(req.body.userId);
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        const isOldPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isOldPasswordMatch) {
+            return res.json({ success: false, message: "Old password is incorrect" });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        await userModel.findByIdAndUpdate(req.body.userId, { password: hashedPassword });
+
+        return res.json({ success: true, message: "Password changed successfully" });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
+export {loginUser, registerUser, getUserProfile, changePassword}

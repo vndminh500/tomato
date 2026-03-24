@@ -15,6 +15,8 @@ import Delivery from './pages/Delivery/Delivery'
 import Privacy from './pages/Privacy/Privacy'
 import ThankYou from './pages/ThankYou/ThankYou';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+import Profile from './pages/Profile/Profile';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
 
@@ -22,6 +24,7 @@ const App = () => {
 
   return (
     <>
+    <Toaster position='top-right' />
     {showLogin?<LoginPopup setShowLogin={setShowLogin}/>:<></>}
     <div className='app'> 
       <Navbar setShowLogin={setShowLogin} />
@@ -37,6 +40,7 @@ const App = () => {
         <Route path='/delivery' element={<Delivery />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/thank-you' element={<ThankYou />} />
+        <Route path='/profile' element={<Profile />} />
         
       </Routes>
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import './Navbar.css';
 import { assets } from '../../assets/assets';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 
 const Navbar = ({ setShowLogin }) => {
@@ -12,6 +12,8 @@ const Navbar = ({ setShowLogin }) => {
   const [filteredFood, setFilteredFood] = useState([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const searchContainerRef = useRef(null);
+  const location = useLocation();
+  const isProductDetailPage = location.pathname.startsWith('/product/');
 
   const { getTotalCartAmount, token, setToken, food_list, url } = useContext(StoreContext);
   const navigate = useNavigate();
@@ -45,17 +47,17 @@ const Navbar = ({ setShowLogin }) => {
     setActiveIndex(-1); 
   }, [debouncedSearchValue, food_list]);
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    setToken('');
-    navigate('/');
-  };
-
   const handleSuggestionClick = (id) => {
     setSearchValue('');
     setFilteredFood([]);
     setIsSearchVisible(false);
     navigate(`/product/${id}`);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setToken('');
+    navigate('/');
   };
 
   const handleKeyDown = (e) => {
@@ -118,7 +120,7 @@ const Navbar = ({ setShowLogin }) => {
 
 
   return (
-    <div className='navbar'>
+    <div className={`navbar ${isProductDetailPage ? 'navbar-no-underline' : ''}`}>
       <Link to='/' onClick={handleHomeClick}>
         <img src={assets.logo} alt='' className='logo' />
       </Link>
@@ -201,7 +203,7 @@ const Navbar = ({ setShowLogin }) => {
           <button onClick={() => setShowLogin(true)}>Sign in</button>
         ) : (
           <div className='navbar-profile'>
-            <img src={assets.profile_icon} alt='' />
+            <img src={assets.profile_icon} alt='' onClick={() => navigate('/profile')} />
             <ul className='navbar-profile-dropdown'>
               <li onClick={() => navigate('/myorders')}>
                 <img src={assets.bag_icon} alt='' />
