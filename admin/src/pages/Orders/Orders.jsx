@@ -50,7 +50,7 @@ const Orders = ({url}) => {
                     return item.name + " x " + item.quantity
                   }
                   else {
-                    return item.name + " x " + item.quantity + ","
+                    return item.name + " x " + item.quantity + " - "
                   }
                 })}
               </p>
@@ -60,17 +60,17 @@ const Orders = ({url}) => {
               </p>
 
               <div className="order-item-address">
-                <p>{order.address.street + " "}</p>
-                <p>{order.address.city + " " + order.address.state + " , " + order.address.country + " , " + order.address.zipcode}</p>
+                <p><strong>Address: </strong> {order.address.street + " "}</p>
+                <p><strong>City: </strong>{order.address.city + " - " + order.address.state + " - " + order.address.country + " - " + order.address.zipcode}</p>
               </div>
               <p className="order-item-phone">
-                {order.address.phone}
+                <strong>Phone number: </strong>{order.address.phone}
               </p>
             </div>
             <p>Items: {order.items.length}</p>
             <p>${order.amount}</p>
             {order.paymentMethod === "vnpay" && !order.payment ? (
-              <div className="order-failed-box">Giao dịch thất bại</div>
+              <div className="order-failed-box">Payment Failed</div>
             ) : (
               <select onChange={(event)=>statusHandler(event,order._id)} value={order.status}>
                 <option value="Food Processing">Food Processing</option>

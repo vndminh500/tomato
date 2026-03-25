@@ -22,7 +22,7 @@ const StoreContextProvider = (props) => {
         try {
             const response = await axios.post(`${url}/api/voucher/validate`, {
                 code,
-                minOrderAmount: getTotalCartAmount()
+                cartSubtotal: getTotalCartAmount()
             }, { headers: { token } });
     
             if (response.data.success) {
@@ -40,7 +40,12 @@ const StoreContextProvider = (props) => {
         } catch (error) {
             setDiscount(0);
             setDiscountAmount(0);
-            setMessage('Voucher code does not exist or is ineligible.');
+            const serverMsg = error.response?.data?.message;
+            setMessage(
+                typeof serverMsg === 'string' && serverMsg.trim()
+                    ? serverMsg
+                    : 'Voucher code does not exist or is ineligible.'
+            );
             setPromoCode('');
         }
     };
@@ -69,7 +74,7 @@ const StoreContextProvider = (props) => {
     let totalAmount = 0;
     for (const item in cartItems) {
         if (cartItems[item] > 0) {
-            let itemInfo = food_list.find((product) => product._id === item);
+            let itemInfo = food_list.find((product) => String(product._id) === String(item));
             
             if (itemInfo) {
                 totalAmount += itemInfo.price * cartItems[item];

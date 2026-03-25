@@ -18,6 +18,10 @@ const loginUser = async(req,res) => {
             return res.json({success:false,message:"Invalid credentials"})
         }
 
+        if (user.isActive === false) {
+            return res.json({ success: false, message: "Tài khoản đã bị dừng hoạt động" })
+        }
+
         const token = createToken(user._id);
         res.json({success:true,token})
 
@@ -125,4 +129,49 @@ const changePassword = async (req, res) => {
     }
 };
 
-export {loginUser, registerUser, getUserProfile, changePassword}
+const listUsers = async (req, res) => {
+    try {
+        const users = await userModel.find({}).select("name email isActive").lean();
+        const data = users.map((u) => ({
+            _id: u._id,
+            name: u.name,
+            email: u.email,
+            isActive: u.isActive !== false
+        }));
+        return res.json({ success: true, data });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
+const updateUserActiveStatus = async (req, res) => {
+    const { userId, isActive } = req.body;
+    try {
+        if (!userId || typeof isActive !== "boolean") {
+            return res.json({ success: false, message: "Invalid request" });
+        }
+        const user = await userModel.findByIdAndUpdate(
+            userId,
+            { isActive },
+            { new: true }
+        ).select("name email isActive");
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+        return res.json({
+            success: true,
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                isActive: user.isActive !== false
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
+export {loginUser, registerUser, getUserProfile, changePassword, listUsers, updateUserActiveStatus}

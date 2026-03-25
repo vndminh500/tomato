@@ -1,0 +1,95 @@
+.users.add {
+    width: 70%;
+    margin-left: max(5vw, 25px);
+    margin-top: 50px;
+    color: #6d6d6d;
+}
+
+.users h3 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #404040;
+}
+
+.users-list-table {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border: 1px solid #eee;
+    border-top: none;
+    font-size: 14px;
+    background-color: #fff;
+    transition: 0.3s;
+}
+
+.users-list-table.title {
+    background-color: #f9f9f9;
+    font-weight: 700;
+    color: #333;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.users-list-table:hover:not(.title) {
+    background-color: #fcfcfc;
+}
+
+.users-list-table p {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.users-status-select {
+    padding: 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s;
+    border: 1px solid #ccc;
+}
+
+.users-status-select--active {
+    background-color: #e6f7ed;
+    color: #2ecc71;
+    border-color: #2ecc71;
+}
+
+.users-status-select--inactive {
+    background-color: #fff2f0;
+    color: tomato;
+    border-color: tomato;
+}
+
+
+@media (max-width: 900px) {
+    .users.add {
+        width: 90%;
+        margin-left: 20px;
+    }
+    
+    .users-list-table {
+        grid-template-columns: 1fr 1fr 1fr; 
+        font-size: 13px;
+    }
+
+    .users-list-table b:nth-child(1),
+    .users-list-table p:nth-child(1) {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .users-list-table {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .users-list-table b:nth-child(3),
+    .users-list-table p:nth-child(3) {
+        display: none;
+    }
+}

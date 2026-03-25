@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+import userModel from "../models/userModel.js"
 
 const authMiddleware = async (req,res,next) => {
     const {token} = req.headers;
@@ -12,6 +13,14 @@ const authMiddleware = async (req,res,next) => {
             req.body = {}; 
         }
         //
+
+        const user = await userModel.findById(token_decode.id).select("isActive");
+        if (!user) {
+            return res.json({ success: false, message: "Not authorized login again" });
+        }
+        if (user.isActive === false) {
+            return res.json({ success: false, message: "Tài khoản đã bị dừng hoạt động" });
+        }
 
         req.body.userId = token_decode.id;
         next();

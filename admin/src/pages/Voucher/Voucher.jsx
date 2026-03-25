@@ -3,6 +3,12 @@ import './Voucher.css';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const todayInputDateMin = () => {
+    const d = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+
 const Voucher = ({ url }) => {
     const [vouchers, setVouchers] = useState([]);
     const [showAddPopup, setShowAddPopup] = useState(false);
@@ -28,8 +34,24 @@ const Voucher = ({ url }) => {
 
     const handleAddVoucher = async (e) => {
         e.preventDefault();
+        const minDate = todayInputDateMin();
+        if (!newVoucher.expiryDate || newVoucher.expiryDate < minDate) {
+            toast.error('Expiry date cannot be before today.');
+            return;
+        }
+        const discountNum = Number(newVoucher.discountPercent);
+        const minOrderNum = Number(newVoucher.minOrderAmount);
+        if (Number.isNaN(discountNum) || Number.isNaN(minOrderNum)) {
+            toast.error('Discount and minimum order must be valid numbers.');
+            return;
+        }
         try {
-            const response = await axios.post(`${url}/api/voucher/add`, newVoucher);
+            const response = await axios.post(`${url}/api/voucher/add`, {
+                code: newVoucher.code.trim(),
+                discountPercent: discountNum,
+                expiryDate: newVoucher.expiryDate,
+                minOrderAmount: minOrderNum
+            });
             if (response.data.success) {
                 toast.success('Voucher added successfully');
                 setShowAddPopup(false);
@@ -132,6 +154,7 @@ const Voucher = ({ url }) => {
                                 name='expiryDate'
                                 value={newVoucher.expiryDate}
                                 onChange={handleInputChange}
+                                min={todayInputDateMin()}
                                 required
                             />
                         </div>

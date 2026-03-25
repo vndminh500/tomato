@@ -216,7 +216,7 @@
 
 .navbar-profile-dropdown li:hover p {
     color: tomato;
-    font-weight: 600;
+    text-shadow: 0.5px 0 0 tomato, -0.5px 0 0 tomato;
 }
 
 .navbar-profile-dropdown hr {

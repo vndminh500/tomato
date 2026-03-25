@@ -18,12 +18,12 @@ const VerifyVnpay = () => {
 
         if (success) {
             clearCart();
-            toast.success('Thanh toán VNPay thành công');
+            toast.success('Payment Successful');
             navigate('/myorders', { replace: true });
             return;
         }
 
-        toast.error('Thanh toán VNPay thất bại hoặc đã bị hủy');
+        toast.error('Payment Failed');
         navigate('/order', { replace: true });
     }, [clearCart, navigate, searchParams]);
 
