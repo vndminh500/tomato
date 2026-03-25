@@ -1,0 +1,114 @@
+.not-found-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.not-found-visual {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.not-found-404 {
+  font-size: max(15vw, 150px);
+  font-weight: 800;
+  color: #f1f1f1; 
+  margin: 0;
+  line-height: 1;
+}
+
+.not-found-avatar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px; 
+  height: auto;
+  filter: drop-shadow(0 10px 15px rgba(255, 99, 71, 0.2));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(-50%, -55%); }
+  50% { transform: translate(-50%, -45%); }
+}
+
+.not-found-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.not-found-subtitle {
+  font-size: 16px;
+  color: #666;
+  max-width: 450px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.not-found-subtitle strong {
+  color: tomato;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.not-found-actions button {
+  padding: 12px 35px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-home {
+  background-color: tomato;
+  border: 2px solid tomato;
+  color: white;
+}
+
+.btn-home:hover {
+  background-color: #e5533d;
+  transform: translateY(-3px); 
+  box-shadow: 0 8px 20px rgba(255, 99, 71, 0.3);
+}
+
+.btn-menu {
+  background-color: tomato;
+  border: 2px solid tomato;
+  color: white;
+}
+
+.btn-menu:hover {
+  background-color: #e5533d;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 99, 71, 0.3);
+}
+
+@media (max-width: 600px) {
+  .not-found-404 {
+      font-size: 120px;
+  }
+  .not-found-avatar {
+      width: 100px;
+  }
+  .not-found-actions {
+      flex-direction: column;
+      width: 100%;
+      gap: 15px;
+  }
+  .not-found-actions button {
+      width: 100%;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Home.css'
 import Header from '../../components/Header/Header'
 import ExploreMenu from '../../components/ExploreMenu/ExploreMenu'
@@ -9,6 +9,10 @@ const Home = () => {
 
     const [category, setCategory] = useState("All");
     const [currentPage, setCurrentPage] = useState(1);
+
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [category]);
 
   return (
     <div>

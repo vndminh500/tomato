@@ -12,10 +12,10 @@ const Users = ({ url }) => {
             if (response.data.success) {
                 setUsers(response.data.data)
             } else {
-                toast.error('Không tải được danh sách người dùng')
+                toast.error('Unable to load user list')
             }
         } catch {
-            toast.error('Lỗi kết nối')
+            toast.error('Connection error')
         }
     }
 
@@ -47,7 +47,7 @@ const Users = ({ url }) => {
 
     return (
         <div className="users add">
-            <h3>Danh sách người dùng</h3>
+            <h3>List Users</h3>
             <div className="users-list-table title">
                 <b>ID</b>
                 <b>User Name</b>

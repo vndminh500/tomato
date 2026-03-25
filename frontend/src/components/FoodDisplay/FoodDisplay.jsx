@@ -20,6 +20,18 @@ const FoodDisplay = ({category, currentPage, setCurrentPage}) => {
       setCurrentPage(pageNumber);
     }
 
+    // Chặn trường hợp currentPage đang lớn hơn tổng trang sau khi đổi category
+    useEffect(() => {
+      if (totalPages === 0) {
+        if (currentPage !== 1) setCurrentPage(1);
+        return;
+      }
+
+      if (currentPage > totalPages) {
+        setCurrentPage(totalPages);
+      }
+    }, [category, totalPages]);
+
     useEffect(() => {
       if (isInitialRender.current) {
         isInitialRender.current = false;

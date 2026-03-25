@@ -17,6 +17,7 @@ import ThankYou from './pages/ThankYou/ThankYou';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import Profile from './pages/Profile/Profile';
 import { Toaster } from 'react-hot-toast';
+import NotFound from './pages/NotFound/NotFound'
 
 const App = () => {
 
@@ -41,6 +42,7 @@ const App = () => {
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/thank-you' element={<ThankYou />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='*' element={<NotFound />} />
         
       </Routes>
     </div>

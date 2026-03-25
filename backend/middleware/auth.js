@@ -19,7 +19,7 @@ const authMiddleware = async (req,res,next) => {
             return res.json({ success: false, message: "Not authorized login again" });
         }
         if (user.isActive === false) {
-            return res.json({ success: false, message: "Tài khoản đã bị dừng hoạt động" });
+            return res.json({ success: false, message: "The account has been deactivated." });
         }
 
         req.body.userId = token_decode.id;

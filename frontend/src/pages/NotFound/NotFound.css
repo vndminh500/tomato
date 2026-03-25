@@ -1,0 +1,121 @@
+.not-found-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  text-align: center;
+  padding: 20px;
+  color: #444;
+}
+
+.not-found-visual {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.not-found-404 {
+  font-size: max(15vw, 120px);
+  font-weight: 800;
+  color: #f1f1f1;
+  line-height: 1;
+  margin: 0;
+}
+
+.not-found-avatar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(10vw, 100px);
+  height: auto;
+  filter: drop-shadow(0 5px 10px rgba(255, 99, 71, 0.2));
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%,
+  100% {
+    transform: translate(-50%, -55%);
+  }
+  50% {
+    transform: translate(-50%, -45%);
+  }
+}
+
+.not-found-title {
+  font-size: max(2vw, 24px);
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.not-found-subtitle {
+  font-size: max(1.1vw, 16px);
+  color: #666;
+  max-width: 520px;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.not-found-subtitle strong {
+  color: tomato;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.not-found-actions button {
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-home {
+  background-color: tomato;
+  border: 2px solid tomato;
+  color: white;
+  box-shadow: 0 5px 15px rgba(255, 99, 71, 0.3);
+}
+
+.btn-home:hover {
+  background-color: #e5533d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 99, 71, 0.4);
+}
+
+.btn-menu {
+  background-color: tomato;
+  border: 2px solid tomato;
+  color: white;
+  box-shadow: 0 5px 15px rgba(255, 99, 71, 0.3);
+}
+
+.btn-menu:hover {
+  background-color: #e5533d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 99, 71, 0.4);
+}
+
+@media (max-width: 600px) {
+  .not-found-page {
+    min-height: 70vh;
+  }
+  .not-found-visual {
+    margin-bottom: 20px;
+  }
+  .not-found-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .not-found-actions button {
+    width: 100%;
+  }
+}
+
