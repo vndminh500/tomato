@@ -8,6 +8,7 @@ import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
 import commentRouter from "./routes/commentRoute.js"
 import voucherRouter from './routes/voucherRoute.js';
+import { startDailyStockResetScheduler } from "./utils/stockResetScheduler.js";
 
 
 
@@ -22,6 +23,7 @@ app.use(cors())
 
 
 connectDB();
+startDailyStockResetScheduler();
 
 
 app.use("/api/food",foodRouter)

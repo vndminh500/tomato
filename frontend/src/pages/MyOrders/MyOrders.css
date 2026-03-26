@@ -27,6 +27,7 @@
     border: 1px solid tomato; 
     border-radius: 8px;
     background-color: #fff;
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
@@ -50,22 +51,116 @@
     color: #454545;
 }
 
-.my-orders-order button {
-    border: none;
-    padding: 12px 0px;
-    border-radius: 4px;
-    background-color: #ffe1e1;
-    cursor: pointer;
+.my-order-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.my-order-status .status-placed {
+    color: #ff6b6b;
+}
+
+.my-order-status .status-received {
+    color: #ff9f43;
+}
+
+.my-order-status .status-processing {
+    color: #f0c24f;
+}
+
+.my-order-status .status-delivering {
+    color: #5aa9ff;
+}
+
+.my-order-status .status-delivered {
+    color: #2ecc71;
+}
+
+.my-order-status .status-default {
     color: #454545;
-    font-weight: 500;
-    transition: 0.3s;
 }
 
-.my-orders-order button:hover {
-    background-color: tomato;
-    color: white;
+.my-order-status .status-cancelled {
+    color: #9aa0ac;
 }
 
+.cancel-order-btn {
+    border: 1px solid #ffd2d2;
+    background: #fff4f4;
+    color: #e25757;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cancel-order-btn:hover {
+    background: #ffeaea;
+}
+
+.cancel-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(22, 26, 34, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.cancel-modal {
+    width: min(92vw, 420px);
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.cancel-modal h3 {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+    color: #1f2937;
+}
+
+.cancel-modal p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.cancel-modal-actions {
+    margin-top: 18px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-modal-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-modal-btn.secondary {
+    background: #f2f4f7;
+    color: #374151;
+}
+
+.cancel-modal-btn.danger {
+    background: #ef4444;
+    color: #fff;
+}
+
+.cancel-modal-btn.secondary:hover {
+    background: #e5e7eb;
+}
+
+.cancel-modal-btn.danger:hover {
+    background: #dc2626;
+}
 
 @media (max-width: 900px) {
     .my-orders-order {
@@ -73,11 +168,6 @@
         row-gap: 15px;
         font-size: 12px;
         padding: 15px;
-    }
-    
-    .my-orders-order button {
-        font-size: 10px;
-        padding: 8px;
     }
 }
 
@@ -87,9 +177,5 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
-    }
-    
-    .my-orders-order button {
-        width: 100%;
     }
 }

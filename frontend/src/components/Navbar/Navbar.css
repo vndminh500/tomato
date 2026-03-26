@@ -1,8 +1,10 @@
 .navbar {
-    padding: 20px 0px;
+    padding: 16px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #eef1f6;
+    background: #fff;
 }
 
 .navbar .logo {
@@ -12,35 +14,71 @@
 .navbar-menu {
     display: flex;
     list-style: none;
-    gap: 20px;
+    gap: 10px;
     color: #49557e;
     font-size: 18px;
+    font-weight: 600;
+    position: relative;
+    padding: 2px 2px 10px;
+    border-radius: 0;
+}
+
+.navbar-menu a {
+    color: #58678f;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: color 0.24s ease, background-color 0.24s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.navbar-menu a:hover {
+    color: #d54f33;
+    background: rgba(255, 149, 120, 0.08);
 }
 
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 24px;
 }
 
 .navbar button {
-    background: transparent;
+    background: #fff;
     font-size: 16px;
     color: #49557e;
-    border: 1px solid tomato;
-    padding: 10px 30px;
+    border: 1px solid #d8dfeb;
+    padding: 10px 20px;
     border-radius: 40px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.2s ease;
+    box-shadow: none;
 }
 
 .navbar button:hover {
-    background-color: #fff4f2;
+    border-color: #ffcbbd;
+    color: #db5235;
+    background: #fff5f1;
 }
 
 .navbar-menu .active {
-    padding-bottom: 2px;
-    border-bottom: 2px solid #49557e ;
+    color: #db5235;
+    background: transparent;
+    box-shadow: none;
+    border-bottom: none;
+}
+
+.navbar-active-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #ff8c70 0%, #ef5d3e 100%);
+    transition: transform 0.42s cubic-bezier(0.2, 0.9, 0.2, 1), width 0.42s cubic-bezier(0.2, 0.9, 0.2, 1), opacity 0.24s ease;
+    box-shadow: 0 4px 12px rgba(239, 93, 62, 0.45);
+    pointer-events: none;
 }
 
 .navbar.navbar-no-underline .navbar-menu .active {
@@ -55,12 +93,22 @@
     position: relative; 
     display: flex;
     align-items: center;
-    background-color: #f0f0f0; 
-    border-radius: 25px;
+    background: #f8fafd;
+    border-radius: 12px;
     padding: 8px 12px;
-    transition: background-color 0.3s;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    border: 1px solid #e3e9f3;
+    box-shadow: none;
+}
+
+.search-container:hover {
+    border-color: #d6dfed;
+}
+
+.search-container:focus-within {
+    border-color: #ffb8a7;
+    box-shadow: 0 0 0 3px rgba(255, 150, 120, 0.18);
+    transform: none;
 }
 
 .search-input {
@@ -71,21 +119,31 @@
     padding: 0;
     transition: width 0.4s ease-in-out;
     font-size: 16px;
-    color: #49557e;
+    color: #394a73;
+    font-weight: 500;
 }
 
 .search-input::placeholder {
-    color: #9a9a9a;
+    color: #a7afbf;
 }
 
 .search-input.active {
-    width: 200px;
-    padding-right: 10px; 
+    width: 210px;
+    padding-right: 12px; 
 }
 
 .search-icon {
-    width: 20px;
+    width: 18px;
     cursor: pointer;
+    filter: saturate(1.05);
+    opacity: 0.88;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.search-container:hover .search-icon,
+.search-container:focus-within .search-icon {
+    transform: scale(1.08);
+    opacity: 1;
 }
 
 
@@ -152,6 +210,187 @@
 
 .navbar-search-icon {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-notification-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 25;
+}
+
+.navbar .notification-trigger {
+    border: none;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar .notification-trigger:hover {
+    background: transparent;
+}
+
+.nav-action-icon {
+    font-size: 32px;
+    color: #5a688f;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar-search-icon a,
+.navbar .notification-trigger,
+.navbar-profile .nav-action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.navbar-search-icon a:hover .nav-action-icon,
+.navbar .notification-trigger:hover .nav-action-icon,
+.navbar-profile .nav-action-icon:hover {
+    color: #db5235;
+    transform: none;
+}
+
+.notification-count-badge {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    padding: 0 5px;
+    background: #ff4d4f;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+.customer-notification-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 340px;
+    max-height: 360px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #e9edf3;
+    border-radius: 12px;
+    box-shadow: 0 16px 32px rgba(26, 37, 58, 0.14);
+    padding: 6px 0;
+}
+
+.customer-notification-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: #6b748c;
+}
+
+.customer-notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px 12px;
+    border-bottom: 1px solid #f1f4f8;
+}
+
+.navbar .customer-notification-clear-all {
+    border: none;
+    background: transparent;
+    color: #5f6f8d;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0;
+    cursor: pointer;
+}
+
+.navbar .customer-notification-clear-all:hover {
+    color: #ef4444;
+    background: transparent;
+}
+
+.customer-notification-empty {
+    margin: 0;
+    padding: 14px;
+    font-size: 13px;
+    color: #8a93a8;
+}
+
+.navbar .customer-notification-item {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    gap: 12px;
+    padding: 10px 14px 10px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f5f7fa;
+    box-shadow: none;
+}
+
+.customer-notification-item.is-unread {
+    background: #f4f7fb;
+    border-left: 3px solid #5aa9ff;
+}
+
+.customer-notification-item.is-read {
+    background: #fff;
+    border-left: 3px solid transparent;
+}
+
+.customer-notification-item span {
+    font-size: 13px;
+    color: #38445b;
+    line-height: 1.45;
+}
+
+.navbar .customer-notification-item:hover {
+    background: #eef3f9;
+}
+
+.customer-notification-item.is-removing {
+    opacity: 0;
+    transform: translateX(8px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+    pointer-events: none;
+}
+
+.customer-notification-delete {
+    min-width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #d8dee8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #8b93a8;
+    background: #fff;
+    flex-shrink: 0;
+}
+
+.customer-notification-delete:hover {
+    color: #e25252;
+    border-color: #ffc9c9;
+    background: #fff3f3;
 }
 
 .navbar-search-icon .dot {
@@ -169,6 +408,10 @@
     cursor: pointer;
 }
 
+.navbar-profile .nav-action-icon {
+    font-size: 33px;
+}
+
 .navbar-profile img {
     width: 25px;
     transition: transform 0.3s ease;
@@ -178,7 +421,7 @@
     position: absolute;
     display: none; 
     right: 0;
-    top: 40px;
+    top: 42px;
     z-index: 100;
     background-color: #fff2f0;
     padding: 12px 20px;
@@ -257,11 +500,11 @@
     }
 
     .navbar-right {
-        gap: 30px
+        gap: 20px
     }
 
-    .navbar-right img {
-        width: 22px;
+    .nav-action-icon {
+        font-size: 28px;
     }
 
     .navbar-right button {
@@ -280,11 +523,11 @@
     }
 
     .navbar-right {
-        gap: 20px
+        gap: 14px
     }
 
-    .navbar-right img {
-        width: 20px;
+    .nav-action-icon {
+        font-size: 25px;
     }
 
     .navbar-right button {
@@ -293,7 +536,7 @@
     }
 
     .search-input.active {
-        width: 150px;
+        width: 165px;
     }
 }
 

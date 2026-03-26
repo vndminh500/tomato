@@ -10,7 +10,12 @@ const orderSchema = new mongoose.Schema({
     status:{type:String,default:"Food Processing"},
     date:{type:Date,default:Date.now()},
     payment:{type:Boolean,default:false},
-    paymentMethod:{type:String,default:"stripe"}
+    paymentMethod:{type:String,default:"stripe"},
+    cancelReason:{type:String,default:""},
+    cancelledAt:{type:Date,default:null},
+    cancelledBy:{type:String,default:""},
+    stockDeducted:{type:Boolean,default:false},
+    stockDeductedAt:{type:Date,default:null}
 })
 
 const orderModel = mongoose.models.order || mongoose.model("order",orderSchema)

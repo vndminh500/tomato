@@ -64,7 +64,7 @@ const PlaceOrder = () => {
         window.location.replace(vnpayUrl);
       }
       else {
-        toast.error("Something went wrong");
+        toast.error(response.data.message || "Something went wrong");
       }
     }
     else if (paymentMethod === 'cod') {
@@ -75,7 +75,7 @@ const PlaceOrder = () => {
         clearCart();
       }
       else {
-        toast.error("Something went wrong");
+        toast.error(response.data.message || "Something went wrong");
       }
     }
   }

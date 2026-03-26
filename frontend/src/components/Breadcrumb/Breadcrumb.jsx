@@ -65,6 +65,19 @@ const Breadcrumb = () => {
         label: 'Checkout',
       },
     ];
+  } else if (parts[0] === 'myorders' && parts.length > 1) {
+    crumbs = [
+      {
+        path: '/myorders',
+        isLast: false,
+        label: 'My Orders',
+      },
+      {
+        path: pathname,
+        isLast: true,
+        label: `Order #${parts[1].slice(-6)}`,
+      },
+    ];
   } else {
     crumbs = parts.map((part, index) => {
       const path = `/${parts.slice(0, index + 1).join('/')}`;

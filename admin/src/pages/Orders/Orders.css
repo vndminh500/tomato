@@ -30,10 +30,17 @@
     font-size: 14px;
     transition: 0.3s;
     box-shadow: var(--shadow-soft);
+    position: relative;
 }
 
 .order-item:hover {
     border-color: #4a6484;
+}
+
+.order-item.order-item-highlight {
+    border-color: #ff8a71;
+    box-shadow: 0 0 0 2px rgba(255, 138, 113, 0.28);
+    animation: orderFlash 1.3s ease;
 }
 
 .order-item:nth-child(odd) {
@@ -46,6 +53,41 @@
 
 .order-item img {
     width: 50px; 
+}
+
+.order-delete-trigger {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 2px solid #fff;
+    background: radial-gradient(circle at 30% 30%, #ff7b7b, #ef4444 70%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 0;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.32);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+
+.order-delete-trigger:hover {
+    transform: translateY(-1px) scale(1.04);
+    box-shadow: 0 12px 24px rgba(239, 68, 68, 0.4);
+    filter: saturate(1.08);
+}
+
+.order-delete-trigger:active {
+    transform: scale(0.95);
+}
+
+.order-delete-trigger span {
+    transform: translateY(-1px);
 }
 
 .order-item-food {
@@ -112,21 +154,39 @@
 }
 
 .order-status-badge.is-processing {
-    color: #ffd48a;
-    border-color: rgba(255, 212, 138, 0.45);
-    background: rgba(255, 212, 138, 0.12);
+    color: #f0c24f;
+    border-color: rgba(240, 194, 79, 0.45);
+    background: rgba(240, 194, 79, 0.12);
+}
+
+.order-status-badge.is-placed {
+    color: #ff6b6b;
+    border-color: rgba(255, 107, 107, 0.5);
+    background: rgba(255, 107, 107, 0.14);
+}
+
+.order-status-badge.is-received {
+    color: #ff9f43;
+    border-color: rgba(255, 159, 67, 0.45);
+    background: rgba(255, 159, 67, 0.12);
 }
 
 .order-status-badge.is-delivering {
-    color: #94c9ff;
-    border-color: rgba(148, 201, 255, 0.45);
-    background: rgba(148, 201, 255, 0.12);
+    color: #5aa9ff;
+    border-color: rgba(90, 169, 255, 0.45);
+    background: rgba(90, 169, 255, 0.12);
 }
 
 .order-status-badge.is-delivered {
-    color: #8ee2bc;
-    border-color: rgba(38, 194, 129, 0.5);
-    background: rgba(38, 194, 129, 0.14);
+    color: #2ecc71;
+    border-color: rgba(46, 204, 113, 0.5);
+    background: rgba(46, 204, 113, 0.14);
+}
+
+.order-status-badge.is-cancelled {
+    color: #9aa0ac;
+    border-color: rgba(154, 160, 172, 0.5);
+    background: rgba(154, 160, 172, 0.14);
 }
 
 .order-failed-box {
@@ -158,6 +218,95 @@
 .order-empty-state span {
     color: var(--text-secondary);
     font-size: 14px;
+}
+
+.order-delete-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.46);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200;
+}
+
+.order-delete-modal {
+    width: min(92vw, 420px);
+    background: #fff;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 20px 44px rgba(15, 23, 42, 0.3);
+}
+
+.order-delete-modal h4 {
+    margin: 0;
+    font-size: 22px;
+    color: #1f2937;
+}
+
+.order-delete-modal p {
+    margin: 10px 0 14px;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.order-delete-modal label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.order-delete-modal select {
+    width: 100%;
+}
+
+.order-delete-reason-fixed {
+    width: 100%;
+    border: 1px solid #d9e1ec;
+    background: #f8fafc;
+    color: #1f2937;
+    border-radius: 10px;
+    padding: 11px 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.order-delete-modal textarea {
+    width: 100%;
+    border: 1px solid #d0d7e2;
+    border-radius: 8px;
+    padding: 10px;
+    resize: vertical;
+    outline: none;
+    color: #334155;
+}
+
+.order-delete-modal-actions {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.order-delete-modal-actions .btn-cancel,
+.order-delete-modal-actions .btn-delete {
+    border: none;
+    border-radius: 8px;
+    padding: 9px 14px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.order-delete-modal-actions .btn-cancel {
+    background: #edf2f7;
+    color: #334155;
+}
+
+.order-delete-modal-actions .btn-delete {
+    background: #ef4444;
+    color: #fff;
 }
 
 .order-skeleton span {
@@ -216,6 +365,11 @@
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
+}
+
+@keyframes orderFlash {
+    0% { background: #fff6f3; }
+    100% { background: var(--bg-secondary); }
 }
 
 @media (max-width: 1100px) {

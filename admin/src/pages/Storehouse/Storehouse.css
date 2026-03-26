@@ -1,0 +1,206 @@
+.storehouse .storehouse-table {
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: 0 16px 30px rgba(44, 70, 110, 0.08);
+}
+
+.storehouse .storehouse-table-row {
+    display: grid;
+    grid-template-columns: 0.6fr 2fr 1fr;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+    gap: 12px;
+    min-height: 76px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13.5px;
+    color: var(--text-secondary);
+}
+
+.storehouse .storehouse-table-row.title {
+    background: linear-gradient(180deg, #f3f8ff 0%, #edf5ff 100%);
+    color: var(--text-primary);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    min-height: 60px;
+}
+
+.storehouse .storehouse-table-row.title b {
+    font-size: 12.5px;
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+}
+
+.storehouse .storehouse-table-row img {
+    width: 54px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #dbe7f7;
+    box-shadow: 0 6px 14px rgba(48, 84, 132, 0.12);
+}
+
+.storehouse-stock {
+    min-width: 42px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.storehouse-stock.stock-high {
+    border: 1px solid #b8dfc8;
+    background: #effaf2;
+    color: #2f8b52;
+}
+
+.storehouse-stock.stock-medium {
+    border: 1px solid #f0dd9a;
+    background: #fff7de;
+    color: #9a7708;
+}
+
+.storehouse-stock.stock-low {
+    border: 1px solid #f3c7a2;
+    background: #fff0e3;
+    color: #ba5f16;
+}
+
+.storehouse-stock.stock-critical {
+    border: 1px solid #f2b1b1;
+    background: #ffebeb;
+    color: #b73636;
+}
+
+.storehouse .storehouse-table-row:not(.title):nth-child(odd) {
+    background: #fbfdff;
+}
+
+.storehouse .storehouse-table-row:not(.title):not(.storehouse-skeleton-row) {
+    animation: revealUp 0.35s ease both;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.storehouse .storehouse-table-row:not(.title):not(.storehouse-skeleton-row):hover {
+    background: #f4f9ff;
+    transform: translateY(-1px);
+}
+
+.storehouse-pagination {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.storehouse-pagination button {
+    border: 1px solid var(--border-color);
+    background: #fff;
+    color: var(--text-secondary);
+    min-width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 0 10px;
+    transition: all 0.2s ease;
+}
+
+.storehouse-pagination button:hover:not(:disabled) {
+    border-color: #bdd1ee;
+    color: #2e4f7d;
+    background: #f7fbff;
+}
+
+.storehouse-pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.storehouse-pagination-numbers {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.storehouse-pagination-numbers button.active {
+    border-color: #ff9b85;
+    background: #fff3ee;
+    color: #d85b3f;
+    font-weight: 600;
+}
+
+.storehouse-empty-state {
+    padding: 26px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+}
+
+.storehouse-empty-state p {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.storehouse-empty-state span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.storehouse-skeleton-row span {
+    display: block;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #eef3fb 20%, #dde7f6 50%, #eef3fb 80%);
+    background-size: 220% 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.storehouse-skeleton-box {
+    width: 52px;
+    height: 52px;
+}
+
+.storehouse-skeleton-line {
+    height: 14px;
+}
+
+.storehouse-skeleton-line.short {
+    width: 70%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .storehouse .storehouse-table-row {
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 15px;
+        min-height: 72px;
+        padding: 12px;
+    }
+    .storehouse .storehouse-table-row.title {
+        display: none;
+    }
+}

@@ -11,7 +11,8 @@ const addFood = async (req, res) => {
         description: req.body.description, 
         price: req.body.price,        
         category: req.body.category,    
-        image: image_filename          
+        image: image_filename,
+        stock: Number(req.body.stock ?? 20)
     })
 
     try {
@@ -25,6 +26,10 @@ const addFood = async (req, res) => {
 
 const listFood = async (req, res) => {
     try {
+        await foodModel.updateMany(
+            { stock: { $exists: false } },
+            { $set: { stock: 20 } }
+        );
  
         const foods = await foodModel.find({});
 

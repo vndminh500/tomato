@@ -59,7 +59,58 @@
     font-size: 2rem;
     font-weight: 600;
     color: tomato;
+    margin-bottom: 0;
+}
+
+.product-price-stock {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     margin-bottom: 25px;
+}
+
+.product-stock-pill {
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.product-stock-pill.stock-high {
+    border: 1px solid #b8dfc8;
+    background: #effaf2;
+    color: #2f8b52;
+}
+
+.product-stock-pill.stock-medium {
+    border: 1px solid #f0dd9a;
+    background: #fff7de;
+    color: #9a7708;
+}
+
+.product-stock-pill.stock-low {
+    border: 1px solid #f3c7a2;
+    background: #fff0e3;
+    color: #ba5f16;
+}
+
+.product-stock-pill.stock-critical {
+    border: 1px solid #f2b1b1;
+    background: #ffebeb;
+    color: #b73636;
+}
+
+.product-stock-pill.stock-badge-shake {
+    animation: stockBadgeShake 0.42s ease;
+}
+
+@keyframes stockBadgeShake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+    100% { transform: translateX(0); }
 }
 
 .product-display-right button {
@@ -148,6 +199,9 @@
     .food-item-counter {
             margin: 0 auto;
         }
+    .product-price-stock {
+        justify-content: center;
+    }
     }
     
     product-share {

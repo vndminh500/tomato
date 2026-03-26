@@ -13,9 +13,18 @@ import FoodItem from '../../components/FoodItem/FoodItem'
 
 const Product = () => {
     const { productId } = useParams();
-    const { food_list, addToCart, url, cartItems, removeFromCart } = useContext(StoreContext);
+    const { food_list, addToCart, url, cartItems, removeFromCart, stockAlertItemId, stockAlertTick } = useContext(StoreContext);
     const product = food_list.find((e) => e._id === productId);
     const [comments, setComments] = useState([]);
+    const [isStockShaking, setIsStockShaking] = useState(false);
+    const stockValue = Number(product?.stock ?? 20);
+
+    const getStockClassName = (quantity) => {
+        if (quantity >= 15) return 'stock-high';
+        if (quantity >= 10) return 'stock-medium';
+        if (quantity >= 5) return 'stock-low';
+        return 'stock-critical';
+    };
 
     const fetchComments = async () => {
         try {
@@ -33,6 +42,14 @@ const Product = () => {
             fetchComments();
         }
     }, [productId]);
+
+    useEffect(() => {
+        if (String(stockAlertItemId) === String(productId) && stockAlertTick > 0) {
+            setIsStockShaking(true);
+            const timeoutId = setTimeout(() => setIsStockShaking(false), 420);
+            return () => clearTimeout(timeoutId);
+        }
+    }, [stockAlertItemId, stockAlertTick, productId]);
 
     if (!product) {
         return <div>Product not found</div>
@@ -54,7 +71,10 @@ const Product = () => {
                         <img src={assets.rating_starts} alt="" />
                     </div>
                     <p className='product-display-right-description'>{product.description}</p>
-                    <div className='product-display-right-price'>${product.price}</div>
+                    <div className='product-price-stock'>
+                        <div className='product-display-right-price'>${product.price}</div>
+                        <span className={`product-stock-pill ${getStockClassName(stockValue)} ${isStockShaking ? 'stock-badge-shake' : ''}`}>In stock: {stockValue}</span>
+                    </div>
                     {!cartItems[product._id]
                         ? <button onClick={() => addToCart(product._id)}>ADD TO CART</button>
                         : <div className='food-item-counter food-item-counter-fix'>
@@ -98,7 +118,7 @@ const Product = () => {
                 <h2>Similar Products</h2>
                 <div className='similar-products-list'>
                     {similarProducts.map((item) => (
-                        <FoodItem key={item._id} id={item._id} name={item.name} description={item.description} price={item.price} image={item.image} />
+                        <FoodItem key={item._id} id={item._id} name={item.name} description={item.description} price={item.price} image={item.image} stock={item.stock ?? 20} />
                     ))}
                 </div>
             </div>

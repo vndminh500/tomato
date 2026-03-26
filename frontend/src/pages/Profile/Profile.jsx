@@ -47,6 +47,14 @@ const Profile = () => {
     () => (showPassword ? 'your_password' : '********'),
     [showPassword]
   );
+  const accountName = useMemo(
+    () => (email?.includes('@') ? email.split('@')[0] : 'Guest'),
+    [email]
+  );
+  const profileInitial = useMemo(
+    () => (accountName ? accountName.charAt(0).toUpperCase() : 'G'),
+    [accountName]
+  );
 
   const fetchProfile = async () => {
     try {
@@ -129,26 +137,44 @@ const Profile = () => {
 
   return (
     <div className='profile-page'>
-      <h1>My Profile</h1>
-      <p className='profile-subtitle'>Manage your profile information to secure your account.</p>
+      <div className='profile-hero'>
+        <div className='profile-avatar'>{profileInitial}</div>
+        <div className='profile-hero-content'>
+          <p className='profile-kicker'>Account Center</p>
+          <h1>My Profile</h1>
+          <p className='profile-subtitle'>Manage your profile information to secure your account.</p>
+        </div>
+      </div>
 
       <div className='profile-card'>
-        <div className='profile-field'>
-          <label>Email</label>
-          <input type='text' value={getMaskedEmail(email)} readOnly />
-        </div>
+        <div className='profile-main-grid'>
+          <div className='profile-column'>
+            <div className='profile-field'>
+              <label>Email</label>
+              <input type='text' value={getMaskedEmail(email)} readOnly />
+            </div>
+            <div className='profile-field'>
+              <label>Password</label>
+              <div className='password-view-box'>
+                <input type='text' value={displayedPassword} readOnly />
+                <button type='button' className='eye-btn' onClick={() => setShowPassword((prev) => !prev)}>
+                  <EyeIcon open={showPassword} />
+                </button>
+              </div>
+            </div>
+          </div>
 
-        <div className='profile-field'>
-          <label>Password</label>
-          <div className='password-view-box'>
-            <input type='text' value={displayedPassword} readOnly />
-            <button type='button' className='eye-btn' onClick={() => setShowPassword((prev) => !prev)}>
-              <EyeIcon open={showPassword} />
+          <div className='profile-column profile-security-panel'>
+            <h3>Security Actions</h3>
+            <p>Keep your account safe by changing your password regularly and using a strong password.</p>
+            <ul className='profile-tips'>
+              <li>At least 8 characters</li>
+              <li>Avoid reusing old passwords</li>
+            </ul>
+            <button type='button' className='change-password-btn' onClick={() => setShowChangePopup(true)}>
+              Change password
             </button>
           </div>
-          <button type='button' className='change-password-btn' onClick={() => setShowChangePopup(true)}>
-            Change password
-          </button>
         </div>
       </div>
 

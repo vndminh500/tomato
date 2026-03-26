@@ -22,6 +22,7 @@ import Menu from './pages/Menu/Menu'
 import MobileApp from './pages/MobileApp/MobileApp'
 import Contact from './pages/Contact/Contact'
 import { useParams } from 'react-router-dom'
+import OrdersDetails from './pages/OrdersDetails/OrdersDetails'
 
 const LegacyProductRedirect = () => {
   const { productId } = useParams()
@@ -43,11 +44,13 @@ const App = () => {
       <Routes>
         < Route path ='/' element = {<Home/>} />
         <Route path='/menu' element={<Menu />} />
-        < Route path ='/cart' element = {<Cart/>} />
+        < Route path ='/cart' element = {<Cart setShowLogin={setShowLogin} />} />
         < Route path ='/order' element = {<PlaceOrder/>} />
         <Route path='/mobile-app' element={<MobileApp />} />
         <Route path='/verifyVnpay' element={<VerifyVnpay />} />
         <Route path='/myorders' element ={<MyOrders/>} />
+        <Route path='/myorders/:orderId' element={<OrdersDetails />} />
+        <Route path='/myorders/:orderId/*' element={<OrdersDetails />} />
         <Route path='/product' element={<Navigate to='/' replace />} />
         <Route path='/menu/:productId' element={<Product/>} />
         <Route path='/product/:productId' element={<LegacyProductRedirect />} />

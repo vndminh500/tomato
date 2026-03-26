@@ -66,6 +66,33 @@
     border-radius: 8px;
 }
 
+.cart-item-link {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+}
+
+.cart-item-image-link {
+    width: fit-content;
+    display: inline-flex;
+}
+
+.cart-item-name-link:hover {
+    color: tomato;
+    text-decoration: underline;
+}
+
+.cart-items-item .cart-item-name-link {
+    justify-self: start;
+    display: inline-block;
+    width: fit-content;
+}
+
 .cart hr {
     height: 1px;
     background-color: #e2e2e2;

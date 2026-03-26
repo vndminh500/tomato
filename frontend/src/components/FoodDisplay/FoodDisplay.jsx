@@ -71,13 +71,13 @@ const FoodDisplay = ({
 
   return (
     <div className='food-display' id = 'food-display' ref={foodDisplayRef}>
-      <h2>
+      <h2 className={title === 'Trending Now' ? 'trending-title' : ''}>
         {title}
       </h2>
 
       <div className='food-display-list' key={currentPage}>
         {currentItems.map((item,index)=>{
-            return <FoodItem key = {index} id={item._id} name = {item.name} description = {item.description} price = {item.price} image = {item.image} />
+            return <FoodItem key = {index} id={item._id} name = {item.name} description = {item.description} price = {item.price} image = {item.image} stock={item.stock ?? 20} />
         })}
       </div>
       {showPagination && totalPages > 1 && (

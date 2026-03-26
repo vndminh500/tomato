@@ -1,28 +1,101 @@
 .profile-page {
-  max-width: 800px;
+  max-width: 920px;
   margin: 50px auto;
-  padding: 20px;
+  padding: 12px 20px 24px;
   font-family: 'Poppins', sans-serif;
   color: #444;
 }
 
+.profile-hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid #ffd8cf;
+  background: radial-gradient(circle at left top, #fff4ef 0%, #ffffff 55%);
+  box-shadow: 0 12px 30px rgba(239, 110, 72, 0.12);
+  margin-bottom: 22px;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #ff7b5e 0%, #f44e2f 100%);
+  box-shadow: 0 10px 22px rgba(244, 78, 47, 0.35);
+}
+
+.profile-kicker {
+  margin: 0;
+  color: #de5f43;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
 .profile-page h1 {
-  font-size: 2rem;
-  color: #333;
-  margin-bottom: 8px;
+  font-size: 2.1rem;
+  color: #272727;
+  margin: 2px 0 6px;
 }
 
 .profile-subtitle {
-  color: #666;
-  margin-bottom: 30px;
+  color: #6e6e6e;
+  margin: 0;
 }
+
 
 .profile-card {
   background: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee;
+  padding: 26px;
+  border-radius: 18px;
+  box-shadow: 0 14px 30px rgba(27, 39, 79, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.profile-main-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+}
+
+.profile-column {
+  border: 1px solid #f2f2f2;
+  border-radius: 14px;
+  padding: 16px;
+  background: #fff;
+}
+
+.profile-security-panel {
+  background: linear-gradient(160deg, #fff9f7 0%, #ffffff 75%);
+}
+
+.profile-security-panel h3 {
+  margin: 0 0 8px;
+  color: #333;
+}
+
+.profile-security-panel p {
+  margin: 0;
+  color: #6f6f6f;
+  font-size: 14px;
+}
+
+.profile-tips {
+  margin: 12px 0 18px;
+  padding-left: 18px;
+  color: #5b5b5b;
+  font-size: 13px;
+  display: grid;
+  gap: 6px;
 }
 
 .profile-field {
@@ -80,20 +153,21 @@
 
 .change-password-btn {
   width: fit-content;
-  background: none;
-  border: 1px solid tomato;
-  color: tomato;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: 500;
+  background: linear-gradient(135deg, #ff8567 0%, #ef5638 100%);
+  border: none;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 9px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   margin-top: 5px;
+  box-shadow: 0 8px 18px rgba(239, 86, 56, 0.32);
 }
 
 .change-password-btn:hover {
-  background-color: tomato;
-  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(239, 86, 56, 0.4);
 }
 
 .profile-popup-overlay {
@@ -182,6 +256,17 @@
 }
 
 @media (max-width: 600px) {
+  .profile-hero {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      padding: 18px;
+  }
+
+  .profile-main-grid {
+      grid-template-columns: 1fr;
+  }
+
   .profile-card {
       padding: 20px;
   }

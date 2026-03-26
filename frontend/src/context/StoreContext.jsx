@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext , useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 
 export const StoreContext = createContext(null)
@@ -16,6 +17,8 @@ const StoreContextProvider = (props) => {
     const [discount, setDiscount] = useState(0);
     const [discountAmount, setDiscountAmount] = useState(0);
     const [message, setMessage] = useState('');
+    const [stockAlertItemId, setStockAlertItemId] = useState("");
+    const [stockAlertTick, setStockAlertTick] = useState(0);
 
 
     const applyPromoCode = async (code) => {
@@ -51,16 +54,29 @@ const StoreContextProvider = (props) => {
     };
 
     const addToCart = async (itemId) => {
+        const product = food_list.find((item) => String(item._id) === String(itemId));
+        const stock = Number(product?.stock ?? 20);
+        const currentQuantity = Number(cartItems[itemId] || 0);
+
+        if (currentQuantity >= stock) {
+            setStockAlertItemId(String(itemId));
+            setStockAlertTick((prev) => prev + 1);
+            toast.error(`Only ${stock} item(s) in stock`);
+            return false;
+        }
+
         if (!cartItems[itemId]) {
             setCartItems((prev)=>({...prev,[itemId]:1}))
         }
         else {
             setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}))
         }
+
         if (token) {    
             await axios.post(url + "/api/cart/add",{itemId},{headers:{token}})
         }
 
+        return true;
     }
 
     const removeFromCart = async (itemId) => {
@@ -111,6 +127,10 @@ const StoreContextProvider = (props) => {
         }
         }
         loadData();
+        const intervalId = setInterval(() => {
+            fetchFoodList();
+        }, 5000);
+        return () => clearInterval(intervalId);
     },[])
     
 
@@ -135,7 +155,9 @@ const StoreContextProvider = (props) => {
         message,
         applyPromoCode,
         setPromoCode,
-        setMessage
+        setMessage,
+        stockAlertItemId,
+        stockAlertTick
     }
     return (
         <StoreContext.Provider value={contextValue}>

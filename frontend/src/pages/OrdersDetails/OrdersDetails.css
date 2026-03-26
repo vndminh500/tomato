@@ -1,0 +1,100 @@
+.order-details {
+    margin: 40px 0;
+    color: #374151;
+}
+
+.order-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.order-details-header h2 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.order-details-header span {
+    color: #64748b;
+    font-weight: 600;
+}
+
+.order-details-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.order-details-card {
+    border: 1px solid #f0c6c0;
+    border-radius: 10px;
+    background: #fff;
+    padding: 14px;
+}
+
+.order-details-card h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.order-details-card p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.order-details-section {
+    border: 1px solid #f0c6c0;
+    border-radius: 10px;
+    background: #fff;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.order-details-section h3 {
+    margin: 0 0 10px;
+}
+
+.order-details-section p {
+    margin: 6px 0;
+}
+
+.order-details-section ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.order-details-section li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+.order-details-section li:last-child {
+    border-bottom: none;
+}
+
+.order-details-empty {
+    text-align: center;
+}
+
+.order-details-empty button {
+    margin-top: 10px;
+    border: 1px solid tomato;
+    background: #fff4f2;
+    color: #333;
+    border-radius: 8px;
+    padding: 9px 14px;
+    cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .order-details-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

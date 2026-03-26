@@ -7,6 +7,12 @@
     font-weight: 600;
 }
 
+.food-display h2.trending-title {
+    display: inline-block;
+    color: #ff6347;
+    animation: trendingColorShift 2.4s ease-in-out infinite;
+}
+
 .food-display-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
@@ -51,6 +57,27 @@
     }
     to {
         opacity: 1;
+    }
+}
+
+@keyframes trendingColorShift {
+    0% {
+        color: #ff6347;
+    }
+    33% {
+        color: #ff7a5c;
+    }
+    66% {
+        color: #ff4f2e;
+    }
+    100% {
+        color: #ff6347;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .food-display h2.trending-title {
+        animation: none;
     }
 }
 

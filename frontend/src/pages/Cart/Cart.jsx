@@ -3,8 +3,9 @@ import './Cart.css'
 import { StoreContext } from '../../context/StoreContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const Cart = () => {
+const Cart = ({ setShowLogin }) => {
 
   const {cartItems, food_list,removeFromCart,getTotalCartAmount, url, token, promoCode, discount, discountAmount, message, applyPromoCode, setPromoCode, setMessage} = useContext(StoreContext);
   const [inputPromoCode, setInputPromoCode] = useState('');
@@ -13,6 +14,26 @@ const Cart = () => {
 
   const handleApplyPromoCode = () => {
     applyPromoCode(inputPromoCode);
+  };
+
+  const handleOpenProductDetails = (productId) => {
+    navigate(`/menu/${productId}`);
+  };
+
+  const handleProceedToCheckout = () => {
+    if (getTotalCartAmount() === 0) {
+      toast.error('Your cart is empty. Please add items before checkout.');
+      return;
+    }
+
+    if (!token) {
+      toast.error('Please sign in to proceed to checkout.');
+      if (setShowLogin) {
+        setShowLogin(true);
+      }
+      return;
+    }
+    navigate('/order');
   };
 
   useEffect(() => {
@@ -46,8 +67,20 @@ const Cart = () => {
                 return (
                   <div key={index}>
                     <div className="cart-items-title cart-items-item">
-                    <img src={url+"/images/" +item.image} alt={item.name} />
-                    <p>{item.name}</p>
+                    <button
+                      type='button'
+                      className='cart-item-link cart-item-image-link'
+                      onClick={() => handleOpenProductDetails(item._id)}
+                    >
+                      <img src={url+"/images/" +item.image} alt={item.name} />
+                    </button>
+                    <button
+                      type='button'
+                      className='cart-item-link cart-item-name-link'
+                      onClick={() => handleOpenProductDetails(item._id)}
+                    >
+                      {item.name}
+                    </button>
                     <p>${item.price}</p>
                     <p>{cartItems[item._id]}</p>
                     <p>${item.price*cartItems[item._id]}</p>
@@ -96,7 +129,7 @@ const Cart = () => {
             </div>
           </div>
 
-          <button onClick={()=>navigate('/order')}>PROCEED TO CHECKOUT</button>
+          <button onClick={handleProceedToCheckout}>PROCEED TO CHECKOUT</button>
 
         </div>
           <div className="cart-promocode">
