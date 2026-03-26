@@ -13,7 +13,7 @@ const Navbar = ({ setShowLogin }) => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const searchContainerRef = useRef(null);
   const location = useLocation();
-  const isProductDetailPage = location.pathname.startsWith('/product/');
+  const isProductDetailPage = location.pathname.startsWith('/menu/');
 
   const { getTotalCartAmount, token, setToken, food_list, url } = useContext(StoreContext);
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const Navbar = ({ setShowLogin }) => {
     setSearchValue('');
     setFilteredFood([]);
     setIsSearchVisible(false);
-    navigate(`/product/${id}`);
+    navigate(`/menu/${id}`);
   };
 
   const logout = () => {

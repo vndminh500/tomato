@@ -34,7 +34,7 @@ const Breadcrumb = () => {
   const parts = pathname.split('/').filter(Boolean);
   let crumbs = [];
 
-  if (parts[0] === 'product') {
+  if (parts[0] === 'product' || (parts[0] === 'menu' && parts.length > 1)) {
     const productId = parts[1];
     const product = food_list.find((item) => String(item._id) === String(productId));
     crumbs = [

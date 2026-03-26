@@ -21,6 +21,12 @@ import Breadcrumb from './components/Breadcrumb/Breadcrumb'
 import Menu from './pages/Menu/Menu'
 import MobileApp from './pages/MobileApp/MobileApp'
 import Contact from './pages/Contact/Contact'
+import { useParams } from 'react-router-dom'
+
+const LegacyProductRedirect = () => {
+  const { productId } = useParams()
+  return <Navigate to={`/menu/${productId}`} replace />
+}
 
 const App = () => {
 
@@ -43,7 +49,8 @@ const App = () => {
         <Route path='/verifyVnpay' element={<VerifyVnpay />} />
         <Route path='/myorders' element ={<MyOrders/>} />
         <Route path='/product' element={<Navigate to='/' replace />} />
-        <Route path='/product/:productId' element={<Product/>} />
+        <Route path='/menu/:productId' element={<Product/>} />
+        <Route path='/product/:productId' element={<LegacyProductRedirect />} />
         <Route path='/about' element={<About />} />
         <Route path='/contact-us' element={<Contact />} />
         <Route path='/delivery' element={<Delivery />} />
