@@ -21,20 +21,12 @@ const NotFound = () => {
 
       <p className="not-found-subtitle">
         
-It seems the page you're looking for has been <strong>"lost"</strong>. Don't worry, come back and discover other delicious dishes!
+It seems the page you're looking for has been lost. Don't worry, come back and discover other delicious dishes!
       </p>
 
       <div className="not-found-actions">
         <button className="btn-home" onClick={() => navigate('/')}>
           Home
-        </button>
-        <button
-          className="btn-menu"
-          onClick={() => {
-            window.location.href = '/#explore-menu';
-          }}
-        >
-          Menu
         </button>
       </div>
     </div>

@@ -5,14 +5,12 @@ import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   return (
-    <div>
-      <div className="navbar">
-        <Link to='/'>
-          <img src={assets.logo} alt="" className="logo" />
-        </Link>
-        <img src={assets.profile_image} alt="" className='profile' />
-      </div>
-    </div>
+    <header className="navbar">
+      <Link to='/' className="navbar-brand">
+        <img src={assets.logo} alt="Tomato admin logo" className="logo" />
+      </Link>
+      <img src={assets.profile_image} alt="Admin profile" className='profile' />
+    </header>
   )
 }
 

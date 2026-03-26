@@ -2,35 +2,131 @@
   margin-top: 30px;
   display: flex;
   flex-direction: column;
-  }
-  
-  .place-order-payment .title {
+}
+
+.place-order {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 50px;
+    margin-top: 100px;
+    padding: 28px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #fff9f6 0%, #ffffff 48%);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.06);
+}
+
+.place-order-left {
+    width: 100%;
+    max-width: max(30%,500px);
+}
+
+.order-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #fff0ea;
+    color: tomato;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.place-order-left .title {
+    font-size: clamp(28px, 3vw, 36px);
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #252525;
+}
+
+.order-subtitle {
+    color: #727272;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.place-order-left input,
+.place-order-left select {
+    margin-bottom: 15px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d7d7d7;
+    border-radius: 10px;
+    outline-color: tomato;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.place-order-left input:focus,
+.place-order-left select:focus {
+    border-color: #ff9d87;
+    box-shadow: 0 0 0 3px rgba(255, 99, 71, 0.12);
+}
+
+.place-order-left select:disabled {
+    cursor: not-allowed;
+    color: #9fa6b2;
+    background: #f6f7f9;
+}
+
+.place-order-left .multi-fields {
+    display: flex;
+    gap: 12px;
+}
+
+.place-order-right {
+    width: 100%;
+    max-width: max(40%, 500px);
+}
+
+.place-order-right .cart-total {
+    padding: 24px;
+    border: 1px solid #ebebeb;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05);
+    margin-top: 145px;
+}
+
+.place-order .cart-total button {
+    margin-top: 30px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.place-order-payment .title {
     font-size: max(1.5vw, 20px);
     font-weight: 600;
     color: #404040;
-  }
-  
-  .payment-options {
+    margin-bottom: 8px;
+}
+
+.payment-options {
     display: flex;
     flex-direction: column;
     gap: 12px;
-  }
-  
-  .payment-options label {
+}
+
+.payment-options label {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 12px 15px;
     border: 1px solid #e2e2e2;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 15px;
     color: #555;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
     background-color: #fff;
-  }
-  
-  .payment-options input[type="radio"] {
+}
+
+.payment-options label.active {
+    border-color: #ff9b85;
+    background: #fff6f2;
+    color: tomato;
+}
+
+.payment-options input[type="radio"] {
     -webkit-appearance: none;
     appearance: none;
     background-color: #fff;
@@ -44,62 +140,38 @@
     transform: translateY(-0.075em);
     display: grid;
     place-content: center;
-  }
-  
-  .payment-options input[type="radio"]::before {
+}
+
+.payment-options input[type="radio"]::before {
     content: "";
     width: 0.65em;
     height: 0.65em;
     border-radius: 50%;
     transform: scale(0);
     transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em #4caf50;
-  }
-  
-  .payment-options input[type="radio"]:checked::before {
+    box-shadow: inset 1em 1em tomato;
+}
+
+.payment-options input[type="radio"]:checked::before {
     transform: scale(1);
-  }
-  
-
-
-  .place-order {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 50px;
-    margin-top: 100px;
 }
 
-.place-order-left {
-    width: 100%;
-    max-width: max(30%,500px);
+@media (max-width: 900px) {
+    .place-order {
+        flex-direction: column;
+        padding: 18px;
+        margin-top: 72px;
+    }
+
+    .place-order-left,
+    .place-order-right {
+        max-width: 100%;
+    }
 }
 
-.place-order-left .title {
-    font-size: 30px;
-    font-weight: 600;
-    margin-bottom: 50px;
-}
-
-.place-order-left input {
-    margin-bottom: 15px;
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #c5c5c5;
-    border-radius: 4px;
-    outline-color: tomato;
-}
-
-.place-order-left .multi-fields {
-    display: flex;
-    gap: 10px;
-}
-
-.place-order-right {
-    width: 100%;
-    max-width: max(40%, 500px);
-}
-
-.place-order .cart-total button {
-    margin-top: 30px;
+@media (max-width: 600px) {
+    .place-order-left .multi-fields {
+        flex-direction: column;
+        gap: 0;
+    }
 }

@@ -11,6 +11,8 @@ const todayInputDateMin = () => {
 
 const Voucher = ({ url }) => {
     const [vouchers, setVouchers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [removingVoucherId, setRemovingVoucherId] = useState("");
     const [showAddPopup, setShowAddPopup] = useState(false);
     const [newVoucher, setNewVoucher] = useState({
         code: '',
@@ -21,6 +23,7 @@ const Voucher = ({ url }) => {
 
     const fetchVouchers = async () => {
         try {
+            setIsLoading(true);
             const response = await axios.get(`${url}/api/voucher/list`);
             if (response.data.success) {
                 setVouchers(response.data.data);
@@ -29,6 +32,8 @@ const Voucher = ({ url }) => {
             }
         } catch (error) {
             toast.error('Error fetching vouchers');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -77,6 +82,7 @@ const Voucher = ({ url }) => {
 
     const handleRemoveVoucher = async (voucherId) => {
         try {
+            setRemovingVoucherId(voucherId);
             const response = await axios.post(`${url}/api/voucher/remove`, { id: voucherId });
             if (response.data.success) {
                 toast.success('Voucher removed successfully');
@@ -86,6 +92,8 @@ const Voucher = ({ url }) => {
             }
         } catch (error) {
             toast.error('Error removing voucher');
+        } finally {
+            setRemovingVoucherId("");
         }
     };
 
@@ -107,13 +115,35 @@ const Voucher = ({ url }) => {
                     <b>Min Order Amount ($)</b>
                     <b>Remove</b>
                 </div>
-                {vouchers.map((item, index) => (
+                {isLoading ? (
+                    Array.from({ length: 6 }).map((_, index) => (
+                        <div key={index} className='list-table-format voucher-skeleton-row'>
+                            <span className='voucher-skeleton-line'></span>
+                            <span className='voucher-skeleton-line short'></span>
+                            <span className='voucher-skeleton-line'></span>
+                            <span className='voucher-skeleton-line short'></span>
+                            <span className='voucher-skeleton-pill'></span>
+                        </div>
+                    ))
+                ) : vouchers.length === 0 ? (
+                    <div className='voucher-empty-state'>
+                        <p>No vouchers available.</p>
+                        <span>Create a voucher to boost conversions on checkout.</span>
+                    </div>
+                ) : vouchers.map((item, index) => (
                     <div key={index} className='list-table-format'>
                         <p>{item.code}</p>
                         <p>{item.discountPercent}</p>
                         <p>{new Date(item.expiryDate).toLocaleDateString()}</p>
                         <p>{item.minOrderAmount}</p>
-                        <p className='remove-voucher-btn' onClick={() => handleRemoveVoucher(item._id)}>X</p>
+                        <button
+                            className='remove-voucher-btn'
+                            onClick={() => handleRemoveVoucher(item._id)}
+                            type='button'
+                            disabled={removingVoucherId === item._id}
+                        >
+                            {removingVoucherId === item._id ? "..." : "X"}
+                        </button>
                     </div>
                 ))}
             </div>

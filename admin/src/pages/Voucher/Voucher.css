@@ -1,8 +1,8 @@
 .voucher.add {
-    width: 70%;
+    width: 74%;
     margin-left: max(5vw, 25px);
-    margin-top: 50px;
-    color: #6d6d6d;
+    margin-top: 36px;
+    color: var(--text-secondary);
 }
 
 .voucher-header {
@@ -16,50 +16,79 @@
 .voucher-header p {
     font-size: 20px;
     font-weight: 600;
-    color: #404040;
+    color: var(--text-primary);
 }
 
 .voucher-header button {
     padding: 10px 20px;
-    background-color: tomato;
+    background: linear-gradient(135deg, #ff7a59 0%, #ff5b3f 100%);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 600;
     transition: 0.3s;
 }
 
 .voucher-header button:hover {
-    background-color: #e5533d;
+    transform: translateY(-2px);
 }
 
-.list-table-format {
+.voucher .list-table {
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-soft);
+}
+
+.voucher .list-table-format {
     display: grid;
     grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr 0.5fr;
     gap: 10px;
     padding: 12px 15px;
-    border: 1px solid #cacaca;
+    border-bottom: 1px solid var(--border-color);
     align-items: center;
     font-size: 14px;
-    background-color: #fff;
+    color: var(--text-secondary);
 }
 
-.list-table-format.title {
-    background-color: #f9f9f9;
+.voucher .list-table-format:not(.title):nth-child(odd) {
+    background: #fbfdff;
+}
+
+.voucher .list-table-format:not(.title):not(.voucher-skeleton-row) {
+    animation: revealUp 0.35s ease both;
+}
+
+.voucher .list-table-format.title {
+    background-color: var(--bg-surface);
+    color: var(--text-primary);
     font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .remove-voucher-btn {
     cursor: pointer;
-    
-    color: #555;
+    color: var(--text-secondary);
     transition: 0.2s;
+    border: 1px solid rgba(255, 107, 74, 0.55);
+    background: rgba(255, 107, 74, 0.12);
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
 }
 
 .remove-voucher-btn:hover {
-    color: tomato;
+    color: var(--accent);
     font-weight: 700;
+}
+
+.remove-voucher-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
 }
 
 .add-voucher-popup {
@@ -76,7 +105,9 @@
 }
 
 .add-voucher-form {
-    background-color: white;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     padding: 30px;
     border-radius: 10px;
     width: max(30vw, 400px);
@@ -88,7 +119,7 @@
 }
 
 .add-voucher-form h2 {
-    color: #404040;
+    color: var(--text-primary);
     font-size: 20px;
     margin-bottom: 10px;
 }
@@ -99,7 +130,7 @@
     right: 20px;
     font-size: 28px;
     cursor: pointer;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 
@@ -116,13 +147,13 @@
 
 .form-group input {
     padding: 10px;
-    border: 1px solid #c9c9c9;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    outline-color: tomato;
+    outline-color: var(--accent);
 }
 
 .add-voucher-form button[type='submit'] {
-    background-color: tomato;
+    background: linear-gradient(135deg, #ff7a59 0%, #ff5b3f 100%);
     color: white;
     padding: 12px;
     border: none;
@@ -134,7 +165,47 @@
 }
 
 .add-voucher-form button[type='submit']:hover {
-    background-color: #e5533d;
+    transform: translateY(-2px);
+}
+
+.voucher-empty-state {
+    padding: 26px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+}
+
+.voucher-empty-state p {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.voucher-empty-state span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.voucher-skeleton-row span {
+    display: block;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #eef3fb 20%, #dde7f6 50%, #eef3fb 80%);
+    background-size: 220% 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.voucher-skeleton-line {
+    height: 14px;
+}
+
+.voucher-skeleton-line.short {
+    width: 75%;
+}
+
+.voucher-skeleton-pill {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
 }
 
 @keyframes fadeIn {
@@ -142,13 +213,33 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 768px) {
-    .list-table-format {
+    .voucher .list-table-format {
         grid-template-columns: 1fr 0.5fr 1fr 0.5fr;
         font-size: 12px;
     }
-    .list-table-format b:nth-child(4), 
-    .list-table-format p:nth-child(4) {
+    .voucher .list-table-format b:nth-child(4), 
+    .voucher .list-table-format p:nth-child(4) {
         display: none;
     }
 }

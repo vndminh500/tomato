@@ -1,15 +1,15 @@
 .order {
-    width: 70%;
+    width: 74%;
     margin-left: max(5vw, 25px);
-    margin-top: 50px;
-    color: #505050;
+    margin-top: 36px;
+    color: var(--text-secondary);
 }
 
 .order h3 {
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 25px;
-    color: #404040;
+    color: var(--text-primary);
 }
 
 .order-list {
@@ -23,17 +23,25 @@
     grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
     align-items: start;
     gap: 30px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     padding: 20px;
-    border-radius: 8px;
-    background-color: #fff;
+    border-radius: 14px;
+    background-color: var(--bg-secondary);
     font-size: 14px;
     transition: 0.3s;
+    box-shadow: var(--shadow-soft);
 }
 
 .order-item:hover {
-    border-color: tomato;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #4a6484;
+}
+
+.order-item:nth-child(odd) {
+    background: linear-gradient(180deg, #fbfdff, #ffffff);
+}
+
+.order-item:not(.order-skeleton) {
+    animation: revealUp 0.35s ease both;
 }
 
 .order-item img {
@@ -42,14 +50,14 @@
 
 .order-item-food {
     font-weight: 600;
-    color: #333;
+    color: var(--text-primary);
     line-height: 1.4;
 }
 
 .order-item-name {
     font-weight: 600;
     margin-top: 15px;
-    color: tomato;
+    color: #ff8a71;
 }
 
 .order-item-time {
@@ -62,7 +70,7 @@
 .order-item-address {
     margin-top: 10px;
     font-size: 13px;
-    color: #666;
+    color: var(--text-secondary);
     line-height: 1.4;
 }
 
@@ -78,19 +86,53 @@
 }
 
 .order-item select {
-    background-color: #ffe8e4;
-    border: 1px solid tomato;
+    background-color: var(--bg-soft);
+    border: 1px solid #4f617a;
+    color: var(--text-primary);
     padding: 10px;
     outline: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 500;
 }
 
+.order-status-control {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.order-status-badge {
+    width: fit-content;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: 1px solid transparent;
+    font-weight: 600;
+}
+
+.order-status-badge.is-processing {
+    color: #ffd48a;
+    border-color: rgba(255, 212, 138, 0.45);
+    background: rgba(255, 212, 138, 0.12);
+}
+
+.order-status-badge.is-delivering {
+    color: #94c9ff;
+    border-color: rgba(148, 201, 255, 0.45);
+    background: rgba(148, 201, 255, 0.12);
+}
+
+.order-status-badge.is-delivered {
+    color: #8ee2bc;
+    border-color: rgba(38, 194, 129, 0.5);
+    background: rgba(38, 194, 129, 0.14);
+}
+
 .order-failed-box {
-    background-color: #ffeaea;
-    color: #d9534f;
-    border: 1px solid #d9534f;
+    background-color: rgba(255, 107, 107, 0.12);
+    color: #ff9696;
+    border: 1px solid rgba(255, 107, 107, 0.6);
     padding: 8px 12px;
     border-radius: 4px;
     text-align: center;
@@ -98,6 +140,76 @@
     font-size: 12px;
     text-transform: uppercase;
     animation: pulse 2s infinite;
+}
+
+.order-empty-state {
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    background: var(--bg-secondary);
+}
+
+.order-empty-state p {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.order-empty-state span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.order-skeleton span {
+    display: block;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #eef3fb 20%, #dde7f6 50%, #eef3fb 80%);
+    background-size: 220% 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.order-skeleton-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.order-skeleton-line {
+    height: 14px;
+    margin-bottom: 8px;
+}
+
+.order-skeleton-line.short {
+    width: 70%;
+}
+
+.order-skeleton-line.tiny {
+    width: 65px;
+}
+
+.order-skeleton-pill {
+    width: 120px;
+    height: 34px;
+    border-radius: 999px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes pulse {

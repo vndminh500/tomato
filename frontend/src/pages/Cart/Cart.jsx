@@ -24,6 +24,11 @@ const Cart = () => {
 
   return (
     <div className='cart'>
+      <div className='cart-header'>
+        <span className='cart-badge'>Your Order</span>
+        <h1>Shopping Cart</h1>
+        <p>Review your items, apply a voucher, and proceed to checkout in one step.</p>
+      </div>
       <div className="cart-items">
         <div className="cart-items-title">
           <p>Items</p>
@@ -35,23 +40,31 @@ const Cart = () => {
         </div>
         <br />
         <hr />
-          {food_list.map((item,index)=>{
-            if(cartItems[item._id]>0) {
-              return (
-                <div key={index}>
-                  <div className="cart-items-title cart-items-item">
-                  <img src={url+"/images/" +item.image} alt="" />
-                  <p>{item.name}</p>
-                  <p>${item.price}</p>
-                  <p>{cartItems[item._id]}</p>
-                  <p>${item.price*cartItems[item._id]}</p>
-                  <p onClick={()=>removeFromCart(item._id)} className='cross'>x</p>
-                </div>
-                <hr />
-                </div>
-              )
-            }
-          })}
+          {food_list.some((item) => cartItems[item._id] > 0) ? (
+            food_list.map((item,index)=>{
+              if(cartItems[item._id]>0) {
+                return (
+                  <div key={index}>
+                    <div className="cart-items-title cart-items-item">
+                    <img src={url+"/images/" +item.image} alt={item.name} />
+                    <p>{item.name}</p>
+                    <p>${item.price}</p>
+                    <p>{cartItems[item._id]}</p>
+                    <p>${item.price*cartItems[item._id]}</p>
+                    <button onClick={()=>removeFromCart(item._id)} className='cross' type='button'>x</button>
+                  </div>
+                  <hr />
+                  </div>
+                )
+              }
+            })
+          ) : (
+            <div className='cart-empty-state'>
+              <h3>Your cart is empty</h3>
+              <p>Add delicious items from the menu and come back here.</p>
+              <button type='button' onClick={() => navigate('/')}>Browse Menu</button>
+            </div>
+          )}
 
       </div>
       <div className="cart-bottom">
@@ -101,7 +114,9 @@ const Cart = () => {
                             />
                             <button onClick={handleApplyPromoCode}>Submit</button>
               </div>
-              {message && <p style={{ color: discount > 0 ? 'green' : 'red' }}>{message}</p>}
+              {message && (
+                <p className={`cart-promocode-message ${discount > 0 ? 'success' : 'error'}`}>{message}</p>
+              )}
             </div>
           </div>
 

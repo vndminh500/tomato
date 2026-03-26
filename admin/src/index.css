@@ -1,15 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
+:root {
+  --bg-primary: #f4f7fb;
+  --bg-secondary: #ffffff;
+  --bg-surface: #f7f9fd;
+  --bg-soft: #ffffff;
+  --text-primary: #1c2536;
+  --text-secondary: #5f6f87;
+  --border-color: #dbe3f0;
+  --accent: #ff6b4a;
+  --accent-soft: rgba(255, 107, 74, 0.18);
+  --success: #26c281;
+  --danger: #ff6b6b;
+  --shadow-soft: 0 10px 24px rgba(18, 38, 63, 0.08);
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Outfit", sans-serif;;
+  font-family: "Outfit", sans-serif;
 }
 
 body {
   min-height: 100vh;
-  background-color: #fcfcfc;
+  background: radial-gradient(circle at top right, #e9f0fb 0%, var(--bg-primary) 42%);
+  color: var(--text-primary);
 }
 
 a {
@@ -20,24 +36,55 @@ a {
 hr {
   border: none;
   height: 1px;
-  background-color: #a9a9a9;
+  background-color: var(--border-color);
 }
 
 .app-content {
   display: flex;
+  min-height: calc(100vh - 86px);
 }
 
 .flex-col {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .cursor {
   cursor: pointer;
+  transition: color 0.2s ease;
 }
+
 .cursor:hover {
-  font-weight: bold;
-  font-size: 14px;
-  color: red;
+  color: var(--accent);
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  background-color: var(--bg-soft);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 10px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #8090aa;
+}
+
+button {
+  border-radius: 10px;
+}
+
+.toast-dark {
+  background: #1f2633;
+  color: #f5f7fb;
 }

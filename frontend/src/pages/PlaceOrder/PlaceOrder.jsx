@@ -13,18 +13,22 @@ const PlaceOrder = () => {
     firstName:"",
     lastName:"",
     email:"",
-    street:"",
     city:"",
-    state:"",
-    zipcode:"",
-    country:"",
+    district:"",
+    street:"",
     phone:""
   })
+  const [locations, setLocations] = useState([]);
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setData(data=>({...data,[name]:value}))
+    setData((prev) => {
+      if (name === 'city') {
+        return { ...prev, city: value, district: "" };
+      }
+      return ({ ...prev, [name]: value });
+    })
   }
 
   const [paymentMethod, setPaymentMethod] = useState('vnpay');
@@ -77,6 +81,18 @@ const PlaceOrder = () => {
   }
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await axios.get("https://provinces.open-api.vn/api/?depth=2");
+        setLocations(response.data || []);
+      } catch {
+        toast.error("Unable to load city and district list");
+      }
+    };
+    fetchLocations();
+  }, []);
+
   useEffect(()=>{
     if (!token) {
       navigate('/cart')
@@ -86,36 +102,55 @@ const PlaceOrder = () => {
     }
   },[token])
 
+  const districtOptions = locations.find((item) => item.name === data.city)?.districts || [];
+
   return (
     <form onSubmit={placeOrder} className='place-order'>
       <div className="place-order-left">
+        <span className='order-badge'>Checkout</span>
         <p className="title">Delivery Information</p>
+        <p className='order-subtitle'>Fill in your details so we can deliver your order quickly and safely.</p>
         <div className='multi-fields'>
           <input required name='firstName' onChange={onChangeHandler} value={data.firstName} type="text" placeholder='First name' />
           <input required name='lastName' onChange={onChangeHandler} value={data.lastName} type="text" placeholder='Last name' />
         </div>
         <input required name='email' onChange={onChangeHandler} value={data.email} type="email" placeholder='Email' />
-        <input required name='street' onChange={onChangeHandler} value={data.street} type="text" placeholder='Address' />
 
         <div className='multi-fields'>
-          <input required name='city' onChange={onChangeHandler} value={data.city} type="text" placeholder='City' />
-          <input required name='state' onChange={onChangeHandler} value={data.state} type="text" placeholder='State' />
+          <select required name='city' onChange={onChangeHandler} value={data.city}>
+            <option value=''>Select city</option>
+            {locations.map((location) => (
+              <option key={location.code} value={location.name}>
+                {location.name}
+              </option>
+            ))}
+          </select>
+          <select
+            required
+            name='district'
+            onChange={onChangeHandler}
+            value={data.district}
+            disabled={!data.city}
+          >
+            <option value=''>Select district</option>
+            {districtOptions.map((district) => (
+              <option key={district.code} value={district.name}>
+                {district.name}
+              </option>
+            ))}
+          </select>
         </div>
-        
-        <div className='multi-fields'>
-          <input required name='zipcode' onChange={onChangeHandler} value={data.zipcode} type="text" placeholder='Zip code' />
-          <input required name='country' onChange={onChangeHandler} value={data.country} type="text" placeholder='Country' />
-        </div>
+        <input required name='street' onChange={onChangeHandler} value={data.street} type="text" placeholder='Address' />
 
         <input required name='phone' onChange={onChangeHandler} value={data.phone} type="text" placeholder='Phone number' />
         <div className="place-order-payment">
           <p className="title">Payment Method</p>
           <div className="payment-options">
-            <label>
+            <label className={paymentMethod === 'vnpay' ? 'active' : ''}>
               <input type="radio" name="paymentMethod" value="vnpay" checked={paymentMethod === 'vnpay'} onChange={() => setPaymentMethod('vnpay')} />
               Online Payment
             </label>
-            <label>
+            <label className={paymentMethod === 'cod' ? 'active' : ''}>
               <input type="radio" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={() => setPaymentMethod('cod')} />
               Cash on Delivery
             </label>

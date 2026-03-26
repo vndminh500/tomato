@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from './components/Navbar/Navbar'
-import { Route , Routes } from 'react-router-dom'
+import { Navigate, Route , Routes } from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Cart from './pages/Cart/Cart'
 import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
@@ -18,6 +18,7 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import Profile from './pages/Profile/Profile';
 import { Toaster } from 'react-hot-toast';
 import NotFound from './pages/NotFound/NotFound'
+import Breadcrumb from './components/Breadcrumb/Breadcrumb'
 
 const App = () => {
 
@@ -29,6 +30,7 @@ const App = () => {
     {showLogin?<LoginPopup setShowLogin={setShowLogin}/>:<></>}
     <div className='app'> 
       <Navbar setShowLogin={setShowLogin} />
+      <Breadcrumb />
       <ScrollToTop />
       <Routes>
         < Route path ='/' element = {<Home/>} />
@@ -36,6 +38,7 @@ const App = () => {
         < Route path ='/order' element = {<PlaceOrder/>} />
         <Route path='/verifyVnpay' element={<VerifyVnpay />} />
         <Route path='/myorders' element ={<MyOrders/>} />
+        <Route path='/product' element={<Navigate to='/' replace />} />
         <Route path='/product/:productId' element={<Product/>} />
         <Route path='/about' element={<About />} />
         <Route path='/delivery' element={<Delivery />} />

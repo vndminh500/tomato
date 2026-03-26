@@ -1,14 +1,14 @@
 .users.add {
-    width: 70%;
+    width: 74%;
     margin-left: max(5vw, 25px);
-    margin-top: 50px;
-    color: #6d6d6d;
+    margin-top: 36px;
+    color: var(--text-secondary);
 }
 
 .users h3 {
     font-weight: 600;
     margin-bottom: 20px;
-    color: #404040;
+    color: var(--text-primary);
 }
 
 .users-list-table {
@@ -17,23 +17,31 @@
     align-items: center;
     gap: 15px;
     padding: 12px 15px;
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     border-top: none;
     font-size: 14px;
-    background-color: #fff;
+    background-color: var(--bg-secondary);
     transition: 0.3s;
 }
 
 .users-list-table.title {
-    background-color: #f9f9f9;
+    background-color: var(--bg-surface);
     font-weight: 700;
-    color: #333;
-    border: 1px solid #ddd;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
     text-align: left;
 }
 
 .users-list-table:hover:not(.title) {
-    background-color: #fcfcfc;
+    background-color: #f6f9ff;
+}
+
+.users-list-table:not(.title):nth-child(odd) {
+    background: #fbfdff;
+}
+
+.users-list-table:not(.title):not(.users-skeleton-row) {
+    animation: revealUp 0.35s ease both;
 }
 
 .users-list-table p {
@@ -45,24 +53,112 @@
 
 .users-status-select {
     padding: 8px;
-    border-radius: 4px;
+    border-radius: 8px;
     font-weight: 500;
     cursor: pointer;
     outline: none;
     transition: 0.3s;
-    border: 1px solid #ccc;
+    border: 1px solid #4f617a;
+    color: var(--text-primary);
 }
 
 .users-status-select--active {
-    background-color: #e6f7ed;
-    color: #2ecc71;
-    border-color: #2ecc71;
+    background-color: rgba(38, 194, 129, 0.16);
+    color: #8ee2bc;
+    border-color: rgba(38, 194, 129, 0.6);
 }
 
 .users-status-select--inactive {
-    background-color: #fff2f0;
-    color: tomato;
-    border-color: tomato;
+    background-color: rgba(255, 107, 74, 0.15);
+    color: #ff9a84;
+    border-color: rgba(255, 107, 74, 0.6);
+}
+
+.users-status-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.users-status-badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.users-status-badge.is-active {
+    color: #8ee2bc;
+    background: rgba(38, 194, 129, 0.14);
+    border-color: rgba(38, 194, 129, 0.5);
+}
+
+.users-status-badge.is-inactive {
+    color: #ff9a84;
+    background: rgba(255, 107, 74, 0.14);
+    border-color: rgba(255, 107, 74, 0.5);
+}
+
+.users-empty-state {
+    margin-top: 1px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    background: var(--bg-secondary);
+}
+
+.users-empty-state p {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.users-empty-state span {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.users-skeleton-row span {
+    display: block;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #eef3fb 20%, #dde7f6 50%, #eef3fb 80%);
+    background-size: 220% 100%;
+    animation: shimmer 1.4s infinite linear;
+}
+
+.users-skeleton-line {
+    height: 14px;
+}
+
+.users-skeleton-line.short {
+    width: 80%;
+}
+
+.users-skeleton-pill {
+    width: 95px;
+    height: 30px;
+    border-radius: 999px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes revealUp {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
@@ -80,6 +176,11 @@
     .users-list-table b:nth-child(1),
     .users-list-table p:nth-child(1) {
         display: none;
+    }
+
+    .users-status-cell {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 

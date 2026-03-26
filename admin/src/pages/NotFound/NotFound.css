@@ -6,8 +6,9 @@
   min-height: 100vh;
   text-align: center;
   padding: 20px;
-  background-color: #fff;
-  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle at top right, #1e2a3d 0%, var(--bg-primary) 45%);
+  font-family: 'Outfit', sans-serif;
+  width: 100%;
 }
 
 .not-found-visual {
@@ -18,7 +19,7 @@
 .not-found-404 {
   font-size: max(15vw, 150px);
   font-weight: 800;
-  color: #f1f1f1; 
+  color: rgba(255, 255, 255, 0.08);
   margin: 0;
   line-height: 1;
 }
@@ -42,13 +43,13 @@
 .not-found-title {
   font-size: 28px;
   font-weight: 700;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 10px;
 }
 
 .not-found-subtitle {
   font-size: 16px;
-  color: #666;
+  color: var(--text-secondary);
   max-width: 450px;
   line-height: 1.6;
   margin-bottom: 40px;
@@ -73,28 +74,17 @@
 }
 
 .btn-home {
-  background-color: tomato;
-  border: 2px solid tomato;
+  background: linear-gradient(135deg, #ff7a59 0%, #ff5b3f 100%);
+  border: 2px solid #ff7a59;
   color: white;
 }
 
 .btn-home:hover {
-  background-color: #e5533d;
+  border-color: #ff9b85;
   transform: translateY(-3px); 
   box-shadow: 0 8px 20px rgba(255, 99, 71, 0.3);
 }
 
-.btn-menu {
-  background-color: tomato;
-  border: 2px solid tomato;
-  color: white;
-}
-
-.btn-menu:hover {
-  background-color: #e5533d;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(255, 99, 71, 0.3);
-}
 
 @media (max-width: 600px) {
   .not-found-404 {

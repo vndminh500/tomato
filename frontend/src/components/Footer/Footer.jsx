@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
-    <div className='footer' id='footer'>
+    <footer className='footer' id='footer'>
       <div className="footer-content">
         <div className="footer-content-left">
-            <img src={assets.logo} alt="" />
-            <p>Our mission is to deliver fresh, delicious food right to your doorstep. We are committed to quality, convenience, and customer satisfaction.</p>
+            <img src={assets.logo} alt="Tomato logo" />
+            <p>Experience the best of fresh dining from the comfort of your home. We pride ourselves on quality service and a customer-first approach.</p>
             <div className="footer-social-icons">
-                <img src={assets.facebook_icon} alt="" />
-                <img src={assets.twitter_icon} alt="" />
-                <img src={assets.linkedin_icon} alt="" />
+                <a href="#" aria-label="Tomato on Facebook"><img src={assets.facebook_icon} alt="Facebook" /></a>
+                <a href="#" aria-label="Tomato on Twitter"><img src={assets.twitter_icon} alt="Twitter" /></a>
+                <a href="#" aria-label="Tomato on LinkedIn"><img src={assets.linkedin_icon} alt="LinkedIn" /></a>
             </div>
         </div>
 
@@ -29,17 +29,24 @@ const Footer = () => {
 
         <div className="footer-content-right">
             <h2>GET IN TOUCH</h2>
-            <ul>
-                <li>+84 123 456 789</li>
-                <li>tomato@gmail.com</li>
-            </ul>
+            <div className='footer-contact'>
+              <p className='footer-contact-line'>+84 123 456 789</p>
+              <p className='footer-contact-line'>tomato@gmail.com</p>
+            </div>
+            <div className='footer-newsletter'>
+              <p>Get latest offers in your inbox</p>
+              <div className='footer-newsletter-box'>
+                <input type="email" placeholder='Your email' />
+                <button type='button'>Subscribe</button>
+              </div>
+            </div>
         </div>
       </div>
       <hr />
       <p className='footer-copyright'>
         Copyright 2026 © Tomato.com - All Right Reserved.
       </p>
-    </div>
+    </footer>
   )
 }
 

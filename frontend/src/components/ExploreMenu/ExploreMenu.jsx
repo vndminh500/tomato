@@ -4,30 +4,40 @@ import {menu_list} from '../../assets/assets'
 
 const ExploreMenu = ({category, setCategory}) => {
   return (
-    <div className='explore-menu' id ='explore-menu'>
-      <h1>
-        Explore our menu
-      </h1>
-      
-      <p className='explore-menu-text'>
-        Choose from a diverse menu featuring a delectable array of dishes. Our mission is to 
-        satisfy your cravings and elevate your dining experience, one delicious meal at a time.
-      </p>
+    <section className='explore-menu' id='explore-menu'>
+      <div className='explore-menu-heading'>
+        <span className='explore-menu-badge'>Top picks today</span>
+        <h1>
+          Explore our menu
+        </h1>
+        <p className='explore-menu-text'>
+        Indulge in a curated selection of gourmet dishes. We are dedicated to fulfilling 
+        your culinary desires and transforming every meal into an exceptional dining moment.
+        </p>
+        <p className='explore-menu-selected'>
+          Showing: <span>{category === "All" ? "All Categories" : category}</span>
+        </p>
+      </div>
 
-        <div className='explore-menu-list'>
-            {menu_list.map((item,index)=>{
-                return(
-                    <div onClick = {()=>setCategory(prev=>prev===item.menu_name?"All":item.menu_name)} key={index} className='explore-menu-list-item'>
-                        <img className={category===item.menu_name?"active":""} src={item.menu_image} alt="" />
-                        <p>
-                            {item.menu_name}
-                        </p>
-                    </div>
-                )
-            })}
-        </div>
-        <hr />
-    </div>
+      <div className='explore-menu-list'>
+        {menu_list.map((item, index) => {
+          const isActive = category === item.menu_name;
+
+          return (
+            <button
+              onClick={() => setCategory(prev => prev === item.menu_name ? "All" : item.menu_name)}
+              key={index}
+              className={`explore-menu-list-item ${isActive ? "active" : ""}`}
+              type='button'
+            >
+              <img src={item.menu_image} alt={item.menu_name} />
+              <p>{item.menu_name}</p>
+            </button>
+          )
+        })}
+      </div>
+      <hr />
+    </section>
   )
 }
 

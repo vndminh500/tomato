@@ -20,7 +20,6 @@ const FoodDisplay = ({category, currentPage, setCurrentPage}) => {
       setCurrentPage(pageNumber);
     }
 
-    // Chặn trường hợp currentPage đang lớn hơn tổng trang sau khi đổi category
     useEffect(() => {
       if (totalPages === 0) {
         if (currentPage !== 1) setCurrentPage(1);
@@ -47,7 +46,7 @@ const FoodDisplay = ({category, currentPage, setCurrentPage}) => {
   return (
     <div className='food-display' id = 'food-display' ref={foodDisplayRef}>
       <h2>
-        Top dishes near you
+        Trending Now
       </h2>
 
       <div className='food-display-list' key={currentPage}>

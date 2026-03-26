@@ -2,13 +2,42 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 4%;
+    padding: 14px 4%;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 22px rgba(24, 39, 75, 0.08);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-brand span {
+    color: var(--text-secondary);
+    font-size: 14px;
+    letter-spacing: 0.4px;
+    border-left: 1px solid var(--border-color);
+    padding-left: 12px;
 }
 
 .navbar .logo {
-    width:150px;
+    width: 155px;
 }
 
 .navbar .profile {
-    width: 45px;
+    width: 46px;
+    border-radius: 50%;
+    padding: 3px;
+    border: 2px solid #eef3fb;
+    background: var(--bg-soft);
+    box-shadow: var(--shadow-soft);
+}
+
+@media (max-width: 700px) {
+    .navbar-brand span {
+        display: none;
+    }
 }

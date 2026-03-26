@@ -20,17 +20,13 @@ const NotFound = () => {
       <h2 className="not-found-title">Oops! This page no longer exists.</h2>
 
       <p className="not-found-subtitle">
-      It seems the page you're looking for is either <strong>"lost"</strong> or the system is under
-        <strong>"maintenance"</strong>.
+      It seems the page you're looking for is either lost or the system is under maintenance.
       </p>
 
       <div className="not-found-actions">
         <button className="btn-home" onClick={() => navigate('/')}>
           Home
-        </button>
-        <button className="btn-menu" onClick={() => navigate('/list')}>
-          List Items
-        </button>
+          </button>
       </div>
     </div>
   );
