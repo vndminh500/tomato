@@ -102,7 +102,7 @@ const Voucher = ({ url }) => {
     }, []);
 
     return (
-        <div className='voucher add flex-col'>
+        <div className='voucher flex-col'>
             <div className='voucher-header'>
                 <p>All Vouchers List</p>
                 <button onClick={() => setShowAddPopup(true)}>Add Voucher</button>
