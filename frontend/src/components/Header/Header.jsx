@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './Header.css'
 import { assets } from '../../assets/assets'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   const slides = [
@@ -71,11 +72,11 @@ const Header = () => {
              culinary expertise. Our mission is to satisfy your cravings and elevate your dining experience,
              one delicious meal at a time.
             </p>
-            <a href="/#explore-menu">
+            <Link to="/menu">
               <button className={`header-btn header-btn-${activeSlide.buttonTheme}`}>
                 View Menu
               </button>
-            </a>
+            </Link>
         </h2>
       </div>
     </div>

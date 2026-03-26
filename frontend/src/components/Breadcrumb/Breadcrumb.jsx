@@ -10,10 +10,13 @@ const routeLabels = {
   cart: 'Cart',
   order: 'Checkout',
   myorders: 'My Orders',
+  menu: 'Menu',
   product: 'Product',
   about: 'About',
+  'contact-us': 'Contact Us',
   delivery: 'Delivery',
   privacy: 'Privacy Policy',
+  'mobile-app': 'Mobile App',
   'thank-you': 'Thank You',
   profile: 'Profile',
   verifyVnpay: 'Verify Payment',
@@ -36,7 +39,7 @@ const Breadcrumb = () => {
     const product = food_list.find((item) => String(item._id) === String(productId));
     crumbs = [
       {
-        path: '/#explore-menu',
+        path: '/menu',
         isLast: parts.length === 1,
         label: 'Menu',
       },

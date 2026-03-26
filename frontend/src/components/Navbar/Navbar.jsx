@@ -118,6 +118,18 @@ const Navbar = ({ setShowLogin }) => {
     };
   }, [searchValue]);
 
+  useEffect(() => {
+    if (location.pathname === '/') {
+      setMenu('home');
+    } else if (location.pathname.startsWith('/menu')) {
+      setMenu('menu');
+    } else if (location.pathname.startsWith('/mobile-app')) {
+      setMenu('mobile-app');
+    } else if (location.pathname.startsWith('/contact-us')) {
+      setMenu('contact-us');
+    }
+  }, [location.pathname]);
+
 
   return (
     <div className={`navbar ${isProductDetailPage ? 'navbar-no-underline' : ''}`}>
@@ -132,27 +144,27 @@ const Navbar = ({ setShowLogin }) => {
         >
           Home
         </Link>
-        <a
-          href='/#explore-menu'
+        <Link
+          to='/menu'
           onClick={() => setMenu('menu')}
           className={menu === 'menu' ? 'active' : ''}
         >
           Menu
-        </a>
-        <a
-          href='/#app-download'
+        </Link>
+        <Link
+          to='/mobile-app'
           onClick={() => setMenu('mobile-app')}
           className={menu === 'mobile-app' ? 'active' : ''}
         >
           Mobile app
-        </a>
-        <a
-          href='#footer'
+        </Link>
+        <Link
+          to='/contact-us'
           onClick={() => setMenu('contact-us')}
           className={menu === 'contact-us' ? 'active' : ''}
         >
           Contact us
-        </a>
+        </Link>
       </ul>
 
       <div className='navbar-right'>

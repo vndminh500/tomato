@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from './components/Navbar/Navbar'
 import { Navigate, Route , Routes } from 'react-router-dom'
 import Home from './pages/Home/Home'
@@ -19,6 +18,9 @@ import Profile from './pages/Profile/Profile';
 import { Toaster } from 'react-hot-toast';
 import NotFound from './pages/NotFound/NotFound'
 import Breadcrumb from './components/Breadcrumb/Breadcrumb'
+import Menu from './pages/Menu/Menu'
+import MobileApp from './pages/MobileApp/MobileApp'
+import Contact from './pages/Contact/Contact'
 
 const App = () => {
 
@@ -34,13 +36,16 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         < Route path ='/' element = {<Home/>} />
+        <Route path='/menu' element={<Menu />} />
         < Route path ='/cart' element = {<Cart/>} />
         < Route path ='/order' element = {<PlaceOrder/>} />
+        <Route path='/mobile-app' element={<MobileApp />} />
         <Route path='/verifyVnpay' element={<VerifyVnpay />} />
         <Route path='/myorders' element ={<MyOrders/>} />
         <Route path='/product' element={<Navigate to='/' replace />} />
         <Route path='/product/:productId' element={<Product/>} />
         <Route path='/about' element={<About />} />
+        <Route path='/contact-us' element={<Contact />} />
         <Route path='/delivery' element={<Delivery />} />
         <Route path='/privacy' element={<Privacy />} />
         <Route path='/thank-you' element={<ThankYou />} />
