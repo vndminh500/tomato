@@ -3,6 +3,14 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import validator from "validator"
 
+const SUPER_ADMIN_EMAILS = String(process.env.SUPER_ADMIN_EMAILS || "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+
+const isBootstrapSuperAdmin = (email = "") =>
+    SUPER_ADMIN_EMAILS.includes(String(email).trim().toLowerCase());
+
 const loginUser = async(req,res) => {
     const {email,password} = req.body;
     try {
@@ -22,8 +30,22 @@ const loginUser = async(req,res) => {
             return res.json({ success: false, message: "Tài khoản đã bị dừng hoạt động" })
         }
 
+        if (isBootstrapSuperAdmin(user.email) && user.role !== "super_admin") {
+            user.role = "super_admin";
+            await user.save();
+        }
+
         const token = createToken(user._id);
-        res.json({success:true,token})
+        res.json({
+            success:true,
+            token,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role || "customer"
+            }
+        })
 
     } catch (error) {
         console.log(error);
@@ -59,12 +81,22 @@ const registerUser = async (req,res) => {
         const newUser = new userModel({
             name:name,
             email:email,
-            password:hashedPassword
+            password:hashedPassword,
+            role: isBootstrapSuperAdmin(email) ? "super_admin" : "customer"
         })
 
         const user = await newUser.save()
         const token = createToken(user._id)
-        res.json({success:true,token});
+        res.json({
+            success:true,
+            token,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role || "customer"
+            }
+        });
 
     } catch(error) {
         console.log(error);
@@ -131,12 +163,13 @@ const changePassword = async (req, res) => {
 
 const listUsers = async (req, res) => {
     try {
-        const users = await userModel.find({}).select("name email isActive").lean();
+        const users = await userModel.find({}).select("name email isActive role").lean();
         const data = users.map((u) => ({
             _id: u._id,
             name: u.name,
             email: u.email,
-            isActive: u.isActive !== false
+            isActive: u.isActive !== false,
+            role: u.role || "customer"
         }));
         return res.json({ success: true, data });
     } catch (error) {
@@ -146,13 +179,14 @@ const listUsers = async (req, res) => {
 };
 
 const updateUserActiveStatus = async (req, res) => {
-    const { userId, isActive } = req.body;
+    const targetUserId = req.body.targetUserId || req.body.userId;
+    const { isActive } = req.body;
     try {
-        if (!userId || typeof isActive !== "boolean") {
+        if (!targetUserId || typeof isActive !== "boolean") {
             return res.json({ success: false, message: "Invalid request" });
         }
         const user = await userModel.findByIdAndUpdate(
-            userId,
+            targetUserId,
             { isActive },
             { new: true }
         ).select("name email isActive");
@@ -174,4 +208,70 @@ const updateUserActiveStatus = async (req, res) => {
     }
 };
 
-export {loginUser, registerUser, getUserProfile, changePassword, listUsers, updateUserActiveStatus}
+const updateUserRole = async (req, res) => {
+    const targetUserId = req.body.targetUserId || req.body.userId;
+    const { role } = req.body;
+    const validRoles = ["customer", "staff", "admin", "super_admin"];
+    try {
+        if (!targetUserId || !validRoles.includes(role)) {
+            return res.json({ success: false, message: "Invalid request" });
+        }
+        const targetUser = await userModel.findById(targetUserId).select("role email");
+        if (!targetUser) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        if (isBootstrapSuperAdmin(targetUser.email) && role !== "super_admin") {
+            return res.json({
+                success: false,
+                message: "Cannot change role of bootstrap super_admin account"
+            });
+        }
+
+        const isDemotingSuperAdmin =
+            targetUser.role === "super_admin" && role !== "super_admin";
+        if (isDemotingSuperAdmin) {
+            const superAdminCount = await userModel.countDocuments({
+                role: "super_admin"
+            });
+            if (superAdminCount <= 1) {
+                return res.json({
+                    success: false,
+                    message: "Cannot demote the last super_admin account"
+                });
+            }
+        }
+
+        const user = await userModel.findByIdAndUpdate(
+            targetUserId,
+            { role },
+            { new: true }
+        ).select("name email isActive role");
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+        return res.json({
+            success: true,
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                isActive: user.isActive !== false,
+                role: user.role || "customer"
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
+export {
+    loginUser,
+    registerUser,
+    getUserProfile,
+    changePassword,
+    listUsers,
+    updateUserActiveStatus,
+    updateUserRole
+}

@@ -5,9 +5,9 @@ import {toast} from "react-toastify"
 import { useEffect } from 'react'
 import axios from "axios"
 import {assets} from "../../assets/assets"
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
-const Orders = ({url}) => {
+const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
   const STATUS_FLOW = [
     "Order Placed",
     "Order received",
@@ -48,7 +48,7 @@ const Orders = ({url}) => {
       if (!silent) {
         setIsLoading(true)
       }
-      const response = await axios.get(url+"/api/order/list");
+      const response = await axios.get(url+"/api/order/list",{ headers:{token} });
       if (response.data.success) {
         setOrders(response.data.data);
       }
@@ -68,6 +68,7 @@ const Orders = ({url}) => {
 
   const statusHandler = async (event,orderId) => {
     const nextStatus = event.target.value
+    if (!canUpdate) return
     if (nextStatus === "Cancelled") {
       setCancelStatusOrderId(orderId)
       setCancelStatusReason("")
@@ -79,6 +80,8 @@ const Orders = ({url}) => {
       const response = await axios.post(url + "/api/order/status",{
         orderId,
         status: nextStatus
+      },{
+        headers:{token}
       })
       if (response.data.success) {
         await fetchAllOrders();
@@ -118,6 +121,8 @@ const Orders = ({url}) => {
         orderId: cancelStatusOrderId,
         status: "Cancelled",
         cancelReason: cancelStatusReason.trim()
+      },{
+        headers:{token}
       })
       if (response.data.success) {
         toast.success("Order status changed to Cancelled")
@@ -134,11 +139,14 @@ const Orders = ({url}) => {
   }
 
   const handleDeleteOrder = async () => {
+    if (!canDelete) return
     if (!deletingOrderId) return
     try {
       const response = await axios.post(url + "/api/order/delete", {
         orderId: deletingOrderId,
         deleteReason
+      },{
+        headers:{token}
       })
       if (response.data.success) {
         toast.success("Order deleted successfully")
@@ -210,7 +218,7 @@ const Orders = ({url}) => {
             id={`order-${order._id}`}
             className={`order-item ${highlightedOrderId === String(order._id) ? 'order-item-highlight' : ''}`}
           >
-            {canDeleteOrder(order.status) && (
+            {canDelete && canDeleteOrder(order.status) && (
               <button
                 type='button'
                 className='order-delete-trigger'
@@ -273,7 +281,7 @@ const Orders = ({url}) => {
                 <select
                   onChange={(event)=>statusHandler(event,order._id)}
                   value={order.status}
-                  disabled={updatingOrderId === order._id || order.status === "Cancelled"}
+                  disabled={!canUpdate || updatingOrderId === order._id || order.status === "Cancelled"}
                 >
                   <option value="Order Placed" disabled={isStatusOptionDisabled(order.status, "Order Placed")}>Order Placed</option>
                   <option value="Order received" disabled={isStatusOptionDisabled(order.status, "Order received")}>Order received</option>
@@ -286,6 +294,9 @@ const Orders = ({url}) => {
                 </select>
               </div>
             )}
+            <Link to={`/orders/${order._id}`} className='order-view-link'>
+              View details
+            </Link>
           </div>
         ))}
       </div>

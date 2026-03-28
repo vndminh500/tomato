@@ -13,7 +13,7 @@
 
 .users-list-table {
     display: grid;
-    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
+    grid-template-columns: 1.5fr 1.3fr 2fr 1.5fr 1fr;
     align-items: center;
     gap: 15px;
     padding: 12px 15px;
@@ -59,6 +59,16 @@
     outline: none;
     transition: 0.3s;
     border: 1px solid #4f617a;
+    color: var(--text-primary);
+}
+
+.users-role-select {
+    min-width: 130px;
+    background: #fff;
+    border-color: #5a6d8a;
+}
+
+.users-role-select option {
     color: var(--text-primary);
 }
 
@@ -169,7 +179,7 @@
     }
     
     .users-list-table {
-        grid-template-columns: 1fr 1fr 1fr; 
+        grid-template-columns: 1fr 1fr 1fr 1fr; 
         font-size: 13px;
     }
 
@@ -186,11 +196,16 @@
 
 @media (max-width: 600px) {
     .users-list-table {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
     }
 
     .users-list-table b:nth-child(3),
     .users-list-table p:nth-child(3) {
+        display: none;
+    }
+
+    .users-list-table b:nth-child(5),
+    .users-list-table select:nth-child(5) {
         display: none;
     }
 }

@@ -3,36 +3,27 @@ import './Sidebar.css'
 import { assets } from '../../assets/assets'
 import { NavLink } from 'react-router-dom'
 
-const Sidebar = () => {
+const Sidebar = ({ hasPermission }) => {
+  const options = [
+    { to: '/add', icon: assets.add_icon, label: 'Add Items', allow: hasPermission('menu.create') },
+    { to: '/list', icon: assets.list_icon, label: 'List Items', allow: hasPermission('menu.delete') },
+    { to: '/orders', icon: assets.order_icon, label: 'Orders', allow: hasPermission('orders.read_all') || hasPermission('orders.update_status') },
+    { to: '/storehouse', icon: assets.storehouse_icon, label: 'Storehouse', allow: hasPermission('inventory.read') },
+    { to: '/users', icon: assets.users_icon, label: 'List Users', allow: hasPermission('users.read') },
+    { to: '/vouchers', icon: assets.voucher_icon, label: 'Vouchers', allow: hasPermission('promo.read') }
+  ]
+
   return (
     <div className='sidebar'>
       <div className="sidebar-options">
-        <NavLink to='/add' className="sidebar-option">
-            <img src={assets.add_icon} alt="" />
-            <p>Add Items</p>
-        </NavLink>
-        
-        <NavLink to='/list' className="sidebar-option">
-            <img src={assets.list_icon} alt="" />
-            <p>List Items</p>
-        </NavLink>
-        
-        <NavLink to='/orders' className="sidebar-option">
-            <img src={assets.order_icon} alt="" />
-            <p>Orders</p>
-        </NavLink>
-        <NavLink to='/storehouse' className="sidebar-option">
-            <img src={assets.storehouse_icon} alt="" />
-            <p>Storehouse</p>
-        </NavLink>
-        <NavLink to='/users' className="sidebar-option">
-            <img src={assets.users_icon} alt="" />
-            <p>List Users</p>
-        </NavLink>
-        <NavLink to='/vouchers' className="sidebar-option">
-            <img src={assets.voucher_icon} alt="" />
-            <p>Vouchers</p>
-        </NavLink>
+        {options
+          .filter((item) => item.allow)
+          .map((item) => (
+            <NavLink key={item.to} to={item.to} className="sidebar-option">
+              <img src={item.icon} alt="" />
+              <p>{item.label}</p>
+            </NavLink>
+          ))}
       </div>
     </div>
   )

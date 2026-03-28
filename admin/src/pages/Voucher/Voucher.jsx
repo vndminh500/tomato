@@ -9,7 +9,7 @@ const todayInputDateMin = () => {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 };
 
-const Voucher = ({ url }) => {
+const Voucher = ({ url, token, canCreate = false, canDelete = false }) => {
     const [vouchers, setVouchers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [removingVoucherId, setRemovingVoucherId] = useState("");
@@ -24,13 +24,15 @@ const Voucher = ({ url }) => {
     const fetchVouchers = async () => {
         try {
             setIsLoading(true);
-            const response = await axios.get(`${url}/api/voucher/list`);
+            const response = await axios.get(`${url}/api/voucher/list`, {
+                headers: { token }
+            });
             if (response.data.success) {
                 setVouchers(response.data.data);
             } else {
                 toast.error('Error fetching vouchers');
             }
-        } catch (error) {
+        } catch {
             toast.error('Error fetching vouchers');
         } finally {
             setIsLoading(false);
@@ -38,6 +40,7 @@ const Voucher = ({ url }) => {
     };
 
     const handleAddVoucher = async (e) => {
+        if (!canCreate) return;
         e.preventDefault();
         const minDate = todayInputDateMin();
         if (!newVoucher.expiryDate || newVoucher.expiryDate < minDate) {
@@ -56,6 +59,8 @@ const Voucher = ({ url }) => {
                 discountPercent: discountNum,
                 expiryDate: newVoucher.expiryDate,
                 minOrderAmount: minOrderNum
+            }, {
+                headers: { token }
             });
             if (response.data.success) {
                 toast.success('Voucher added successfully');
@@ -70,7 +75,7 @@ const Voucher = ({ url }) => {
             } else {
                 toast.error(response.data.message);
             }
-        } catch (error) {
+        } catch {
             toast.error('Error adding voucher');
         }
     };
@@ -81,16 +86,19 @@ const Voucher = ({ url }) => {
     };
 
     const handleRemoveVoucher = async (voucherId) => {
+        if (!canDelete) return;
         try {
             setRemovingVoucherId(voucherId);
-            const response = await axios.post(`${url}/api/voucher/remove`, { id: voucherId });
+            const response = await axios.post(`${url}/api/voucher/remove`, { id: voucherId }, {
+                headers: { token }
+            });
             if (response.data.success) {
                 toast.success('Voucher removed successfully');
                 fetchVouchers();
             } else {
                 toast.error(response.data.message || 'Error removing voucher');
             }
-        } catch (error) {
+        } catch {
             toast.error('Error removing voucher');
         } finally {
             setRemovingVoucherId("");
@@ -105,7 +113,9 @@ const Voucher = ({ url }) => {
         <div className='voucher flex-col'>
             <div className='voucher-header'>
                 <p>All Vouchers List</p>
-                <button onClick={() => setShowAddPopup(true)}>Add Voucher</button>
+                {canCreate && (
+                    <button onClick={() => setShowAddPopup(true)}>Add Voucher</button>
+                )}
             </div>
             <div className='list-table'>
                 <div className='list-table-format title'>
@@ -136,19 +146,23 @@ const Voucher = ({ url }) => {
                         <p>{item.discountPercent}</p>
                         <p>{new Date(item.expiryDate).toLocaleDateString()}</p>
                         <p>{item.minOrderAmount}</p>
-                        <button
-                            className='remove-voucher-btn'
-                            onClick={() => handleRemoveVoucher(item._id)}
-                            type='button'
-                            disabled={removingVoucherId === item._id}
-                        >
-                            {removingVoucherId === item._id ? "..." : "X"}
-                        </button>
+                        {canDelete ? (
+                            <button
+                                className='remove-voucher-btn'
+                                onClick={() => handleRemoveVoucher(item._id)}
+                                type='button'
+                                disabled={removingVoucherId === item._id}
+                            >
+                                {removingVoucherId === item._id ? "..." : "X"}
+                            </button>
+                        ) : (
+                            <span>-</span>
+                        )}
                     </div>
                 ))}
             </div>
 
-            {showAddPopup && (
+            {canCreate && showAddPopup && (
                 <div className='add-voucher-popup'>
                     <form onSubmit={handleAddVoucher} className='add-voucher-form'>
                         <h2>Add New Voucher</h2>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Add from './pages/Add/Add'
 import List from './pages/List/List'
 import Orders from './pages/Orders/Orders'
@@ -12,12 +12,46 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import axios from 'axios'
 import Storehouse from './pages/Storehouse/Storehouse'
+import AdminLogin from './components/Auth/AdminLogin'
+import OrderDetails from './pages/OrderDetails/OrderDetails'
 
 const NOTIFICATIONS_STORAGE_KEY = 'admin_order_notifications'
+const ADMIN_TOKEN_STORAGE_KEY = 'admin_token'
+const ADMIN_USER_STORAGE_KEY = 'admin_user'
+
+const ROLE_PERMISSIONS = {
+  super_admin: ["*"],
+  admin: [
+    "users.read",
+    "users.update_status",
+    "orders.read_all",
+    "orders.update_status",
+    "orders.delete",
+    "menu.create",
+    "menu.delete",
+    "promo.create",
+    "promo.read",
+    "promo.delete",
+    "inventory.read",
+    "inventory.update"
+  ],
+  staff: [
+    "orders.read_all",
+    "orders.update_status"
+  ]
+}
 
 const App = () => {
-
   const url ="http://localhost:4000"
+  const [token, setToken] = useState(localStorage.getItem(ADMIN_TOKEN_STORAGE_KEY) || "")
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem(ADMIN_USER_STORAGE_KEY)
+      return saved ? JSON.parse(saved) : null
+    } catch {
+      return null
+    }
+  })
   const [notifications, setNotifications] = useState(() => {
     try {
       const savedNotifications = localStorage.getItem(NOTIFICATIONS_STORAGE_KEY)
@@ -31,6 +65,11 @@ const App = () => {
   const seenOrderIdsRef = useRef(new Set())
   const notifiedCancelledOrderIdsRef = useRef(new Set())
   const isFirstOrderCheckRef = useRef(true)
+  const role = String(user?.role || "").trim().toLowerCase()
+  const hasWildcard = role === "super_admin"
+  const permissions = new Set(ROLE_PERMISSIONS[role] || [])
+  const hasPermission = (permission) => hasWildcard || permissions.has(permission)
+  const canReadOrders = hasPermission("orders.read_all")
 
   useEffect(() => {
     localStorage.setItem(
@@ -40,11 +79,12 @@ const App = () => {
   }, [notifications])
 
   useEffect(() => {
+    if (!token || !canReadOrders) return
     let isMounted = true
 
     const fetchPlacedOrders = async () => {
       try {
-        const response = await axios.get(`${url}/api/order/list`)
+        const response = await axios.get(`${url}/api/order/list`, { headers: { token } })
         if (!isMounted || !response.data?.success) return
 
         const allOrders = response.data.data
@@ -128,7 +168,44 @@ const App = () => {
       isMounted = false
       clearInterval(pollingId)
     }
-  }, [url])
+  }, [url, token, canReadOrders])
+
+  const handleLoginSuccess = (newToken, userData) => {
+    const normalizedUser = {
+      ...userData,
+      role: String(userData?.role || "").trim().toLowerCase()
+    }
+    setToken(newToken)
+    setUser(normalizedUser)
+    localStorage.setItem(ADMIN_TOKEN_STORAGE_KEY, newToken)
+    localStorage.setItem(ADMIN_USER_STORAGE_KEY, JSON.stringify(normalizedUser))
+  }
+
+  const handleLogout = () => {
+    setToken("")
+    setUser(null)
+    setNotifications([])
+    localStorage.removeItem(ADMIN_TOKEN_STORAGE_KEY)
+    localStorage.removeItem(ADMIN_USER_STORAGE_KEY)
+  }
+
+  if (!token || !user) {
+    return (
+      <>
+        <ToastContainer theme="dark" toastClassName="toast-dark" />
+        <AdminLogin url={url} onLoginSuccess={handleLoginSuccess} />
+      </>
+    )
+  }
+
+  if (!["staff", "admin", "super_admin"].includes(role)) {
+    return (
+      <>
+        <ToastContainer theme="dark" toastClassName="toast-dark" />
+        <AdminLogin url={url} onLoginSuccess={handleLoginSuccess} />
+      </>
+    )
+  }
 
   const unreadOrderCount = notifications.filter((notification) => !notification.isRead).length
 
@@ -156,6 +233,8 @@ const App = () => {
     <div className="admin-app">
       <ToastContainer theme="dark" toastClassName="toast-dark" />
       <Navbar
+        user={user}
+        onLogout={handleLogout}
         unreadOrderCount={unreadOrderCount}
         notifications={notifications}
         onMarkNotificationAsRead={handleMarkNotificationAsRead}
@@ -164,15 +243,46 @@ const App = () => {
       />
       <hr />
       <div className="app-content">
-        <Sidebar />
+        <Sidebar hasPermission={hasPermission} />
         <Routes>
           <Route path="/" element={<div />} />
-          <Route path="/add" element={<Add url={url} />} />
-          <Route path="/list" element={<List url={url} />} />
-          <Route path="/orders" element={<Orders url={url} />} />
-          <Route path="/storehouse" element={<Storehouse url={url} />} />
-          <Route path="/vouchers" element={<Voucher url={url} />} />
-          <Route path="/users" element={<Users url={url} />} />
+          <Route
+            path="/add"
+            element={hasPermission("menu.create") ? <Add url={url} token={token} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/list"
+            element={hasPermission("menu.delete") ? <List url={url} token={token} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/orders"
+            element={(hasPermission("orders.read_all") || hasPermission("orders.update_status"))
+              ? <Orders url={url} token={token} canDelete={hasPermission("orders.delete")} canUpdate={hasPermission("orders.update_status")} />
+              : <Navigate to="/" replace />
+            }
+          />
+          <Route
+            path="/orders/:orderId"
+            element={hasPermission("orders.read_all")
+              ? <OrderDetails url={url} token={token} />
+              : <Navigate to="/" replace />
+            }
+          />
+          <Route
+            path="/storehouse"
+            element={hasPermission("inventory.read") ? <Storehouse url={url} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/vouchers"
+            element={hasPermission("promo.read") ? <Voucher url={url} token={token} canCreate={hasPermission("promo.create")} canDelete={hasPermission("promo.delete")} /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/users"
+            element={hasPermission("users.read")
+              ? <Users url={url} token={token} canUpdateStatus={hasPermission("users.update_status")} canUpdateRole={hasPermission("users.update_role")} />
+              : <Navigate to="/" replace />
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

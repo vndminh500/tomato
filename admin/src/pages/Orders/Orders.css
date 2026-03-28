@@ -144,6 +144,28 @@
     gap: 8px;
 }
 
+.order-view-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin-top: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid #cfd8e8;
+    background: #fff;
+    color: #2e4a70;
+    font-size: 12px;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.order-view-link:hover {
+    border-color: #93b4dd;
+    color: #1e3b65;
+    transform: translateY(-1px);
+}
+
 .order-status-badge {
     width: fit-content;
     padding: 4px 10px;

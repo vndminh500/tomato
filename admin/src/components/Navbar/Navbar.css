@@ -31,18 +31,65 @@
 }
 
 .navbar .profile {
-    width: 46px;
+    width: 40px;
     border-radius: 50%;
-    padding: 3px;
-    border: 2px solid #eef3fb;
-    background: var(--bg-soft);
-    box-shadow: var(--shadow-soft);
+    padding: 2px;
+    border: 2px solid #dce6f6;
+    background: #fff;
 }
 
 .navbar-actions {
     display: flex;
     align-items: center;
     gap: 14px;
+}
+
+.account-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    border-radius: 999px;
+    padding: 4px 10px 4px 4px;
+}
+
+.account-meta {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.account-label {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #8090aa;
+}
+
+.account-role {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: capitalize;
+}
+
+.logout-btn {
+    height: 40px;
+    border: 1px solid #ffd0c7;
+    background: linear-gradient(180deg, #fff7f5 0%, #ffece7 100%);
+    color: #dd4b39;
+    font-weight: 700;
+    padding: 0 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+    transform: translateY(-1px);
+    border-color: #ffb8ab;
+    box-shadow: 0 8px 16px rgba(221, 75, 57, 0.16);
 }
 
 .notification-bell {
@@ -198,5 +245,18 @@
 @media (max-width: 700px) {
     .navbar-brand span {
         display: none;
+    }
+
+    .account-meta {
+        display: none;
+    }
+
+    .account-chip {
+        padding-right: 4px;
+    }
+
+    .logout-btn {
+        height: 36px;
+        padding: 0 12px;
     }
 }

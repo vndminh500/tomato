@@ -14,7 +14,9 @@ const authMiddleware = async (req,res,next) => {
         }
         //
 
-        const user = await userModel.findById(token_decode.id).select("isActive");
+        const user = await userModel
+            .findById(token_decode.id)
+            .select("isActive role permissions");
         if (!user) {
             return res.json({ success: false, message: "Not authorized login again" });
         }
@@ -23,6 +25,11 @@ const authMiddleware = async (req,res,next) => {
         }
 
         req.body.userId = token_decode.id;
+        req.user = {
+            id: token_decode.id,
+            role: user.role || "customer",
+            permissions: Array.isArray(user.permissions) ? user.permissions : []
+        };
         next();
     }catch (error){
         console.log(error);

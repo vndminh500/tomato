@@ -1,0 +1,121 @@
+.order-details {
+  width: 74%;
+  margin-left: max(5vw, 25px);
+  margin-top: 36px;
+  color: var(--text-secondary);
+}
+
+.order-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.order-details h3 {
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.order-details-subtitle {
+  color: #7b8ba4;
+  font-size: 13px;
+}
+
+.order-details-back-btn {
+  border: 1px solid var(--border-color);
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.order-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.order-details-card {
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-soft);
+  padding: 16px;
+}
+
+.order-details-card h4 {
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.order-details-kv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #e3e9f4;
+}
+
+.order-details-kv:last-child {
+  border-bottom: none;
+}
+
+.order-details-kv span {
+  font-size: 13px;
+}
+
+.order-details-kv b {
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.order-details-full {
+  margin-top: 16px;
+}
+
+.order-items-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-items-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 8px;
+  border-bottom: 1px solid #edf1f8;
+}
+
+.order-items-row.title {
+  color: var(--text-primary);
+  font-size: 13px;
+  background: #f8fbff;
+  border: 1px solid #e9eef8;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.order-items-row p {
+  margin: 0;
+}
+
+@media (max-width: 980px) {
+  .order-details {
+    width: 90%;
+    margin-left: 20px;
+  }
+
+  .order-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-items-row {
+    grid-template-columns: 1.6fr 0.8fr 1fr 1fr;
+  }
+}

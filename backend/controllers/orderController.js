@@ -113,6 +113,23 @@ const listOrders = async (req,res)=> {
     }
 }
 
+const getOrderById = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        if (!orderId) {
+            return res.json({ success: false, message: "Order ID is required" });
+        }
+        const order = await orderModel.findById(orderId);
+        if (!order) {
+            return res.json({ success: false, message: "Order not found" });
+        }
+        return res.json({ success: true, data: order });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+}
+
 const updateStatus = async (req,res) => {
     try {
         const order = await orderModel.findById(req.body.orderId);
@@ -339,4 +356,13 @@ const verifyVnpay = async (req, res) => {
     }
 }
 
-export {placeOrder, userOrders,listOrders,updateStatus, verifyVnpay, cancelOrder, deleteOrder}
+export {
+    placeOrder,
+    userOrders,
+    listOrders,
+    getOrderById,
+    updateStatus,
+    verifyVnpay,
+    cancelOrder,
+    deleteOrder
+}

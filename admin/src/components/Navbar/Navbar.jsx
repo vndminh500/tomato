@@ -3,7 +3,15 @@ import './Navbar.css'
 import {assets} from '../../assets/assets'
 import { Link } from 'react-router-dom'
 
-const Navbar = ({ unreadOrderCount = 0, notifications = [], onMarkNotificationAsRead, onDeleteNotification, onClearAllNotifications }) => {
+const Navbar = ({
+  user,
+  onLogout,
+  unreadOrderCount = 0,
+  notifications = [],
+  onMarkNotificationAsRead,
+  onDeleteNotification,
+  onClearAllNotifications
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -94,7 +102,14 @@ const Navbar = ({ unreadOrderCount = 0, notifications = [], onMarkNotificationAs
           </div>
         )}
         </div>
-        <img src={assets.profile_image} alt="Admin profile" className='profile' />
+        <div className='account-chip'>
+          <img src={assets.profile_image} alt="Admin profile" className='profile' />
+          <div className='account-meta'>
+            <span className='account-label'>Role</span>
+            <span className='account-role'>{user?.role || "staff"}</span>
+          </div>
+        </div>
+        <button type='button' className='logout-btn' onClick={onLogout}>Logout</button>
       </div>
     </header>
   )
