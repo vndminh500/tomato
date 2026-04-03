@@ -87,6 +87,14 @@
 .add-category-price {
     display: flex;
     gap: 14px;
+    flex-wrap: wrap;
+}
+
+.add-category-price .add-category,
+.add-category-price .add-price,
+.add-category-price .add-quantity {
+    flex: 1;
+    min-width: 140px;
 }
 
 .add-category-price select, .add-category-price input {
@@ -154,6 +162,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.add-preview-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
 }
 
 .add-preview-meta span {
@@ -162,6 +179,11 @@
     font-size: 12px;
     padding: 4px 10px;
     border-radius: 999px;
+}
+
+.add-preview-meta .add-preview-qty {
+    background: #eef3fb;
+    color: #4a6484;
 }
 
 .add-preview-meta b {

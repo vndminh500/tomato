@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     isActive: { type: Boolean, default: true },
     role: {
         type: String,
-        enum: ["customer", "staff", "admin", "super_admin"],
+        enum: ["customer", "staff", "admin"],
         default: "customer"
     },
     permissions: {

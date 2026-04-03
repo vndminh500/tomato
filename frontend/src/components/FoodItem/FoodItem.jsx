@@ -3,10 +3,11 @@ import './FoodItem.css'
 import { assets } from '../../assets/assets'
 import { StoreContext } from '../../context/StoreContext'
 import { Link } from 'react-router-dom'
+import { FaHeart, FaRegHeart } from 'react-icons/fa'
 
 const FoodItem = ({id,name,price,description,image,stock = 20}) => {
 
-    const {cartItems,addToCart,removeFromCart,url,stockAlertItemId,stockAlertTick} = useContext(StoreContext);
+    const {cartItems,addToCart,removeFromCart,url,stockAlertItemId,stockAlertTick,toggleFavorite,isFavorite} = useContext(StoreContext);
     const stockValue = Number(stock ?? 20);
     const [isStockShaking, setIsStockShaking] = useState(false);
 
@@ -33,6 +34,18 @@ const FoodItem = ({id,name,price,description,image,stock = 20}) => {
     <div className='food-item'>
         <div className='food-item-img-container'>
             <Link to={`/menu/${id}`}><img className='food-item-image' src={url+"/images/"+image} alt="" /></Link>
+            <button
+                type="button"
+                className={`food-item-favorite-btn ${isFavorite(id) ? 'is-active' : ''}`}
+                aria-label={isFavorite(id) ? 'Remove from favorites' : 'Add to favorites'}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleFavorite(id);
+                }}
+            >
+                {isFavorite(id) ? <FaHeart /> : <FaRegHeart />}
+            </button>
             <span className={`food-item-stock-badge ${getStockClassName(stockValue)} ${isStockShaking ? 'stock-badge-shake' : ''}`}>In stock: {stockValue}</span>
             {!cartItems[id]
                 ?<img className='add' onClick={()=>addToCart(id)} src = {assets.add_icon_white} alt = "" />

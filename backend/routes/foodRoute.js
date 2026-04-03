@@ -1,5 +1,5 @@
 import express from 'express'
-import { addFood , listFood, removeFood } from '../controllers/foodController.js'
+import { addFood, listFood, updateFood, removeFood } from '../controllers/foodController.js'
 import multer from 'multer'
 import authMiddleware from "../middleware/auth.js";
 import { requirePermission } from "../middleware/authorize.js";
@@ -23,6 +23,13 @@ foodRouter.post(
     addFood
 );
 foodRouter.get("/list", listFood)
+foodRouter.post(
+    "/update",
+    authMiddleware,
+    requirePermission("menu.create"),
+    upload.single("image"),
+    updateFood
+)
 foodRouter.post(
     "/remove",
     authMiddleware,

@@ -1,10 +1,12 @@
 import React from 'react';
 import './NotFound.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { assets } from '../../assets/assets';
 
 const NotFound = () => {
   const navigate = useNavigate();
+  const outletContext = useOutletContext();
+  const homePath = outletContext?.basePath ?? '/';
 
   return (
     <div className="not-found-page">
@@ -24,9 +26,9 @@ const NotFound = () => {
       </p>
 
       <div className="not-found-actions">
-        <button className="btn-home" onClick={() => navigate('/')}>
+        <button className="btn-home" onClick={() => navigate(homePath)}>
           Home
-          </button>
+        </button>
       </div>
     </div>
   );

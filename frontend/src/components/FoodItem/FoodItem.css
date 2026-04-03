@@ -52,6 +52,39 @@
     position: relative;
 }
 
+.food-item-favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.92);
+    color: #9ca3af;
+    font-size: 18px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.food-item-favorite-btn:hover {
+    transform: scale(1.06);
+    color: #6b7280;
+}
+
+.food-item-favorite-btn.is-active {
+    color: #e11d48;
+}
+
+.food-item-favorite-btn.is-active:hover {
+    color: #be123c;
+}
+
 .food-item-stock-badge {
     position: absolute;
     top: 12px;

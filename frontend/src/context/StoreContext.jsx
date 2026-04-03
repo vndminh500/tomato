@@ -5,9 +5,23 @@ import { toast } from "react-hot-toast";
 
 export const StoreContext = createContext(null)
 
+const FAVORITE_PRODUCT_IDS_KEY = "favorite_product_ids";
+
+const loadFavoritesFromStorage = () => {
+    try {
+        const raw = localStorage.getItem(FAVORITE_PRODUCT_IDS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(arr)) return {};
+        return Object.fromEntries(arr.map((id) => [String(id), true]));
+    } catch {
+        return {};
+    }
+};
+
 const StoreContextProvider = (props) => {
 
     const [cartItems, setCartItems] = useState({});
+    const [favorites, setFavorites] = useState(loadFavoritesFromStorage);
 
     const url = "http://localhost:4000"
 
@@ -138,6 +152,25 @@ const StoreContextProvider = (props) => {
         setCartItems({});
     }
 
+    const toggleFavorite = (itemId) => {
+        const key = String(itemId);
+        setFavorites((prev) => {
+            const next = { ...prev };
+            if (next[key]) delete next[key];
+            else next[key] = true;
+            return next;
+        });
+    };
+
+    const isFavorite = (itemId) => !!favorites[String(itemId)];
+
+    useEffect(() => {
+        localStorage.setItem(
+            FAVORITE_PRODUCT_IDS_KEY,
+            JSON.stringify(Object.keys(favorites))
+        );
+    }, [favorites]);
+
     const contextValue = {
         food_list,
         cartItems,
@@ -149,6 +182,9 @@ const StoreContextProvider = (props) => {
         token,
         setToken,
         clearCart,
+        favorites,
+        toggleFavorite,
+        isFavorite,
         promoCode,
         discount,
         discountAmount,

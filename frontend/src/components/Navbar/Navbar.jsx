@@ -268,7 +268,7 @@ const Navbar = ({ setShowLogin }) => {
             )
             .map((order) => {
               const oldStatus = previousOrderStatusRef.current[String(order._id)];
-              const cancellationMessage = `Đơn hàng của bạn đã bị huỷ vì ${order.cancelReason || "không rõ lý do"}`;
+              const cancellationMessage = `Your order was cancelled: ${order.cancelReason || 'reason not specified'}`;
               const cancelledByCustomer = order.status === "Cancelled" && order.cancelledBy === "user";
               return {
                 id: `${order._id}-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`,
@@ -466,6 +466,11 @@ const Navbar = ({ setShowLogin }) => {
               <li onClick={() => navigate('/myorders')}>
                 <img src={assets.bag_icon} alt='' />
                 <p>Orders</p>
+              </li>
+              <hr />
+              <li onClick={() => navigate('/favorites')}>
+                <img src={assets.heart_icon} alt='' />
+                <p>Favorite</p>
               </li>
               <hr />
               <li onClick={logout}>

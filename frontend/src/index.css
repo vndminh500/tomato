@@ -9,7 +9,8 @@
 }
 
 body {
-  min-height: 10vh;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {
@@ -18,8 +19,13 @@ a {
 }
 
 .app {
-  width: 80%;
-  margin: auto;
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(14px, 4vw, 36px);
+  padding-right: clamp(14px, 4vw, 36px);
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {

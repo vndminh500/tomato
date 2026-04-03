@@ -1,15 +1,8 @@
+import crypto from "crypto"
 import userModel from "../models/userModel.js"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import validator from "validator"
-
-const SUPER_ADMIN_EMAILS = String(process.env.SUPER_ADMIN_EMAILS || "")
-    .split(",")
-    .map((email) => email.trim().toLowerCase())
-    .filter(Boolean);
-
-const isBootstrapSuperAdmin = (email = "") =>
-    SUPER_ADMIN_EMAILS.includes(String(email).trim().toLowerCase());
 
 const loginUser = async(req,res) => {
     const {email,password} = req.body;
@@ -28,11 +21,6 @@ const loginUser = async(req,res) => {
 
         if (user.isActive === false) {
             return res.json({ success: false, message: "Tài khoản đã bị dừng hoạt động" })
-        }
-
-        if (isBootstrapSuperAdmin(user.email) && user.role !== "super_admin") {
-            user.role = "super_admin";
-            await user.save();
         }
 
         const token = createToken(user._id);
@@ -82,7 +70,7 @@ const registerUser = async (req,res) => {
             name:name,
             email:email,
             password:hashedPassword,
-            role: isBootstrapSuperAdmin(email) ? "super_admin" : "customer"
+            role: "customer"
         })
 
         const user = await newUser.save()
@@ -161,9 +149,82 @@ const changePassword = async (req, res) => {
     }
 };
 
+const createUserByAdmin = async (req, res) => {
+    const { name, email, role, password, confirmPassword } = req.body;
+    const validRoles = ["customer", "staff", "admin"];
+    try {
+        if (!name?.trim() || !email?.trim() || !validRoles.includes(role)) {
+            return res.json({ success: false, message: "Invalid request" });
+        }
+        if (!validator.isEmail(email.trim())) {
+            return res.json({ success: false, message: "Please enter a valid email" });
+        }
+        const trimmedEmail = email.trim();
+        const exists = await userModel.findOne({ email: trimmedEmail });
+        if (exists) {
+            return res.json({ success: false, message: "User already exists" });
+        }
+
+        const pwdTrim = password != null ? String(password).trim() : "";
+        const confirmTrim = confirmPassword != null ? String(confirmPassword).trim() : "";
+        let plainToHash;
+        let temporaryPassword = null;
+
+        if (pwdTrim.length > 0 || confirmTrim.length > 0) {
+            if (!pwdTrim || !confirmTrim) {
+                return res.json({
+                    success: false,
+                    message: "Please fill both password and confirm password"
+                });
+            }
+            if (pwdTrim !== confirmTrim) {
+                return res.json({ success: false, message: "Passwords do not match" });
+            }
+            if (pwdTrim.length < 8) {
+                return res.json({
+                    success: false,
+                    message: "Password must be at least 8 characters"
+                });
+            }
+            plainToHash = pwdTrim;
+        } else {
+            temporaryPassword = crypto.randomBytes(12).toString("base64url");
+            plainToHash = temporaryPassword;
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(plainToHash, salt);
+
+        const newUser = new userModel({
+            name: name.trim(),
+            email: trimmedEmail,
+            password: hashedPassword,
+            role,
+            isActive: true
+        });
+        const user = await newUser.save();
+
+        return res.json({
+            success: true,
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                isActive: user.isActive !== false,
+                role: user.role || "customer"
+            },
+            ...(temporaryPassword ? { temporaryPassword } : { passwordSetByAdmin: true })
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
 const listUsers = async (req, res) => {
     try {
-        const users = await userModel.find({}).select("name email isActive role").lean();
+        // Không filter — trả về toàn bộ user trong collection `users` của DB đang kết nối (MONGO_URI).
+        const users = await userModel.find({}).select("name email isActive role").sort({ email: 1 }).lean();
         const data = users.map((u) => ({
             _id: u._id,
             name: u.name,
@@ -171,7 +232,7 @@ const listUsers = async (req, res) => {
             isActive: u.isActive !== false,
             role: u.role || "customer"
         }));
-        return res.json({ success: true, data });
+        return res.json({ success: true, data, meta: { total: data.length } });
     } catch (error) {
         console.log(error);
         return res.json({ success: false, message: "Error" });
@@ -188,7 +249,7 @@ const updateUserActiveStatus = async (req, res) => {
         const user = await userModel.findByIdAndUpdate(
             targetUserId,
             { isActive },
-            { new: true }
+            { returnDocument: "after" }
         ).select("name email isActive");
         if (!user) {
             return res.json({ success: false, message: "User not found" });
@@ -211,7 +272,7 @@ const updateUserActiveStatus = async (req, res) => {
 const updateUserRole = async (req, res) => {
     const targetUserId = req.body.targetUserId || req.body.userId;
     const { role } = req.body;
-    const validRoles = ["customer", "staff", "admin", "super_admin"];
+    const validRoles = ["customer", "staff", "admin"];
     try {
         if (!targetUserId || !validRoles.includes(role)) {
             return res.json({ success: false, message: "Invalid request" });
@@ -221,23 +282,14 @@ const updateUserRole = async (req, res) => {
             return res.json({ success: false, message: "User not found" });
         }
 
-        if (isBootstrapSuperAdmin(targetUser.email) && role !== "super_admin") {
-            return res.json({
-                success: false,
-                message: "Cannot change role of bootstrap super_admin account"
-            });
-        }
-
-        const isDemotingSuperAdmin =
-            targetUser.role === "super_admin" && role !== "super_admin";
-        if (isDemotingSuperAdmin) {
-            const superAdminCount = await userModel.countDocuments({
-                role: "super_admin"
-            });
-            if (superAdminCount <= 1) {
+        const isDemotingAdmin =
+            targetUser.role === "admin" && role !== "admin";
+        if (isDemotingAdmin) {
+            const adminCount = await userModel.countDocuments({ role: "admin" });
+            if (adminCount <= 1) {
                 return res.json({
                     success: false,
-                    message: "Cannot demote the last super_admin account"
+                    message: "It is not possible to remove the last administrator privileges."
                 });
             }
         }
@@ -245,7 +297,7 @@ const updateUserRole = async (req, res) => {
         const user = await userModel.findByIdAndUpdate(
             targetUserId,
             { role },
-            { new: true }
+            { returnDocument: "after" }
         ).select("name email isActive role");
         if (!user) {
             return res.json({ success: false, message: "User not found" });
@@ -266,12 +318,124 @@ const updateUserRole = async (req, res) => {
     }
 };
 
+const updateUserByAdmin = async (req, res) => {
+    const { targetUserId, name, email, role, isActive } = req.body;
+    const currentUserId = req.body.userId;
+    const validRoles = ["customer", "staff", "admin"];
+    try {
+        if (!targetUserId) {
+            return res.json({ success: false, message: "Invalid request" });
+        }
+        const user = await userModel.findById(targetUserId);
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        if (typeof name === "string" && name.trim()) {
+            user.name = name.trim();
+        }
+        if (typeof email === "string") {
+            const t = email.trim();
+            if (!validator.isEmail(t)) {
+                return res.json({ success: false, message: "Please enter a valid email" });
+            }
+            const dup = await userModel.findOne({
+                email: t,
+                _id: { $ne: user._id }
+            });
+            if (dup) {
+                return res.json({ success: false, message: "Email already in use" });
+            }
+            user.email = t;
+        }
+
+        if (typeof isActive === "boolean") {
+            if (String(user._id) === String(currentUserId) && isActive === false) {
+                return res.json({
+                    success: false,
+                    message: "It is not possible to disable the currently logged-in account."
+                });
+            }
+            user.isActive = isActive;
+        }
+
+        if (role !== undefined && role !== null && role !== "") {
+            if (!validRoles.includes(role)) {
+                return res.json({ success: false, message: "Invalid role" });
+            }
+            const isDemotingAdmin = user.role === "admin" && role !== "admin";
+            if (isDemotingAdmin) {
+                const adminCount = await userModel.countDocuments({ role: "admin" });
+                if (adminCount <= 1) {
+                    return res.json({
+                        success: false,
+                        message: "It is not possible to remove the last administrator privileges."
+                    });
+                }
+            }
+            user.role = role;
+        }
+
+        await user.save();
+        return res.json({
+            success: true,
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                isActive: user.isActive !== false,
+                role: user.role || "customer"
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
+const deleteUser = async (req, res) => {
+    const targetUserId = req.body.targetUserId;
+    const currentUserId = req.body.userId;
+    try {
+        if (!targetUserId) {
+            return res.json({ success: false, message: "Missing targetUserId" });
+        }
+        if (String(targetUserId) === String(currentUserId)) {
+            return res.json({
+                success: false,
+                message: "It is not possible to delete the currently logged-in account."
+            });
+        }
+        const target = await userModel.findById(targetUserId).select("role");
+        if (!target) {
+            return res.json({ success: false, message: "User not found" });
+        }
+        if (target.role === "admin") {
+            const adminCount = await userModel.countDocuments({ role: "admin" });
+            if (adminCount <= 1) {
+                return res.json({
+                    success: false,
+                    message: "Cannot remove the last admin"
+                });
+            }
+        }
+        await userModel.findByIdAndDelete(targetUserId);
+        return res.json({ success: true, message: "User deleted" });
+    } catch (error) {
+        console.log(error);
+        return res.json({ success: false, message: "Error" });
+    }
+};
+
 export {
     loginUser,
     registerUser,
     getUserProfile,
     changePassword,
+    createUserByAdmin,
     listUsers,
     updateUserActiveStatus,
-    updateUserRole
+    updateUserRole,
+    updateUserByAdmin,
+    deleteUser
 }

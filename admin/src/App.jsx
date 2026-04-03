@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams, Outlet } from 'react-router-dom'
 import Add from './pages/Add/Add'
 import List from './pages/List/List'
 import Orders from './pages/Orders/Orders'
@@ -11,37 +11,28 @@ import NotFound from './pages/NotFound/NotFound'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import axios from 'axios'
-import Storehouse from './pages/Storehouse/Storehouse'
 import AdminLogin from './components/Auth/AdminLogin'
 import OrderDetails from './pages/OrderDetails/OrderDetails'
+import Complaints from './pages/Complaints/Complaints'
 
 const NOTIFICATIONS_STORAGE_KEY = 'admin_order_notifications'
 const ADMIN_TOKEN_STORAGE_KEY = 'admin_token'
 const ADMIN_USER_STORAGE_KEY = 'admin_user'
 
 const ROLE_PERMISSIONS = {
-  super_admin: ["*"],
-  admin: [
-    "users.read",
-    "users.update_status",
-    "orders.read_all",
-    "orders.update_status",
-    "orders.delete",
-    "menu.create",
-    "menu.delete",
-    "promo.create",
-    "promo.read",
-    "promo.delete",
-    "inventory.read",
-    "inventory.update"
-  ],
+  admin: ["*"],
   staff: [
     "orders.read_all",
-    "orders.update_status"
+    "orders.update_status",
+    "complaints.read",
+    "complaints.resolve"
   ]
 }
 
+const ADMIN_PANEL_ROLES = new Set(["staff", "admin"])
+
 const App = () => {
+  const navigate = useNavigate()
   const url ="http://localhost:4000"
   const [token, setToken] = useState(localStorage.getItem(ADMIN_TOKEN_STORAGE_KEY) || "")
   const [user, setUser] = useState(() => {
@@ -65,11 +56,22 @@ const App = () => {
   const seenOrderIdsRef = useRef(new Set())
   const notifiedCancelledOrderIdsRef = useRef(new Set())
   const isFirstOrderCheckRef = useRef(true)
+  const seenComplaintTicketsRef = useRef(new Set())
+  const isFirstComplaintPollRef = useRef(true)
   const role = String(user?.role || "").trim().toLowerCase()
-  const hasWildcard = role === "super_admin"
+  const hasWildcard = role === "admin"
   const permissions = new Set(ROLE_PERMISSIONS[role] || [])
   const hasPermission = (permission) => hasWildcard || permissions.has(permission)
   const canReadOrders = hasPermission("orders.read_all")
+  const canReadComplaints = hasPermission("complaints.read")
+
+  useEffect(() => {
+    isFirstOrderCheckRef.current = true
+    seenOrderIdsRef.current = new Set()
+    notifiedCancelledOrderIdsRef.current = new Set()
+    isFirstComplaintPollRef.current = true
+    seenComplaintTicketsRef.current = new Set()
+  }, [token])
 
   useEffect(() => {
     localStorage.setItem(
@@ -170,6 +172,57 @@ const App = () => {
     }
   }, [url, token, canReadOrders])
 
+  useEffect(() => {
+    if (!token || !canReadComplaints) return
+    let isMounted = true
+
+    const pollComplaints = async () => {
+      try {
+        const response = await axios.get(`${url}/api/complaint/admin/list`, { headers: { token } })
+        if (!isMounted || !response.data?.success) return
+        const rows = response.data.data || []
+        const waiting = rows.filter((r) =>
+          ["in_progress", "open", "in_review", "need_info"].includes(r.status)
+        )
+        if (isFirstComplaintPollRef.current) {
+          waiting.forEach((r) => seenComplaintTicketsRef.current.add(r.ticketNumber))
+          isFirstComplaintPollRef.current = false
+          return
+        }
+        const newTickets = waiting.filter((r) => !seenComplaintTicketsRef.current.has(r.ticketNumber))
+        newTickets.forEach((r) => seenComplaintTicketsRef.current.add(r.ticketNumber))
+        if (newTickets.length > 0) {
+          const newNotifications = newTickets.map((r) => ({
+            id: `complaint-${r.ticketNumber}-${Date.now()}`,
+            type: "complaint",
+            complaintId: String(r._id),
+            ticketNumber: r.ticketNumber,
+            orderId: String(r.orderId),
+            message: `New complaint ${r.ticketNumber} (${r.customerName || "customer"})`,
+            createdAt: Date.now(),
+            isRead: false
+          }))
+          setNotifications((prev) => [...newNotifications, ...prev].slice(0, 100))
+          toast.info(
+            newTickets.length === 1
+              ? "New customer complaint received."
+              : `${newTickets.length} new complaints.`
+          )
+        }
+      } catch {
+        // Silent fail for background polling.
+      }
+    }
+
+    pollComplaints()
+    const complaintPollId = setInterval(pollComplaints, 12000)
+
+    return () => {
+      isMounted = false
+      clearInterval(complaintPollId)
+    }
+  }, [url, token, canReadComplaints])
+
   const handleLoginSuccess = (newToken, userData) => {
     const normalizedUser = {
       ...userData,
@@ -179,6 +232,9 @@ const App = () => {
     setUser(normalizedUser)
     localStorage.setItem(ADMIN_TOKEN_STORAGE_KEY, newToken)
     localStorage.setItem(ADMIN_USER_STORAGE_KEY, JSON.stringify(normalizedUser))
+    if (ADMIN_PANEL_ROLES.has(normalizedUser.role)) {
+      navigate(`/${normalizedUser.role}`, { replace: true })
+    }
   }
 
   const handleLogout = () => {
@@ -187,24 +243,7 @@ const App = () => {
     setNotifications([])
     localStorage.removeItem(ADMIN_TOKEN_STORAGE_KEY)
     localStorage.removeItem(ADMIN_USER_STORAGE_KEY)
-  }
-
-  if (!token || !user) {
-    return (
-      <>
-        <ToastContainer theme="dark" toastClassName="toast-dark" />
-        <AdminLogin url={url} onLoginSuccess={handleLoginSuccess} />
-      </>
-    )
-  }
-
-  if (!["staff", "admin", "super_admin"].includes(role)) {
-    return (
-      <>
-        <ToastContainer theme="dark" toastClassName="toast-dark" />
-        <AdminLogin url={url} onLoginSuccess={handleLoginSuccess} />
-      </>
-    )
+    navigate("/", { replace: true })
   }
 
   const unreadOrderCount = notifications.filter((notification) => !notification.isRead).length
@@ -229,64 +268,166 @@ const App = () => {
     setNotifications([])
   }
 
+  const isAuthenticatedAdmin = Boolean(token && user && ADMIN_PANEL_ROLES.has(role))
+
+  const RoleLayout = () => {
+    const { role: roleInUrl } = useParams()
+    const location = useLocation()
+    const normalizedUrlRole = String(roleInUrl || "").toLowerCase()
+
+    if (!token || !user) {
+      return <Navigate to="/" replace state={{ from: location.pathname }} />
+    }
+    if (!ADMIN_PANEL_ROLES.has(role)) {
+      return <Navigate to="/" replace />
+    }
+    if (!ADMIN_PANEL_ROLES.has(normalizedUrlRole)) {
+      return <Navigate to="/" replace />
+    }
+    if (normalizedUrlRole !== role) {
+      const prefix = `/${roleInUrl}`
+      const suffix = location.pathname.startsWith(prefix)
+        ? location.pathname.slice(prefix.length) || "/"
+        : location.pathname
+      const pathSuffix = suffix === "/" ? "" : suffix
+      return <Navigate to={`/${role}${pathSuffix}`} replace />
+    }
+
+    const basePath = `/${role}`
+
+    return (
+      <div className="admin-app">
+        <Navbar
+          user={user}
+          basePath={basePath}
+          onLogout={handleLogout}
+          unreadOrderCount={unreadOrderCount}
+          notifications={notifications}
+          onMarkNotificationAsRead={handleMarkNotificationAsRead}
+          onDeleteNotification={handleDeleteNotification}
+          onClearAllNotifications={handleClearAllNotifications}
+        />
+        <hr />
+        <div className="app-content">
+          <Sidebar hasPermission={hasPermission} basePath={basePath} />
+          <Outlet context={{ basePath }} />
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="admin-app">
+    <>
       <ToastContainer theme="dark" toastClassName="toast-dark" />
-      <Navbar
-        user={user}
-        onLogout={handleLogout}
-        unreadOrderCount={unreadOrderCount}
-        notifications={notifications}
-        onMarkNotificationAsRead={handleMarkNotificationAsRead}
-        onDeleteNotification={handleDeleteNotification}
-        onClearAllNotifications={handleClearAllNotifications}
-      />
-      <hr />
-      <div className="app-content">
-        <Sidebar hasPermission={hasPermission} />
-        <Routes>
-          <Route path="/" element={<div />} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            isAuthenticatedAdmin ? (
+              <Navigate to={`/${role}`} replace />
+            ) : (
+              <AdminLogin url={url} onLoginSuccess={handleLoginSuccess} />
+            )
+          }
+        />
+        <Route path="/:role" element={<RoleLayout />}>
+          <Route index element={<div />} />
           <Route
-            path="/add"
-            element={hasPermission("menu.create") ? <Add url={url} token={token} /> : <Navigate to="/" replace />}
-          />
-          <Route
-            path="/list"
-            element={hasPermission("menu.delete") ? <List url={url} token={token} /> : <Navigate to="/" replace />}
-          />
-          <Route
-            path="/orders"
-            element={(hasPermission("orders.read_all") || hasPermission("orders.update_status"))
-              ? <Orders url={url} token={token} canDelete={hasPermission("orders.delete")} canUpdate={hasPermission("orders.update_status")} />
-              : <Navigate to="/" replace />
+            path="add"
+            element={
+              hasPermission("menu.create") ? (
+                <Add url={url} token={token} />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
             }
           />
           <Route
-            path="/orders/:orderId"
-            element={hasPermission("orders.read_all")
-              ? <OrderDetails url={url} token={token} />
-              : <Navigate to="/" replace />
+            path="list"
+            element={
+              hasPermission("menu.delete") ? (
+                <List
+                  url={url}
+                  token={token}
+                  canUpdateFood={hasPermission("menu.create")}
+                  canDeleteFood={hasPermission("menu.delete")}
+                />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
             }
           />
           <Route
-            path="/storehouse"
-            element={hasPermission("inventory.read") ? <Storehouse url={url} /> : <Navigate to="/" replace />}
+            path="orders"
+            element={
+              hasPermission("orders.read_all") || hasPermission("orders.update_status") ? (
+                <Orders url={url} token={token} canUpdate={hasPermission("orders.update_status")} />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
+            }
           />
           <Route
-            path="/vouchers"
-            element={hasPermission("promo.read") ? <Voucher url={url} token={token} canCreate={hasPermission("promo.create")} canDelete={hasPermission("promo.delete")} /> : <Navigate to="/" replace />}
+            path="orders/:orderId"
+            element={
+              hasPermission("orders.read_all") ? (
+                <OrderDetails url={url} token={token} />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
+            }
           />
           <Route
-            path="/users"
-            element={hasPermission("users.read")
-              ? <Users url={url} token={token} canUpdateStatus={hasPermission("users.update_status")} canUpdateRole={hasPermission("users.update_role")} />
-              : <Navigate to="/" replace />
+            path="complaints"
+            element={
+              hasPermission('complaints.read') ? (
+                <Complaints
+                  url={url}
+                  token={token}
+                  canResolve={hasPermission('complaints.resolve')}
+                />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
+            }
+          />
+          <Route
+            path="vouchers"
+            element={
+              hasPermission("promo.read") ? (
+                <Voucher
+                  url={url}
+                  token={token}
+                  canCreate={hasPermission("promo.create")}
+                  canDelete={hasPermission("promo.delete")}
+                />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
+            }
+          />
+          <Route
+            path="users"
+            element={
+              hasPermission("users.read") ? (
+                <Users
+                  url={url}
+                  token={token}
+                  currentUserId={user?._id}
+                  canUpdateUserProfile={hasPermission("users.update_profile")}
+                  canCreateUser={hasPermission("users.create")}
+                  canDeleteUser={hasPermission("users.delete")}
+                />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
             }
           />
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </div>
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   )
 }
 

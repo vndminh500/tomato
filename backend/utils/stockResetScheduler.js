@@ -25,7 +25,7 @@ const resetStockIfNeededForToday = async () => {
   await systemConfigModel.findOneAndUpdate(
     { key: DAILY_STOCK_RESET_KEY },
     { value: todayKey },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
+    { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
   );
 
   console.log(`[stock-reset] Reset all product stock to ${DEFAULT_STOCK_VALUE} for ${todayKey}`);

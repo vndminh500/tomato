@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "./AdminLogin.css";
 
-const ADMIN_ROLES = new Set(["staff", "admin", "super_admin"]);
+const ADMIN_ROLES = new Set(["staff", "admin"]);
 
 const AdminLogin = ({ url, onLoginSuccess }) => {
   const [email, setEmail] = useState("");

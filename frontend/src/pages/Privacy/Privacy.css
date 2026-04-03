@@ -56,6 +56,16 @@
     font-size: 1.05rem;
 }
 
+.privacy-policy a {
+    color: tomato;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.privacy-policy a:hover {
+    text-decoration: underline;
+}
+
 .privacy-policy h2 + p {
     background: rgba(255, 99, 71, 0.03); 
     padding: 20px;

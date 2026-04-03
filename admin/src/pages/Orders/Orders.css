@@ -55,41 +55,6 @@
     width: 50px; 
 }
 
-.order-delete-trigger {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    width: 28px;
-    height: 28px;
-    border-radius: 999px;
-    border: 2px solid #fff;
-    background: radial-gradient(circle at 30% 30%, #ff7b7b, #ef4444 70%);
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 0;
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.32);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
-}
-
-.order-delete-trigger:hover {
-    transform: translateY(-1px) scale(1.04);
-    box-shadow: 0 12px 24px rgba(239, 68, 68, 0.4);
-    filter: saturate(1.08);
-}
-
-.order-delete-trigger:active {
-    transform: scale(0.95);
-}
-
-.order-delete-trigger span {
-    transform: translateY(-1px);
-}
-
 .order-item-food {
     font-weight: 600;
     color: var(--text-primary);
@@ -282,17 +247,6 @@
 
 .order-delete-modal select {
     width: 100%;
-}
-
-.order-delete-reason-fixed {
-    width: 100%;
-    border: 1px solid #d9e1ec;
-    background: #f8fafc;
-    color: #1f2937;
-    border-radius: 10px;
-    padding: 11px 12px;
-    font-weight: 600;
-    line-height: 1.4;
 }
 
 .order-delete-modal textarea {

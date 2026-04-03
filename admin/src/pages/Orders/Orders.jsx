@@ -5,9 +5,11 @@ import {toast} from "react-toastify"
 import { useEffect } from 'react'
 import axios from "axios"
 import {assets} from "../../assets/assets"
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useOutletContext, useSearchParams } from 'react-router-dom'
 
-const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
+const Orders = ({url, token, canUpdate = false}) => {
+  const outletContext = useOutletContext()
+  const basePath = outletContext?.basePath ?? ''
   const STATUS_FLOW = [
     "Order Placed",
     "Order received",
@@ -15,11 +17,6 @@ const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
     "Out for delivery",
     "Delivered"
   ];
-  const DELETE_REASON_BY_STATUS = {
-    Delivered: "Delivered",
-    Cancelled: "The customer canceled the order"
-  };
-  const canDeleteOrder = (status) => status === "Delivered" || status === "Cancelled";
   const isStatusOptionDisabled = (currentStatus, optionStatus) => {
     if (optionStatus === "Cancelled") {
       return !(currentStatus === "Order Placed" || currentStatus === "Cancelled");
@@ -95,15 +92,6 @@ const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
     }
   }
 
-  const openDeleteModal = (orderId, status) => {
-    setDeletingOrderId(orderId)
-    setDeleteReason(DELETE_REASON_BY_STATUS[status] || "")
-  }
-
-  const closeDeleteModal = () => {
-    setDeletingOrderId("")
-  }
-
   const closeCancelStatusModal = () => {
     setCancelStatusOrderId("")
     setCancelStatusReason("")
@@ -135,28 +123,6 @@ const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
       toast.error("Unable to update order status")
     } finally {
       setUpdatingOrderId("")
-    }
-  }
-
-  const handleDeleteOrder = async () => {
-    if (!canDelete) return
-    if (!deletingOrderId) return
-    try {
-      const response = await axios.post(url + "/api/order/delete", {
-        orderId: deletingOrderId,
-        deleteReason
-      },{
-        headers:{token}
-      })
-      if (response.data.success) {
-        toast.success("Order deleted successfully")
-        closeDeleteModal()
-        await fetchAllOrders(true)
-      } else {
-        toast.error(response.data.message || "Unable to delete order")
-      }
-    } catch {
-      toast.error("Unable to delete order")
     }
   }
 
@@ -218,16 +184,6 @@ const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
             id={`order-${order._id}`}
             className={`order-item ${highlightedOrderId === String(order._id) ? 'order-item-highlight' : ''}`}
           >
-            {canDelete && canDeleteOrder(order.status) && (
-              <button
-                type='button'
-                className='order-delete-trigger'
-                aria-label='Delete order'
-                onClick={() => openDeleteModal(order._id, order.status)}
-              >
-                <span>&times;</span>
-              </button>
-            )}
             <img src={assets.parcel_icon} alt="" />
             <div>
               <p className='order-item-food'>
@@ -294,26 +250,12 @@ const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
                 </select>
               </div>
             )}
-            <Link to={`/orders/${order._id}`} className='order-view-link'>
+            <Link to={`${basePath}/orders/${order._id}`} className='order-view-link'>
               View details
             </Link>
           </div>
         ))}
       </div>
-      {deletingOrderId && (
-        <div className='order-delete-modal-overlay'>
-          <div className='order-delete-modal'>
-            <h4>Delete order</h4>
-            <p>Please confirm this action. The delete reason is fixed by order status.</p>
-            <label>Reason</label>
-            <div className='order-delete-reason-fixed'>{deleteReason}</div>
-            <div className='order-delete-modal-actions'>
-              <button type='button' className='btn-cancel' onClick={closeDeleteModal}>Cancel</button>
-              <button type='button' className='btn-delete' onClick={handleDeleteOrder}>Delete</button>
-            </div>
-          </div>
-        </div>
-      )}
       {cancelStatusOrderId && (
         <div className='order-delete-modal-overlay'>
           <div className='order-delete-modal'>
@@ -324,7 +266,7 @@ const Orders = ({url, token, canDelete = false, canUpdate = false}) => {
               id='cancel-status-reason'
               value={cancelStatusReason}
               onChange={(event) => setCancelStatusReason(event.target.value)}
-              placeholder='Nhập lý do huỷ đơn...'
+              placeholder='Enter cancellation reason...'
               rows={3}
             />
             <div className='order-delete-modal-actions'>

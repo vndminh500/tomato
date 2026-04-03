@@ -1,13 +1,14 @@
+import "dotenv/config"
 import express from "express"
 import cors from "cors"
 import { connectDB } from "./config/db.js"
 import foodRouter from "./routes/foodRoute.js"
 import userRouter from "./routes/userRoute.js"
-import 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
 import commentRouter from "./routes/commentRoute.js"
 import voucherRouter from './routes/voucherRoute.js';
+import complaintRouter from "./routes/complaintRoute.js"
 import { startDailyStockResetScheduler } from "./utils/stockResetScheduler.js";
 
 
@@ -33,6 +34,7 @@ app.use("/api/cart",cartRouter)
 app.use("/api/order",orderRouter)
 app.use("/api/comment",commentRouter)
 app.use('/api/voucher', voucherRouter);
+app.use("/api/complaint", complaintRouter);
 
 
 app.get("/",(req,res)=> {

@@ -11,7 +11,8 @@ const Add = ({url, token}) => {
         name:"",
         description:"",
         price:"",
-        category:"Salad"
+        category:"Salad",
+        stock:"20"
     })
 
     const onChangeHandler = (event) => {
@@ -37,7 +38,8 @@ const Add = ({url, token}) => {
                 name:"",
                 description:"",
                 price:"",
-                category:"Salad"
+                category:"Salad",
+                stock:"20"
             }) 
             setImage(false)
             toast.success(response.data.message)
@@ -93,6 +95,17 @@ const Add = ({url, token}) => {
                   <p>Price</p>
                   <input onChange={onChangeHandler} value={data.price} type="Number" name='price' placeholder='...' />
               </div>
+              <div className="add-quantity flex-col">
+                  <p>Quantity</p>
+                  <input
+                    onChange={onChangeHandler}
+                    value={data.stock}
+                    type="number"
+                    name="stock"
+                    min="0"
+                    placeholder="0"
+                  />
+              </div>
           </div>
           <button type='submit' className='add-btn'>Add Item</button>
         </div>
@@ -106,7 +119,10 @@ const Add = ({url, token}) => {
                     <p>{data.description || "Your description will appear here for customers."}</p>
                 </div>
                 <div className='add-preview-meta'>
-                    <span>{data.category}</span>
+                    <div className='add-preview-tags'>
+                        <span>{data.category}</span>
+                        <span className='add-preview-qty'>Qty {data.stock || '0'}</span>
+                    </div>
                     <b>${data.price || "0.00"}</b>
                 </div>
             </div>

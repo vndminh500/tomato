@@ -16,10 +16,12 @@ const routeLabels = {
   'contact-us': 'Contact Us',
   delivery: 'Delivery',
   privacy: 'Privacy Policy',
+  'complaints-refund': 'Complaints and refund policy',
   'mobile-app': 'Mobile App',
   'thank-you': 'Thank You',
   profile: 'Profile',
   verifyVnpay: 'Verify Payment',
+  favorites: 'Favorite Products',
 };
 
 const Breadcrumb = () => {

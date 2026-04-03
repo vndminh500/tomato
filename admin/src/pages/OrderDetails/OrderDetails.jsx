@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./OrderDetails.css";
@@ -19,6 +19,9 @@ const formatDateTime = (value) => {
 const OrderDetails = ({ url, token }) => {
   const { orderId } = useParams();
   const navigate = useNavigate();
+  const outletContext = useOutletContext();
+  const basePath = outletContext?.basePath ?? "";
+  const ordersPath = basePath ? `${basePath}/orders` : "/orders";
   const [order, setOrder] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -87,7 +90,7 @@ const OrderDetails = ({ url, token }) => {
           <h3>Order Details</h3>
           <p className="order-details-subtitle">Order ID: {order._id}</p>
         </div>
-        <button type="button" className="order-details-back-btn" onClick={() => navigate("/orders")}>
+        <button type="button" className="order-details-back-btn" onClick={() => navigate(ordersPath)}>
           Back to orders
         </button>
       </div>

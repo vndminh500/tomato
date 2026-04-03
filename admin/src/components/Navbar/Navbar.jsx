@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 const Navbar = ({
   user,
+  basePath = '',
   onLogout,
   unreadOrderCount = 0,
   notifications = [],
@@ -31,7 +32,7 @@ const Navbar = ({
 
   return (
     <header className="navbar">
-      <Link to='/' className="navbar-brand">
+      <Link to={basePath || '/'} className="navbar-brand">
         <img src={assets.logo} alt="Tomato admin logo" className="logo" />
       </Link>
       <div className='navbar-actions'>
@@ -72,7 +73,11 @@ const Navbar = ({
                   className={`notification-item ${notification.isRead ? 'is-read' : 'is-unread'}`}
                 >
                   <Link
-                    to={`/orders?orderId=${notification.orderId}`}
+                    to={
+                      notification.type === 'complaint'
+                        ? `${basePath}/complaints?complaintId=${notification.complaintId}`
+                        : `${basePath}/orders?orderId=${notification.orderId}`
+                    }
                     className='notification-item-link'
                     onClick={() => {
                       if (!notification.isRead && onMarkNotificationAsRead) {

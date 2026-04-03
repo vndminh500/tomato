@@ -1,0 +1,179 @@
+/**
+ * Customer site — shared responsive tweaks (imported after index.css).
+ * Breakpoints: 992px (tablet), 768px (mobile), 480px (small phone).
+ */
+
+@media (max-width: 992px) {
+    .header {
+        height: clamp(220px, 42vw, 380px);
+        min-height: 200px;
+        margin: 20px auto;
+    }
+
+    .header-contents {
+        gap: 8vw;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+    }
+
+    .product-comments,
+    .similar-products {
+        margin-top: 48px;
+    }
+
+    .cart {
+        margin-top: 72px;
+    }
+
+    .my-orders {
+        margin: 32px 0;
+    }
+
+    .order-details-header h2 {
+        font-size: clamp(22px, 5vw, 30px);
+    }
+}
+
+@media (max-width: 768px) {
+    .header-contents h2 {
+        font-size: clamp(20px, 5.5vw, 28px);
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .footer {
+        margin-top: 64px;
+        padding: 48px 5vw 32px;
+    }
+
+    .food-display-list {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 18px;
+        row-gap: 28px;
+    }
+
+    .food-display h2 {
+        font-size: clamp(20px, 4vw, 24px);
+    }
+
+    .explore-menu {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .explore-menu h1 {
+        font-size: clamp(1.35rem, 4vw, 1.75rem);
+    }
+
+    .similar-products-list {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 18px;
+    }
+
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 20px;
+        row-gap: 28px;
+    }
+
+    .favorites-hero {
+        padding: 28px 16px 22px;
+    }
+
+    .favorites-grid-section {
+        padding: 0;
+    }
+
+    .order-details-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .complaint-modal {
+        max-width: calc(100vw - 24px);
+        margin: 0 4px;
+        max-height: min(92vh, 800px);
+    }
+
+    .complaint-modal-head {
+        padding: 16px 18px 14px;
+    }
+
+    .product-name-rating h1 {
+        font-size: clamp(1.5rem, 5vw, 2.2rem);
+    }
+
+    .product-display-right-price {
+        font-size: clamp(1.5rem, 4vw, 2rem);
+    }
+
+    .product-comments h2,
+    .similar-products h2 {
+        font-size: clamp(1.35rem, 3.5vw, 1.65rem);
+    }
+
+    .cart-header {
+        padding: 18px 16px;
+    }
+
+    .cart-bottom {
+        gap: 20px;
+    }
+
+    .place-order {
+        margin-top: 64px;
+        padding: 16px;
+    }
+
+    .profile-page {
+        margin: 32px auto;
+        padding: 8px 4px 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .order-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cart-items > .cart-items-title:first-child {
+        display: none;
+    }
+
+    .cart-items-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 16px 0 !important;
+    }
+
+    .cart-items-item .cross {
+        align-self: flex-end;
+    }
+}
+
+@media (max-width: 480px) {
+    .food-item-info {
+        padding: 14px;
+    }
+
+    .food-item-name-rating p {
+        font-size: 17px;
+    }
+
+    .food-item-price {
+        font-size: 18px;
+    }
+
+    .breadcrumb-home-icon,
+    .breadcrumb-home-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+}

@@ -202,9 +202,9 @@
     .product-price-stock {
         justify-content: center;
     }
-    }
-    
-    product-share {
+}
+
+.product-share {
     display: flex;
     align-items: center;
     gap: 20px;

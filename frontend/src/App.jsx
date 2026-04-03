@@ -12,6 +12,7 @@ import Product from './pages/Product/Product'
 import About from './pages/About/About'
 import Delivery from './pages/Delivery/Delivery'
 import Privacy from './pages/Privacy/Privacy'
+import ComplaintsRefund from './pages/ComplaintsRefund/ComplaintsRefund'
 import ThankYou from './pages/ThankYou/ThankYou';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import Profile from './pages/Profile/Profile';
@@ -23,6 +24,7 @@ import MobileApp from './pages/MobileApp/MobileApp'
 import Contact from './pages/Contact/Contact'
 import { useParams } from 'react-router-dom'
 import OrdersDetails from './pages/OrdersDetails/OrdersDetails'
+import Favorites from './pages/Favorites/Favorites'
 
 const LegacyProductRedirect = () => {
   const { productId } = useParams()
@@ -58,8 +60,10 @@ const App = () => {
         <Route path='/contact-us' element={<Contact />} />
         <Route path='/delivery' element={<Delivery />} />
         <Route path='/privacy' element={<Privacy />} />
+        <Route path='/complaints-refund' element={<ComplaintsRefund />} />
         <Route path='/thank-you' element={<ThankYou />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/favorites' element={<Favorites />} />
         <Route path='*' element={<NotFound />} />
         
       </Routes>

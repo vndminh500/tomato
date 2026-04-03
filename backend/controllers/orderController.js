@@ -58,6 +58,10 @@ const placeOrder = async (req,res) =>{
             res.json({ success: true, message: "Order placed successfully with Cash on Delivery" });
         }
         else if (req.body.paymentMethod === "vnpay") {
+            await orderModel.findByIdAndUpdate(newOrder._id, {
+                payment: false,
+                status: "Order Placed"
+            });
             const orderId = newOrder._id.toString();
             const returnUrl = `${BACKEND_URL}/api/order/vnpay-return`;
             const amount = Math.round(Number(req.body.amount) * 100);
@@ -188,6 +192,17 @@ const updateStatus = async (req,res) => {
                 });
             }
 
+            if (
+                order.paymentMethod === "vnpay" &&
+                !order.payment &&
+                nextIndex > currentIndex
+            ) {
+                return res.json({
+                    success: false,
+                    message: "This order is unpaid (VNPAY). Complete payment before advancing status."
+                });
+            }
+
             if (nextStatus === "Order received" && !order.stockDeducted) {
                 const totalQuantityByItemId = new Map();
 
@@ -288,59 +303,19 @@ const cancelOrder = async (req, res) => {
     }
 }
 
-const deleteOrder = async (req, res) => {
-    try {
-        const { orderId, deleteReason } = req.body;
-        const normalizedReason = String(deleteReason || "").trim().toLowerCase();
-
-        if (!orderId) {
-            return res.json({ success: false, message: "Order ID is required" });
-        }
-
-        const order = await orderModel.findById(orderId);
-        if (!order) {
-            return res.json({ success: false, message: "Order not found" });
-        }
-
-        const canDelete = order.status === "Delivered" || order.status === "Cancelled";
-        if (!canDelete) {
-            return res.json({
-                success: false,
-                message: "Only Delivered or Cancelled orders can be deleted"
-            });
-        }
-
-        if (order.status === "Delivered" && normalizedReason !== "delivered") {
-            return res.json({
-                success: false,
-                message: "Delete reason must be Delivered for delivered orders"
-            });
-        }
-
-        if (order.status === "Cancelled" && normalizedReason !== "the customer canceled the order") {
-            return res.json({
-                success: false,
-                message: "Delete reason must be The customer canceled the order for cancelled orders"
-            });
-        }
-
-        await orderModel.findByIdAndDelete(orderId);
-
-        return res.json({ success: true, message: "Order deleted successfully" });
-    } catch (error) {
-        console.log(error);
-        return res.json({ success: false, message: "Error" });
-    }
-}
-
 const verifyVnpay = async (req, res) => {
     try {
         const verify = vnpay.verifyReturnUrl(req.query);
         const orderId = req.query.vnp_TxnRef;
         const responseCode = req.query.vnp_ResponseCode;
 
-        if (!verify?.isSuccess || !orderId) {
+        if (!orderId) {
             return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=false`);
+        }
+
+        if (!verify?.isSuccess) {
+            await orderModel.findByIdAndUpdate(orderId, { payment: false, status: "Order Placed" });
+            return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=false&orderId=${orderId}`);
         }
 
         if (responseCode === '00') {
@@ -348,7 +323,7 @@ const verifyVnpay = async (req, res) => {
             return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=true&orderId=${orderId}`);
         }
 
-        await orderModel.findByIdAndUpdate(orderId, { payment: false, status: "Payment Failed" });
+        await orderModel.findByIdAndUpdate(orderId, { payment: false, status: "Order Placed" });
         return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=false&orderId=${orderId}`);
     } catch (error) {
         console.log(error);
@@ -363,6 +338,5 @@ export {
     getOrderById,
     updateStatus,
     verifyVnpay,
-    cancelOrder,
-    deleteOrder
+    cancelOrder
 }

@@ -167,6 +167,10 @@
     .place-order-right {
         max-width: 100%;
     }
+
+    .place-order-right .cart-total {
+        margin-top: 24px;
+    }
 }
 
 @media (max-width: 600px) {

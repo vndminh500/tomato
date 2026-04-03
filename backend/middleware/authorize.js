@@ -1,22 +1,5 @@
 const ROLE_PERMISSIONS = {
-    super_admin: ["*"],
-    admin: [
-        "users.read",
-        "users.update_status",
-        "orders.read_all",
-        "orders.update_status",
-        "orders.delete",
-        "menu.create",
-        "menu.delete",
-        "promo.create",
-        "promo.read",
-        "promo.delete",
-        "inventory.read",
-        "inventory.update",
-        "complaints.read",
-        "complaints.resolve",
-        "system.opening_hours.update"
-    ],
+    admin: ["*"],
     staff: [
         "orders.read_all",
         "orders.update_status",

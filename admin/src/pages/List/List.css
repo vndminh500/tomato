@@ -1,20 +1,98 @@
+/* Không dùng class `add` ở đây — tránh .add form trong Add.css áp vào modal Update */
+.list.flex-col {
+    width: 74%;
+    margin-left: max(5vw, 25px);
+    margin-top: 36px;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.list-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+    margin-bottom: 14px;
+}
+
+.list-toolbar-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.list-filter-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.list-filter-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.list-filter-select {
+    min-width: 200px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.list-filter-select:hover {
+    border-color: #c5d0e3;
+}
+
+.list-filter-select:focus {
+    border-color: #ff6b4a;
+    box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.12);
+}
+
 .list .list-table {
     border: 1px solid var(--border-color);
     border-radius: 14px;
-    overflow: hidden;
+    overflow: visible;
     background: var(--bg-secondary);
     box-shadow: var(--shadow-soft);
 }
 
 .list .list-table-format {
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 0.5fr;
+    grid-template-columns: 0.5fr 2fr 0.95fr 1fr 1fr;
     align-items: center;
     gap: 10px;
     padding: 12px 15px;
     border-bottom: 1px solid var(--border-color);
     font-size: 13px;
     color: var(--text-secondary);
+    overflow: visible;
+}
+
+.list--with-actions .list-table-format {
+    grid-template-columns: 0.5fr 2fr 0.95fr 1fr 1fr minmax(88px, auto);
+}
+
+.list--with-actions .list-table-format.title .list-actions-header {
+    justify-self: end;
+    text-align: right;
+    padding-right: 2px;
+}
+
+.list-table-format--menu-open {
+    position: relative;
+    z-index: 40;
+    overflow: visible;
 }
 
 .list .list-table-format.title {
@@ -32,6 +110,41 @@
 
 .list .list-table-format p {
     margin-left: 5px;
+}
+
+.list-stock-pill {
+    justify-self: start;
+    margin-left: 5px;
+    min-width: 36px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-align: center;
+    width: fit-content;
+}
+
+.list-stock-pill.stock-high {
+    border: 1px solid #b8dfc8;
+    background: #effaf2;
+    color: #2f8b52;
+}
+
+.list-stock-pill.stock-medium {
+    border: 1px solid #f0dd9a;
+    background: #fff7de;
+    color: #9a7708;
+}
+
+.list-stock-pill.stock-low {
+    border: 1px solid #f3c7a2;
+    background: #fff0e3;
+    color: #ba5f16;
+}
+
+.list-stock-pill.stock-critical {
+    border: 1px solid #f2b1b1;
+    background: #ffebeb;
+    color: #b73636;
 }
 
 .list .list-table-format:not(.title):nth-child(odd) {
@@ -80,20 +193,411 @@
     font-weight: 600;
 }
 
-.list-remove-btn {
-    border: 1px solid rgba(255, 107, 74, 0.55);
-    color: #ff9a84;
-    background: rgba(255, 107, 74, 0.1);
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    cursor: pointer;
-    justify-self: start;
+.list-actions-cell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    min-width: 0;
 }
 
-.list-remove-btn:disabled {
+.list-menu-trigger {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.list-menu-trigger:hover:not(:disabled) {
+    background: #f1f5f9;
+    color: var(--text-primary);
+    border-color: #cbd5e1;
+}
+
+.list-menu-trigger.is-open {
+    background: #eef2ff;
+    color: var(--text-primary);
+    border-color: #a5b4fc;
+}
+
+.list-menu-trigger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.list-menu-trigger i {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.list-action-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    left: auto;
+    z-index: 200;
+    min-width: 160px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: var(--shadow-soft);
+}
+
+.list-action-menu-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.list-action-menu-item:hover {
+    background: #f1f5f9;
+}
+
+.list-action-menu-item--danger {
+    color: #b91c1c;
+}
+
+.list-action-menu-item--danger:hover {
+    background: rgba(254, 226, 226, 0.6);
+}
+
+.list-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.list-modal {
+    width: min(100%, 480px);
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    background: var(--bg-surface);
+    border-radius: 14px;
+    padding: 22px 20px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+    border: 1px solid var(--border-color);
+    min-width: 0;
+}
+
+.list-modal--edit {
+    width: min(100%, 820px);
+    max-width: calc(100vw - 40px);
+    padding: 28px 36px 26px;
+    border-radius: 18px;
+    box-shadow: 0 24px 56px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+}
+
+.list-modal-header {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.list-modal h4 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.list-modal--edit .list-modal-header h4 {
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+}
+
+.list-modal-hint {
+    margin: 0 0 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+.list-modal--edit .list-modal-hint {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 52ch;
+}
+
+.list-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.list-modal-edit-grid {
+    display: grid;
+    grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
+    gap: 28px 44px;
+    align-items: start;
+    min-width: 0;
+}
+
+.list-modal-edit-media {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+}
+
+.list-modal-edit-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+}
+
+.list-modal-section-title {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.list-modal-section-title--inline {
+    margin-top: 4px;
+    margin-bottom: -8px;
+}
+
+.list-modal-preview {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    max-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #fbfcfe 0%, #f1f5f9 100%);
+}
+
+.list-modal--edit .list-modal-preview {
+    max-height: none;
+    min-height: 200px;
+    padding: 16px;
+}
+
+.list-modal-preview img {
+    display: block;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.list-modal--edit .list-modal-preview img {
+    max-height: 280px;
+}
+
+.list-modal-label--file {
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px dashed #c5d0e3;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.list-modal-file-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.list-modal-label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-width: 0;
+    max-width: 100%;
+}
+
+.list-modal-input,
+.list-modal-textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 14px;
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+}
+
+.list-modal--edit .list-modal-input,
+.list-modal--edit .list-modal-textarea {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border-color: #cfd8e8;
+}
+
+.list-modal--edit .list-modal-input:focus,
+.list-modal--edit .list-modal-textarea:focus {
+    outline: none;
+    border-color: #ff6b4a;
+    box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.12);
+}
+
+.list-modal-textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+}
+
+.list-modal--edit .list-modal-textarea {
+    min-height: 130px;
+}
+
+.list-modal-file {
+    font-size: 13px;
+    max-width: 100%;
+}
+
+.list-modal-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    min-width: 0;
+    width: 100%;
+}
+
+.list-modal--edit .list-modal-row {
+    gap: 16px 24px;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.list-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.list-modal--edit .list-modal-actions {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border-color);
+    gap: 12px;
+}
+
+.list-modal-btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+.list-modal--edit .list-modal-btn {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    min-width: 128px;
+}
+
+.list-modal-btn.secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.list-modal-btn.primary {
+    background: linear-gradient(135deg, #ff6b4a 0%, #ff8f6b 100%);
+    color: #fff;
+}
+
+.list-modal-btn.danger {
+    background: #dc2626;
+    color: #fff;
+}
+
+.list-modal-btn:disabled {
     opacity: 0.65;
     cursor: not-allowed;
+}
+
+.list-delete-dialog {
+    max-width: 400px;
+    width: min(100%, 400px);
+}
+
+@media (max-width: 760px) {
+    .list-modal--edit {
+        padding: 22px 22px 20px;
+        border-radius: 16px;
+    }
+
+    .list-modal-edit-grid {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .list-modal--edit .list-modal-preview {
+        min-height: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .list-modal-row {
+        grid-template-columns: 1fr;
+    }
+
+    .list-modal--edit .list-modal-row {
+        grid-template-columns: 1fr;
+    }
+
+    .list-modal--edit .list-modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .list-modal--edit .list-modal-btn {
+        width: 100%;
+        min-width: 0;
+    }
 }
 
 .list-empty-state {
@@ -151,18 +655,30 @@
 @keyframes revealUp {
     from {
         opacity: 0;
-        transform: translateY(6px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
 @media (max-width: 600px) {
+    .list-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .list-filter-select {
+        min-width: 100%;
+        width: 100%;
+    }
+
     .list .list-table-format {
-        grid-template-columns: 1fr 3fr 1fr;
-        gap: 15px;
+        grid-template-columns: 0.55fr 1.35fr 0.75fr 0.85fr 0.85fr;
+        gap: 12px;
+    }
+
+    .list--with-actions .list-table-format {
+        grid-template-columns: 0.5fr 1.2fr 0.7fr 0.75fr 0.75fr minmax(64px, auto);
     }
     .list .list-table-format.title {
         display: none;
