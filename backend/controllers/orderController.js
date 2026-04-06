@@ -5,6 +5,31 @@ import foodModel from "../models/foodModel.js";
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:4000";
+
+const normalizeBaseUrl = (value) => String(value || "").trim().replace(/\/+$/, "");
+
+const getBackendBaseUrl = (req) => {
+    const envBase = normalizeBaseUrl(process.env.BACKEND_URL);
+    if (envBase) return envBase;
+
+    const forwardedProto = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim();
+    const forwardedHost = String(req.headers["x-forwarded-host"] || "").split(",")[0].trim();
+    const host = forwardedHost || req.get("host");
+    const protocol = forwardedProto || req.protocol || "https";
+
+    if (host) return `${protocol}://${host}`;
+    return normalizeBaseUrl(BACKEND_URL);
+};
+
+const getFrontendBaseUrl = (req) => {
+    const envBase = normalizeBaseUrl(process.env.FRONTEND_URL);
+    if (envBase) return envBase;
+
+    const origin = String(req.headers.origin || "").trim();
+    if (origin) return normalizeBaseUrl(origin);
+
+    return normalizeBaseUrl(FRONTEND_URL);
+};
 const STATUS_FLOW = [
     "Order Placed",
     "Order received",
@@ -63,7 +88,7 @@ const placeOrder = async (req,res) =>{
                 status: "Order Placed"
             });
             const orderId = newOrder._id.toString();
-            const returnUrl = `${BACKEND_URL}/api/order/vnpay-return`;
+            const returnUrl = `${getBackendBaseUrl(req)}/api/order/vnpay-return`;
             const amount = Math.round(Number(req.body.amount));
             const ipAddr = req.headers['x-forwarded-for']?.split(',')[0]?.trim()
                 || req.socket?.remoteAddress
@@ -310,24 +335,24 @@ const verifyVnpay = async (req, res) => {
         const responseCode = req.query.vnp_ResponseCode;
 
         if (!orderId) {
-            return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=false`);
+            return res.redirect(`${getFrontendBaseUrl(req)}/verifyVnpay?success=false`);
         }
 
         if (!verify?.isSuccess) {
             await orderModel.findByIdAndUpdate(orderId, { payment: false, status: "Order Placed" });
-            return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=false&orderId=${orderId}`);
+            return res.redirect(`${getFrontendBaseUrl(req)}/verifyVnpay?success=false&orderId=${orderId}`);
         }
 
         if (responseCode === '00') {
             await orderModel.findByIdAndUpdate(orderId, { payment: true, status: "Order Placed" });
-            return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=true&orderId=${orderId}`);
+            return res.redirect(`${getFrontendBaseUrl(req)}/verifyVnpay?success=true&orderId=${orderId}`);
         }
 
         await orderModel.findByIdAndUpdate(orderId, { payment: false, status: "Order Placed" });
-        return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=false&orderId=${orderId}`);
+        return res.redirect(`${getFrontendBaseUrl(req)}/verifyVnpay?success=false&orderId=${orderId}`);
     } catch (error) {
         console.log(error);
-        return res.redirect(`${FRONTEND_URL}/verifyVnpay?success=false`);
+        return res.redirect(`${getFrontendBaseUrl(req)}/verifyVnpay?success=false`);
     }
 }
 
