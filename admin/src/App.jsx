@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
 import { Navigate, Route, Routes, useLocation, useNavigate, useParams, Outlet } from 'react-router-dom'
@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
 import AdminLogin from './components/Auth/AdminLogin'
 import OrderDetails from './pages/OrderDetails/OrderDetails'
-import Complaints from './pages/Complaints/Complaints'
+import Reviews from './pages/Reviews/Reviews'
 
 const NOTIFICATIONS_STORAGE_KEY = 'admin_order_notifications'
 const ADMIN_TOKEN_STORAGE_KEY = 'admin_token'
@@ -24,8 +24,8 @@ const ROLE_PERMISSIONS = {
   staff: [
     "orders.read_all",
     "orders.update_status",
-    "complaints.read",
-    "complaints.resolve"
+    "reviews.read",
+    "reviews.reply"
   ]
 }
 
@@ -56,21 +56,20 @@ const App = () => {
   const seenOrderIdsRef = useRef(new Set())
   const notifiedCancelledOrderIdsRef = useRef(new Set())
   const isFirstOrderCheckRef = useRef(true)
-  const seenComplaintTicketsRef = useRef(new Set())
-  const isFirstComplaintPollRef = useRef(true)
+  const seenReviewIdsRef = useRef(new Set())
+  const isFirstReviewCheckRef = useRef(true)
   const role = String(user?.role || "").trim().toLowerCase()
   const hasWildcard = role === "admin"
   const permissions = new Set(ROLE_PERMISSIONS[role] || [])
   const hasPermission = (permission) => hasWildcard || permissions.has(permission)
   const canReadOrders = hasPermission("orders.read_all")
-  const canReadComplaints = hasPermission("complaints.read")
-
+  const canReadReviews = hasPermission("reviews.read")
   useEffect(() => {
     isFirstOrderCheckRef.current = true
     seenOrderIdsRef.current = new Set()
     notifiedCancelledOrderIdsRef.current = new Set()
-    isFirstComplaintPollRef.current = true
-    seenComplaintTicketsRef.current = new Set()
+    isFirstReviewCheckRef.current = true
+    seenReviewIdsRef.current = new Set()
   }, [token])
 
   useEffect(() => {
@@ -173,55 +172,54 @@ const App = () => {
   }, [url, token, canReadOrders])
 
   useEffect(() => {
-    if (!token || !canReadComplaints) return
+    if (!token || !canReadReviews) return
     let isMounted = true
 
-    const pollComplaints = async () => {
+    const pollReviews = async () => {
       try {
-        const response = await axios.get(`${url}/api/complaint/admin/list`, { headers: { token } })
+        const response = await axios.get(`${url}/api/review/admin/recent-review-ids`, { headers: { token } })
         if (!isMounted || !response.data?.success) return
-        const rows = response.data.data || []
-        const waiting = rows.filter((r) =>
-          ["in_progress", "open", "in_review", "need_info"].includes(r.status)
-        )
-        if (isFirstComplaintPollRef.current) {
-          waiting.forEach((r) => seenComplaintTicketsRef.current.add(r.ticketNumber))
-          isFirstComplaintPollRef.current = false
+
+        const list = response.data.data || []
+        const ids = list.map((r) => String(r.id))
+
+        if (isFirstReviewCheckRef.current) {
+          ids.forEach((id) => seenReviewIdsRef.current.add(id))
+          isFirstReviewCheckRef.current = false
           return
         }
-        const newTickets = waiting.filter((r) => !seenComplaintTicketsRef.current.has(r.ticketNumber))
-        newTickets.forEach((r) => seenComplaintTicketsRef.current.add(r.ticketNumber))
-        if (newTickets.length > 0) {
-          const newNotifications = newTickets.map((r) => ({
-            id: `complaint-${r.ticketNumber}-${Date.now()}`,
-            type: "complaint",
-            complaintId: String(r._id),
-            ticketNumber: r.ticketNumber,
+
+        const newly = list.filter((r) => !seenReviewIdsRef.current.has(String(r.id)))
+        if (newly.length > 0) {
+          const newNotifications = newly.map((r, i) => ({
+            id: `review-${String(r.id)}-${Date.now()}-${i}`,
+            type: "review",
+            reviewId: String(r.id),
             orderId: String(r.orderId),
-            message: `New complaint ${r.ticketNumber} (${r.customerName || "customer"})`,
+            message: "A customer submitted a new review.",
             createdAt: Date.now(),
             isRead: false
           }))
           setNotifications((prev) => [...newNotifications, ...prev].slice(0, 100))
           toast.info(
-            newTickets.length === 1
-              ? "New customer complaint received."
-              : `${newTickets.length} new complaints.`
+            newly.length === 1 ? "New customer review received." : `${newly.length} new customer reviews received.`
           )
         }
+
+        ids.forEach((id) => seenReviewIdsRef.current.add(id))
       } catch {
         // Silent fail for background polling.
       }
     }
 
-    pollComplaints()
-    const complaintPollId = setInterval(pollComplaints, 12000)
+    pollReviews()
+    const reviewPollId = setInterval(pollReviews, 10000)
 
     return () => {
       isMounted = false
-      clearInterval(complaintPollId)
+      clearInterval(reviewPollId)
     }
-  }, [url, token, canReadComplaints])
+  }, [url, token, canReadReviews])
 
   const handleLoginSuccess = (newToken, userData) => {
     const normalizedUser = {
@@ -273,7 +271,33 @@ const App = () => {
   const RoleLayout = () => {
     const { role: roleInUrl } = useParams()
     const location = useLocation()
+    const [sidebarOpen, setSidebarOpen] = useState(false)
     const normalizedUrlRole = String(roleInUrl || "").toLowerCase()
+
+    useEffect(() => {
+      setSidebarOpen(false)
+    }, [location.pathname])
+
+    useEffect(() => {
+      const onResize = () => {
+        if (window.innerWidth > 768) setSidebarOpen(false)
+      }
+      window.addEventListener('resize', onResize)
+      return () => window.removeEventListener('resize', onResize)
+    }, [])
+
+    useEffect(() => {
+      if (typeof window === 'undefined' || window.innerWidth > 768) return
+      const prev = document.body.style.overflow
+      document.body.style.overflow = sidebarOpen ? 'hidden' : ''
+      return () => {
+        document.body.style.overflow = prev
+      }
+    }, [sidebarOpen])
+
+    const toggleSidebar = useCallback(() => {
+      setSidebarOpen((open) => !open)
+    }, [])
 
     if (!token || !user) {
       return <Navigate to="/" replace state={{ from: location.pathname }} />
@@ -306,11 +330,27 @@ const App = () => {
           onMarkNotificationAsRead={handleMarkNotificationAsRead}
           onDeleteNotification={handleDeleteNotification}
           onClearAllNotifications={handleClearAllNotifications}
+          onMenuToggle={toggleSidebar}
+          menuOpen={sidebarOpen}
         />
-        <hr />
+        <hr className="admin-app-divider" />
         <div className="app-content">
-          <Sidebar hasPermission={hasPermission} basePath={basePath} />
-          <Outlet context={{ basePath }} />
+          <button
+            type="button"
+            className={`sidebar-backdrop${sidebarOpen ? ' is-visible' : ''}`}
+            aria-label="Close navigation menu"
+            tabIndex={sidebarOpen ? 0 : -1}
+            onClick={() => setSidebarOpen(false)}
+          />
+          <Sidebar
+            hasPermission={hasPermission}
+            basePath={basePath}
+            isOpen={sidebarOpen}
+            onNavigate={() => setSidebarOpen(false)}
+          />
+          <main className="admin-main">
+            <Outlet context={{ basePath }} />
+          </main>
         </div>
       </div>
     )
@@ -378,13 +418,13 @@ const App = () => {
             }
           />
           <Route
-            path="complaints"
+            path="reviews"
             element={
-              hasPermission('complaints.read') ? (
-                <Complaints
+              hasPermission('reviews.read') ? (
+                <Reviews
                   url={url}
                   token={token}
-                  canResolve={hasPermission('complaints.resolve')}
+                  canReply={hasPermission('reviews.reply')}
                 />
               ) : (
                 <Navigate to={`/${role}`} replace />

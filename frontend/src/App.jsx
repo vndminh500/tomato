@@ -25,6 +25,7 @@ import Contact from './pages/Contact/Contact'
 import { useParams } from 'react-router-dom'
 import OrdersDetails from './pages/OrdersDetails/OrdersDetails'
 import Favorites from './pages/Favorites/Favorites'
+import ChatWidget from './components/Chat/ChatWidget'
 
 const LegacyProductRedirect = () => {
   const { productId } = useParams()
@@ -69,6 +70,7 @@ const App = () => {
       </Routes>
     </div>
       <Footer />
+      <ChatWidget setShowLogin={setShowLogin} />
   </>
   )
 }

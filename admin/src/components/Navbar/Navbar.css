@@ -2,7 +2,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 4%;
+    gap: 12px;
+    padding: 14px clamp(14px, 4vw, 36px);
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
     box-shadow: 0 8px 22px rgba(24, 39, 75, 0.08);
@@ -12,10 +13,52 @@
     overflow: visible;
 }
 
+.navbar-start {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.navbar-menu-btn {
+    display: none;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navbar-menu-btn:hover {
+    border-color: #c5d0e3;
+    box-shadow: 0 6px 16px rgba(24, 39, 75, 0.1);
+}
+
+.navbar-menu-bars {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 20px;
+}
+
+.navbar-menu-bars span {
+    display: block;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--text-primary);
+}
+
 .navbar-brand {
     display: inline-flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
 .navbar-brand span {
@@ -242,6 +285,27 @@
     background: #fff4f4;
 }
 
+@media (max-width: 768px) {
+    .navbar-menu-btn {
+        display: inline-flex;
+    }
+
+    .navbar .logo {
+        width: min(132px, 36vw);
+    }
+
+    .navbar-actions {
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .notification-dropdown {
+        width: min(280px, calc(100vw - 24px));
+        right: 0;
+        max-height: min(340px, 55vh);
+    }
+}
+
 @media (max-width: 700px) {
     .navbar-brand span {
         display: none;
@@ -257,6 +321,14 @@
 
     .logout-btn {
         height: 36px;
-        padding: 0 12px;
+        padding: 0 10px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 400px) {
+    .logout-btn {
+        padding: 0 8px;
+        font-size: 12px;
     }
 }

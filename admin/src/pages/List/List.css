@@ -1,8 +1,6 @@
 /* Không dùng class `add` ở đây — tránh .add form trong Add.css áp vào modal Update */
 .list.flex-col {
-    width: 74%;
-    margin-left: max(5vw, 25px);
-    margin-top: 36px;
+    margin-top: 24px;
     color: var(--text-secondary);
     font-size: 16px;
 }
@@ -62,7 +60,9 @@
 .list .list-table {
     border: 1px solid var(--border-color);
     border-radius: 14px;
-    overflow: visible;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
     background: var(--bg-secondary);
     box-shadow: var(--shadow-soft);
 }
@@ -77,6 +77,7 @@
     font-size: 13px;
     color: var(--text-secondary);
     overflow: visible;
+    min-width: 520px;
 }
 
 .list--with-actions .list-table-format {

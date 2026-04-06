@@ -1,7 +1,5 @@
 .voucher {
-    width: 74%;
-    margin-left: max(5vw, 25px);
-    margin-top: 36px;
+    margin-top: 24px;
     color: var(--text-secondary);
 }
 
@@ -9,6 +7,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     width: 100%;
     margin-bottom: 20px;
 }
@@ -37,7 +37,9 @@
 .voucher .list-table {
     border: 1px solid var(--border-color);
     border-radius: 14px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
     background: var(--bg-secondary);
     box-shadow: var(--shadow-soft);
 }
@@ -51,6 +53,7 @@
     align-items: center;
     font-size: 14px;
     color: var(--text-secondary);
+    min-width: 480px;
 }
 
 .voucher .list-table-format:not(.title):nth-child(odd) {
@@ -237,13 +240,10 @@
 }
 
 @media (max-width: 768px) {
-    .voucher {
-        width: 82%;
-    }
-
     .voucher .list-table-format {
         grid-template-columns: 1fr 0.5fr 1fr 0.5fr;
         font-size: 12px;
+        min-width: 360px;
     }
     .voucher .list-table-format b:nth-child(4), 
     .voucher .list-table-format p:nth-child(4) {
@@ -259,11 +259,9 @@
         top: 8px;
         right: 12px;
     }
-}
 
-@media (max-width: 700px) {
-    .voucher {
-        width: 92%;
-        margin-left: 16px;
+    .voucher-header button {
+        width: 100%;
+        max-width: 280px;
     }
 }

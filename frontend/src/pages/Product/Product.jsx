@@ -68,11 +68,18 @@ const Product = () => {
                 <div className="product-display-right">
                     <div className='product-name-rating'>
                         <h1>{product.name}</h1>
-                        <img src={assets.rating_starts} alt="" />
+                        {Number(product.ratingCount) > 0 ? (
+                            <span className='product-avg-rating' title='From customer reviews'>
+                                ★ {(Number(product.ratingSum) / Number(product.ratingCount)).toFixed(1)} (
+                                {product.ratingCount} reviews)
+                            </span>
+                        ) : (
+                            <img src={assets.rating_starts} alt='' />
+                        )}
                     </div>
                     <p className='product-display-right-description'>{product.description}</p>
                     <div className='product-price-stock'>
-                        <div className='product-display-right-price'>${product.price}</div>
+                        <div className='product-display-right-price'>{product.price} vnđ</div>
                         <span className={`product-stock-pill ${getStockClassName(stockValue)} ${isStockShaking ? 'stock-badge-shake' : ''}`}>In stock: {stockValue}</span>
                     </div>
                     {!cartItems[product._id]

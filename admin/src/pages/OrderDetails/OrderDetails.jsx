@@ -6,7 +6,7 @@ import "./OrderDetails.css";
 
 const currency = (amount) => {
   const value = Number(amount || 0);
-  return `$${value.toFixed(2)}`;
+  return `${value} vnđ`;
 };
 
 const formatDateTime = (value) => {
@@ -56,7 +56,7 @@ const OrderDetails = ({ url, token }) => {
 
   if (isLoading) {
     return (
-      <div className="order-details add">
+      <div className="order-details">
         <h3>Order Details</h3>
         <p>Loading order details...</p>
       </div>
@@ -65,10 +65,10 @@ const OrderDetails = ({ url, token }) => {
 
   if (!order) {
     return (
-      <div className="order-details add">
+      <div className="order-details">
         <h3>Order Details</h3>
         <p>Order not found.</p>
-        <button type="button" className="order-details-back-btn" onClick={() => navigate("/orders")}>
+        <button type="button" className="order-details-back-btn" onClick={() => navigate(ordersPath)}>
           Back to orders
         </button>
       </div>
@@ -84,7 +84,7 @@ const OrderDetails = ({ url, token }) => {
     .join(", ");
 
   return (
-    <div className="order-details add">
+    <div className="order-details">
       <div className="order-details-header">
         <div>
           <h3>Order Details</h3>

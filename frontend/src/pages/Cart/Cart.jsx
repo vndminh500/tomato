@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
+const DELIVERY_FEE = 15000;
+
 const Cart = ({ setShowLogin }) => {
 
   const {cartItems, food_list,removeFromCart,getTotalCartAmount, url, token, promoCode, discount, discountAmount, message, applyPromoCode, setPromoCode, setMessage} = useContext(StoreContext);
@@ -81,9 +83,9 @@ const Cart = ({ setShowLogin }) => {
                     >
                       {item.name}
                     </button>
-                    <p>${item.price}</p>
+                    <p>{item.price} vnđ</p>
                     <p>{cartItems[item._id]}</p>
-                    <p>${item.price*cartItems[item._id]}</p>
+                    <p>{item.price*cartItems[item._id]} vnđ</p>
                     <button onClick={()=>removeFromCart(item._id)} className='cross' type='button'>x</button>
                   </div>
                   <hr />
@@ -106,26 +108,26 @@ const Cart = ({ setShowLogin }) => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p>
+              <p>{getTotalCartAmount()} vnđ</p>
             </div>
             <hr />
             {discount > 0 && (
                             <>
                                 <div className="cart-total-details">
                                     <p>Discount</p>
-                                    <p>- ${discountAmount.toFixed(2)}</p>
+                                    <p>- ${discountAmount}</p>
                                 </div>
                                 <hr />
                             </>
                         )}
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>${getTotalCartAmount()===0?0:2}</p>
+              <p>{getTotalCartAmount()===0?0:DELIVERY_FEE} vnđ</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>${(getTotalCartAmount() - discountAmount + (getTotalCartAmount() === 0 ? 0 : 2)).toFixed(2)}</b>
+              <b>{(getTotalCartAmount() - discountAmount + (getTotalCartAmount() === 0 ? 0 : DELIVERY_FEE))} vnđ</b>
             </div>
           </div>
 

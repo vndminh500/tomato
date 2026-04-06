@@ -64,7 +64,7 @@ const placeOrder = async (req,res) =>{
             });
             const orderId = newOrder._id.toString();
             const returnUrl = `${BACKEND_URL}/api/order/vnpay-return`;
-            const amount = Math.round(Number(req.body.amount) * 100);
+            const amount = Math.round(Number(req.body.amount));
             const ipAddr = req.headers['x-forwarded-for']?.split(',')[0]?.trim()
                 || req.socket?.remoteAddress
                 || req.ip

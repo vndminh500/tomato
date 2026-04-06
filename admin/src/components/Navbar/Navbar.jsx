@@ -11,7 +11,9 @@ const Navbar = ({
   notifications = [],
   onMarkNotificationAsRead,
   onDeleteNotification,
-  onClearAllNotifications
+  onClearAllNotifications,
+  onMenuToggle,
+  menuOpen = false
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -32,9 +34,26 @@ const Navbar = ({
 
   return (
     <header className="navbar">
-      <Link to={basePath || '/'} className="navbar-brand">
-        <img src={assets.logo} alt="Tomato admin logo" className="logo" />
-      </Link>
+      <div className="navbar-start">
+        {onMenuToggle ? (
+          <button
+            type="button"
+            className="navbar-menu-btn"
+            onClick={onMenuToggle}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <span className="navbar-menu-bars" aria-hidden>
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        ) : null}
+        <Link to={basePath || '/'} className="navbar-brand">
+          <img src={assets.logo} alt="Tomato admin logo" className="logo" />
+        </Link>
+      </div>
       <div className='navbar-actions'>
         <div className='notification-wrap' ref={dropdownRef}>
         <button
@@ -74,8 +93,8 @@ const Navbar = ({
                 >
                   <Link
                     to={
-                      notification.type === 'complaint'
-                        ? `${basePath}/complaints?complaintId=${notification.complaintId}`
+                      notification.type === 'review'
+                        ? `${basePath}/reviews?reviewId=${notification.reviewId}`
                         : `${basePath}/orders?orderId=${notification.orderId}`
                     }
                     className='notification-item-link'

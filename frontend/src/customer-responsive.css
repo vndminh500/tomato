@@ -1,8 +1,3 @@
-/**
- * Customer site — shared responsive tweaks (imported after index.css).
- * Breakpoints: 992px (tablet), 768px (mobile), 480px (small phone).
- */
-
 @media (max-width: 992px) {
     .header {
         height: clamp(220px, 42vw, 380px);
@@ -92,16 +87,6 @@
 
     .order-details-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .complaint-modal {
-        max-width: calc(100vw - 24px);
-        margin: 0 4px;
-        max-height: min(92vh, 800px);
-    }
-
-    .complaint-modal-head {
-        padding: 16px 18px 14px;
     }
 
     .product-name-rating h1 {

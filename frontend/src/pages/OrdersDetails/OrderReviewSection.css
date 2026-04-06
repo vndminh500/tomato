@@ -1,0 +1,549 @@
+.order-review-section {
+  margin-top: 1.75rem;
+  padding: 1.25rem 1.35rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fff9f6 0%, #ffffff 55%);
+  border: 1px solid #ffe0d6;
+  text-align: left;
+}
+
+.order-review-section--submitted {
+  background: linear-gradient(180deg, #f6fff8 0%, #ffffff 50%);
+  border-color: #c8e6c9;
+}
+
+.order-review-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  color: #1a1a1a;
+}
+
+.order-review-intro,
+.order-review-loading {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.order-review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.order-review-gated {
+  position: relative;
+}
+
+.order-review-gated.is-locked .order-review-form {
+  filter: blur(2px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.order-review-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(2px);
+  z-index: 20;
+}
+
+.order-review-overlay-card {
+  width: min(100%, 620px);
+  border-radius: 14px;
+  border: 1px solid #ffd9cc;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  padding: 16px 18px;
+}
+
+.order-review-overlay-card h4 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: #1a1a1a;
+}
+
+.order-review-overlay-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #3f3f46;
+}
+
+.order-review-overlay-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.order-review-help-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid #ffd9cc;
+  background: #fff3ee;
+}
+
+.order-review-help-text {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #7c2d12;
+  flex: 1;
+  min-width: 230px;
+}
+
+.order-review-help-btn {
+  border: 1px solid #ef5d3e;
+  background: #fff;
+  color: #c73d22;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.order-review-help-btn:hover {
+  background: #fff7f5;
+}
+
+.order-review-stars-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.order-review-stars-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+  min-width: 160px;
+}
+
+.order-review-optional {
+  font-weight: 400;
+  color: #888;
+  font-size: 0.82rem;
+}
+
+.order-review-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.order-review-star-wrap {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.order-review-star-wrap::after {
+  content: attr(data-hint);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid #e8e0dc;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+  z-index: 20;
+}
+
+.order-review-star-wrap:hover::after,
+.order-review-star-wrap:focus-within::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+.order-review-star {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.65rem;
+  line-height: 1;
+  color: #c8c8c8;
+  padding: 2px;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.order-review-star.is-on {
+  color: #ffb400;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.order-review-star:hover {
+  transform: scale(1.12);
+}
+
+.order-review-star-clear {
+  margin-left: 8px;
+  font-size: 0.78rem;
+  border: none;
+  background: none;
+  color: #ef5d3e;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.order-review-block {
+  padding-top: 0.25rem;
+}
+
+.order-review-block-title {
+  display: block;
+  font-weight: 600;
+  font-size: 0.88rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.order-review-quick-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.order-review-quick-tag {
+  border: 1px solid #e8e0dc;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #444;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.order-review-quick-tag.is-on {
+  border-color: #ef5d3e;
+  background: #fff5f2;
+  color: #c73d22;
+}
+
+.order-review-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #333;
+}
+
+.order-review-hint {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: #888;
+}
+
+.order-review-textarea {
+  border: 1px solid #e8e0dc;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 88px;
+}
+
+.order-review-textarea:focus {
+  outline: none;
+  border-color: #ff9d87;
+  box-shadow: 0 0 0 3px rgba(239, 93, 62, 0.12);
+}
+
+.order-review-file {
+  font-size: 0.85rem;
+}
+
+.order-review-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.order-review-file-name {
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.order-review-submit {
+  align-self: flex-start;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(90deg, #ff8c70 0%, #ef5d3e 100%);
+  box-shadow: 0 6px 18px rgba(239, 93, 62, 0.35);
+}
+
+.order-review-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.order-review-primary-btn,
+.order-review-outline-btn {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.order-review-primary-btn {
+  border: none;
+  color: #fff;
+  background: linear-gradient(90deg, #ff8c70 0%, #ef5d3e 100%);
+}
+
+.order-review-outline-btn {
+  border: 1px solid #e7d6cf;
+  color: #5f4b42;
+  background: #fff;
+}
+
+.order-review-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.order-review-modal {
+  width: min(100%, 460px);
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #eadfd9;
+  box-shadow: 0 20px 48px rgba(2, 6, 23, 0.28);
+  padding: 18px;
+}
+
+.order-review-modal h4 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.order-review-modal p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.order-review-modal-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.order-review-contact-actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.order-review-contact-btn {
+  flex: 1;
+  min-width: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  border: 1px solid #f2d5cb;
+  color: #3f3f46;
+  background: #fff;
+  padding: 12px 12px;
+  font-weight: 700;
+  font-size: 0.86rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.order-review-contact-btn:hover {
+  transform: translateY(-1px);
+  border-color: #ef5d3e;
+  box-shadow: 0 8px 18px rgba(239, 93, 62, 0.16);
+}
+
+.order-review-contact-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.order-review-contact-icon--zalo {
+  background: linear-gradient(135deg, #0099ff 0%, #0069ff 100%);
+}
+
+.order-review-contact-icon--gmail {
+  background: linear-gradient(135deg, #ea4335 0%, #fbbc05 100%);
+}
+
+.order-review-contact-close {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.order-review-summary {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.55;
+}
+
+.order-review-overall-display {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin-bottom: 0.75rem;
+}
+
+.order-review-overall-caption {
+  flex-basis: 100%;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #555;
+  margin-top: -0.25rem;
+}
+
+.order-review-big-stars {
+  font-size: 1.5rem;
+  color: #ffb400;
+  letter-spacing: 2px;
+}
+
+.order-review-overall-num {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.order-review-tags-read {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0.5rem 0;
+}
+
+.order-review-tag-pill {
+  background: #fff0ea;
+  border: 1px solid #ffd4c8;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+}
+
+.order-review-comment-read {
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+}
+
+.order-review-media {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 0.75rem;
+}
+
+.order-review-media-item {
+  max-width: 120px;
+  max-height: 120px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.order-review-merchant {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.order-review-merchant h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.order-review-merchant-meta {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.order-review-pending-reply {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+@media (max-width: 680px) {
+  .order-review-overlay-card {
+    padding: 14px;
+  }
+
+  .order-review-help-strip {
+    align-items: flex-start;
+  }
+
+  .order-review-help-text {
+    min-width: 0;
+  }
+
+  .order-review-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .order-review-modal-actions .order-review-primary-btn,
+  .order-review-modal-actions .order-review-outline-btn,
+  .order-review-contact-actions .order-review-outline-btn {
+    width: 100%;
+  }
+
+  .order-review-contact-actions {
+    flex-direction: row;
+  }
+}

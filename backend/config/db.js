@@ -1,4 +1,3 @@
-import "dotenv/config";
 import mongoose from "mongoose";
 import { seedAdmin } from "./adminSeed.js";
 

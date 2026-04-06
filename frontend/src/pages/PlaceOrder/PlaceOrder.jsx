@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
+const DELIVERY_FEE = 15000;
+
 const PlaceOrder = () => {
 
   const {getTotalCartAmount,token,food_list,cartItems,url, clearCart, discountAmount} = useContext(StoreContext)
@@ -51,7 +53,7 @@ const PlaceOrder = () => {
     let orderData = {
       address: data,
       items: orderItems,
-      amount: getTotalCartAmount() - discountAmount + 2,
+      amount: getTotalCartAmount() - discountAmount + DELIVERY_FEE,
       paymentMethod: paymentMethod
     }
     console.log("Placing order with payment method:", paymentMethod);
@@ -164,7 +166,7 @@ const PlaceOrder = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p>
+              <p>{getTotalCartAmount()} vnđ</p>
             </div>
             <hr />
             {discountAmount > 0 && (
@@ -178,12 +180,12 @@ const PlaceOrder = () => {
             )}
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>${2}</p>
+              <p>{DELIVERY_FEE} vnđ</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>${(getTotalCartAmount() - discountAmount + 2).toFixed(2)}</b>
+              <b>{(getTotalCartAmount() - discountAmount + DELIVERY_FEE)} vnđ</b>
             </div>
           </div>
           <button type='submit'>PROCEED TO PAYMENT</button>

@@ -3,8 +3,8 @@ const ROLE_PERMISSIONS = {
     staff: [
         "orders.read_all",
         "orders.update_status",
-        "complaints.read",
-        "complaints.resolve"
+        "reviews.read",
+        "reviews.reply"
     ],
     customer: [
         "profile.read_self",

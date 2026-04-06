@@ -1,7 +1,5 @@
 .order {
-    width: 74%;
-    margin-left: max(5vw, 25px);
-    margin-top: 36px;
+    margin-top: 24px;
     color: var(--text-secondary);
 }
 
@@ -356,17 +354,26 @@
 }
 
 @media (max-width: 750px) {
-    .order {
-        width: 90%;
-        margin-left: 20px;
+    .order h3 {
+        font-size: 20px;
+        margin-bottom: 16px;
     }
+
     .order-item {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
+        padding: 16px;
     }
     .order-item select, .order-failed-box {
         width: 100%;
+        max-width: 100%;
+    }
+
+    .order-view-link {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
     }
 }

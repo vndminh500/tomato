@@ -1,7 +1,5 @@
 .add {
-    width: 74%;
-    margin-left: max(5vw,25px);
-    margin-top: 36px;
+    margin-top: 24px;
     color: var(--text-secondary);
     font-size: 16px;
 }
@@ -214,9 +212,6 @@
 }
 
 @media (max-width: 900px) {
-    .add {
-        width: 82%;
-    }
     .add form {
         grid-template-columns: 1fr;
     }
@@ -229,14 +224,14 @@
 }
 
 @media (max-width: 700px) {
-    .add {
-        width: 92%;
-        margin-left: 16px;
-    }
     .add form {
         padding: 18px;
     }
     .add-category-price {
         flex-direction: column;
+    }
+
+    .add-header h2 {
+        font-size: 22px;
     }
 }

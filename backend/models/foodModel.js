@@ -6,7 +6,10 @@ const foodSchema = new mongoose.Schema({
     price:{type:Number, required:true},
     image:{type:String, required:true},
     category:{type:String,required:true},
-    stock:{type:Number, default:20, min:0}
+    stock:{type:Number, default:20, min:0},
+    /** Aggregated from per-item ratings in order reviews (average = ratingSum / ratingCount). */
+    ratingCount: { type: Number, default: 0, min: 0 },
+    ratingSum: { type: Number, default: 0, min: 0 }
 })
 
 const foodModel = mongoose.models.food || mongoose.model("food",foodSchema);

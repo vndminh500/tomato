@@ -156,7 +156,7 @@ const Orders = ({url, token, canUpdate = false}) => {
 
 
   return (
-    <div className='order add'>
+    <div className='order'>
       <h3>Order Page</h3>
       <div className="order-list">
         {isLoading ? (
@@ -214,7 +214,7 @@ const Orders = ({url, token, canUpdate = false}) => {
               </p>
             </div>
             <p>Items: {order.items.length}</p>
-            <p>${order.amount}</p>
+            <p>{order.amount} vnđ</p>
             {order.paymentMethod === "vnpay" && !order.payment ? (
               <div className="order-failed-box">Payment Failed</div>
             ) : (

@@ -13,6 +13,7 @@
   --success: #26c281;
   --danger: #ff6b6b;
   --shadow-soft: 0 10px 24px rgba(18, 38, 63, 0.08);
+  --admin-top-offset: 86px;
 }
 
 * {
@@ -26,6 +27,7 @@ body {
   min-height: 100vh;
   background: radial-gradient(circle at top right, #e9f0fb 0%, var(--bg-primary) 42%);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
 a {
@@ -39,11 +41,46 @@ hr {
   background-color: var(--border-color);
 }
 
+.admin-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-app-divider {
+  flex-shrink: 0;
+}
+
 .app-content {
   display: flex;
-  min-height: calc(100vh - 86px);
-  overflow: visible;
+  flex: 1;
+  min-height: 0;
   min-width: 0;
+  align-items: stretch;
+  position: relative;
+}
+
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  padding: 8px clamp(12px, 2.5vw, 22px) 40px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Legacy pages used fixed % width + left margin; center them in the fluid main column */
+.admin-main > * {
+  width: 100% !important;
+  max-width: 1280px;
+  margin-left: auto !important;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .admin-main {
+    padding-bottom: 28px;
+  }
 }
 
 .flex-col {

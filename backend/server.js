@@ -1,4 +1,4 @@
-import "dotenv/config"
+import "./loadEnv.js"
 import express from "express"
 import cors from "cors"
 import { connectDB } from "./config/db.js"
@@ -9,6 +9,8 @@ import orderRouter from "./routes/orderRoute.js"
 import commentRouter from "./routes/commentRoute.js"
 import voucherRouter from './routes/voucherRoute.js';
 import complaintRouter from "./routes/complaintRoute.js"
+import chatRouter from "./routes/chatRoute.js"
+import reviewRouter from "./routes/reviewRoute.js"
 import { startDailyStockResetScheduler } from "./utils/stockResetScheduler.js";
 
 
@@ -35,6 +37,8 @@ app.use("/api/order",orderRouter)
 app.use("/api/comment",commentRouter)
 app.use('/api/voucher', voucherRouter);
 app.use("/api/complaint", complaintRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/review", reviewRouter);
 
 
 app.get("/",(req,res)=> {
