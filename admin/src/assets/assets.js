@@ -8,6 +8,7 @@ import voucher_icon from './voucher_icon.png'
 import users_icon from './users_icon.png'
 import list_icon from './list_icon.png'
 import complaint_icon from './complaint_icon.png'
+import blog_icon from './blog_icon.png'
 
 
 export const assets ={
@@ -21,6 +22,7 @@ export const assets ={
     users_icon,
     list_icon,
     complaint_icon,
+    blog_icon,
 }
 
 export const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000"

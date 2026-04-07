@@ -173,7 +173,7 @@ const PlaceOrder = () => {
               <>
                 <div className="cart-total-details">
                   <p>Discount</p>
-                  <p>- ${discountAmount.toFixed(2)}</p>
+                  <p>- {discountAmount} VNĐ</p>
                 </div>
                 <hr />
               </>

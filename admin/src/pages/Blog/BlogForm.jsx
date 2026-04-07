@@ -103,7 +103,10 @@ const BlogForm = ({ url, token, basePath = "" }) => {
       if (coverFile) fd.append("cover", coverFile);
       const endpoint = isEdit ? `${url}/api/blog/update` : `${url}/api/blog/add`;
       const res = await axios.post(endpoint, fd, { headers: { token } });
-      if (res.data?.success) navigate(`${basePath}/blog`);
+      if (res.data?.success) {
+        toast.success(isEdit ? "Post updated successfully" : "Post created successfully");
+        navigate(`${basePath}/blog`);
+      }
       else toast.error(res.data?.message || "Save failed");
     } catch {
       toast.error("Save failed");

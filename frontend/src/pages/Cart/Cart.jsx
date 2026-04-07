@@ -115,7 +115,7 @@ const Cart = ({ setShowLogin }) => {
                             <>
                                 <div className="cart-total-details">
                                     <p>Discount</p>
-                                    <p>- ${discountAmount}</p>
+                                    <p>- {discountAmount} VNĐ</p>
                                 </div>
                                 <hr />
                             </>
