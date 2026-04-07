@@ -166,7 +166,7 @@ const PlaceOrder = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>{getTotalCartAmount()} vnđ</p>
+              <p>{getTotalCartAmount()} VNĐ</p>
             </div>
             <hr />
             {discountAmount > 0 && (
@@ -180,12 +180,12 @@ const PlaceOrder = () => {
             )}
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>{DELIVERY_FEE} vnđ</p>
+              <p>{DELIVERY_FEE} VNĐ</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>{(getTotalCartAmount() - discountAmount + DELIVERY_FEE)} vnđ</b>
+              <b>{(getTotalCartAmount() - discountAmount + DELIVERY_FEE)} VNĐ</b>
             </div>
           </div>
           <button type='submit'>PROCEED TO PAYMENT</button>

@@ -41,6 +41,7 @@ const Navbar = ({ setShowLogin }) => {
   const activeMenu = useMemo(() => {
     if (location.pathname === '/') return 'home';
     if (location.pathname.startsWith('/menu')) return 'menu';
+    if (location.pathname.startsWith('/blog')) return 'blog';
     if (location.pathname.startsWith('/mobile-app')) return 'mobile-app';
     if (location.pathname.startsWith('/contact-us')) return 'contact-us';
     return menu;
@@ -189,6 +190,8 @@ const Navbar = ({ setShowLogin }) => {
       setMenu('home');
     } else if (location.pathname.startsWith('/menu')) {
       setMenu('menu');
+    } else if (location.pathname.startsWith('/blog')) {
+      setMenu('blog');
     } else if (location.pathname.startsWith('/mobile-app')) {
       setMenu('mobile-app');
     } else if (location.pathname.startsWith('/contact-us')) {
@@ -337,6 +340,13 @@ const Navbar = ({ setShowLogin }) => {
           className={activeMenu === 'menu' ? 'active' : ''}
         >
           Menu
+        </Link>
+        <Link
+          to='/blog'
+          onClick={() => setMenu('blog')}
+          className={activeMenu === 'blog' ? 'active' : ''}
+        >
+          Blog
         </Link>
         <Link
           to='/mobile-app'

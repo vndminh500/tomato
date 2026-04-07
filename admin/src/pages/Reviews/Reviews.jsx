@@ -340,7 +340,7 @@ const Reviews = ({ url, token, canReply = false }) => {
                                 </div>
                                 <div className='reviews-admin-metric'>
                                     <h5>Order total</h5>
-                                    <p>{detail.order?.amount} vnđ</p>
+                                    <p>{detail.order?.amount} VNĐ</p>
                                 </div>
                             </div>
                         </div>

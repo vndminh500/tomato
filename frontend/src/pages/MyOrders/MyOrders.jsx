@@ -80,7 +80,7 @@ const MyOrders = () => {
                             return item.name+" x " +item.quantity +" , "
                         }
                     })}</p>
-                    <p>{order.amount} vnđ</p>
+                    <p>{order.amount} VNĐ</p>
                     <p>Items: {order.items.length}</p>
                     <p className='my-order-status'>
                         <span className={getStatusClassName(order.status)}>&#x25cf;</span>

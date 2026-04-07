@@ -11,7 +11,8 @@ const Sidebar = ({ hasPermission, basePath = '', isOpen = false, onNavigate }) =
     { to: `${prefix}/orders`, icon: assets.order_icon, label: 'Orders', allow: hasPermission('orders.read_all') || hasPermission('orders.update_status') },
     { to: `${prefix}/reviews`, icon: assets.complaint_icon, label: 'Ratings & Reviews', allow: hasPermission('reviews.read') },
     { to: `${prefix}/users`, icon: assets.users_icon, label: 'List Users', allow: hasPermission('users.read') },
-    { to: `${prefix}/vouchers`, icon: assets.voucher_icon, label: 'Vouchers', allow: hasPermission('promo.read') }
+    { to: `${prefix}/vouchers`, icon: assets.voucher_icon, label: 'Vouchers', allow: hasPermission('promo.read') },
+    { to: `${prefix}/blog`, icon: assets.list_icon, label: 'Blog', allow: hasPermission('blog.read_all') }
   ]
 
   return (

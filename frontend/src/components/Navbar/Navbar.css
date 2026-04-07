@@ -8,7 +8,12 @@
 }
 
 .navbar .logo {
-    width: 150px;
+    width: auto;
+    height: 69px;
+    max-width: 275px;
+    object-fit: contain;
+    object-position: left center;
+    display: block;
 }
 
 .navbar-menu {
@@ -491,7 +496,8 @@
 
 @media (max-width:1050px) {
     .navbar .logo {
-        width: 140px;
+        height: 65px;
+        max-width: 259px;
     }
 
     .navbar-menu {
@@ -514,7 +520,8 @@
 
 @media (max-width:900px) {
     .navbar .logo {
-        width: 120px;
+        height: 59px;
+        max-width: 231px;
     }
 
     .navbar-menu {
@@ -596,7 +603,8 @@
 
 @media (max-width: 480px) {
     .navbar .logo {
-        width: 108px;
+        height: 55px;
+        max-width: 211px;
     }
 
     .navbar-right {

@@ -6,7 +6,7 @@ import "./OrderDetails.css";
 
 const currency = (amount) => {
   const value = Number(amount || 0);
-  return `${value} vnđ`;
+  return `${value} VNĐ`;
 };
 
 const formatDateTime = (value) => {

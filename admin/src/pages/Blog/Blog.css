@@ -1,0 +1,9 @@
+.admin-blog .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.new-btn{background:#ff6347;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:86px 1fr auto;gap:12px;align-items:center;padding:10px;border:1px solid #ececec;border-radius:10px;background:#fff}
+.row img{width:86px;height:58px;object-fit:cover;border-radius:8px}
+.title{margin:0;font-weight:600}
+.sub{margin:2px 0 0;color:#777;font-size:.85rem}
+.actions{display:flex;gap:10px}
+.actions a,.actions button{background:none;border:none;color:#2563eb;cursor:pointer;text-decoration:underline;font-size:.9rem}

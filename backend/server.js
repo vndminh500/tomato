@@ -11,6 +11,7 @@ import voucherRouter from './routes/voucherRoute.js';
 import complaintRouter from "./routes/complaintRoute.js"
 import chatRouter from "./routes/chatRoute.js"
 import reviewRouter from "./routes/reviewRoute.js"
+import blogRouter from "./routes/blogRoute.js"
 import { startDailyStockResetScheduler } from "./utils/stockResetScheduler.js";
 
 
@@ -39,6 +40,7 @@ app.use('/api/voucher', voucherRouter);
 app.use("/api/complaint", complaintRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/blog", blogRouter);
 
 
 app.get("/",(req,res)=> {

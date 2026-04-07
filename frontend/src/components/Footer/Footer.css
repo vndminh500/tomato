@@ -32,8 +32,13 @@
     cursor: pointer;
 }
 
-.footer-content-left img {
-    cursor: pointer;
+.footer-brand-logo {
+    width: auto;
+    height: 71px;
+    max-width: 295px;
+    object-fit: contain;
+    object-position: left center;
+    display: block;
 }
 
 .footer-content-left p {
@@ -179,6 +184,11 @@
 
     .footer {
         padding-top: 52px;
+    }
+
+    .footer-brand-logo {
+        height: 65px;
+        max-width: 265px;
     }
 
     .footer-newsletter-box {

@@ -26,6 +26,8 @@ import { useParams } from 'react-router-dom'
 import OrdersDetails from './pages/OrdersDetails/OrdersDetails'
 import Favorites from './pages/Favorites/Favorites'
 import ChatWidget from './components/Chat/ChatWidget'
+import Blog from './pages/Blog/Blog'
+import BlogPost from './pages/Blog/BlogPost'
 
 const LegacyProductRedirect = () => {
   const { productId } = useParams()
@@ -47,6 +49,8 @@ const App = () => {
       <Routes>
         < Route path ='/' element = {<Home/>} />
         <Route path='/menu' element={<Menu />} />
+        <Route path='/blog' element={<Blog />} />
+        <Route path='/blog/:slugOrId' element={<BlogPost />} />
         < Route path ='/cart' element = {<Cart setShowLogin={setShowLogin} />} />
         < Route path ='/order' element = {<PlaceOrder/>} />
         <Route path='/mobile-app' element={<MobileApp />} />

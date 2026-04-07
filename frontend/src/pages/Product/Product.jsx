@@ -9,6 +9,7 @@ import { assets } from '../../assets/assets'
 import { FaFacebookMessenger, FaInstagram, FaTiktok, FaPinterest } from 'react-icons/fa'
 import Description from '../../components/Description/Description'
 import FoodItem from '../../components/FoodItem/FoodItem'
+import NotFound from '../NotFound/NotFound'
 
 
 const Product = () => {
@@ -51,8 +52,12 @@ const Product = () => {
         }
     }, [stockAlertItemId, stockAlertTick, productId]);
 
+    if (food_list.length === 0) {
+        return null;
+    }
+
     if (!product) {
-        return <div>Product not found</div>
+        return <NotFound />;
     }
 
     const similarProducts = food_list.filter(item => item.category === product.category && item._id !== product._id).slice(0, 4);
@@ -79,7 +84,7 @@ const Product = () => {
                     </div>
                     <p className='product-display-right-description'>{product.description}</p>
                     <div className='product-price-stock'>
-                        <div className='product-display-right-price'>{product.price} vnđ</div>
+                        <div className='product-display-right-price'>{product.price} VNĐ</div>
                         <span className={`product-stock-pill ${getStockClassName(stockValue)} ${isStockShaking ? 'stock-badge-shake' : ''}`}>In stock: {stockValue}</span>
                     </div>
                     {!cartItems[product._id]

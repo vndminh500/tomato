@@ -11,6 +11,7 @@ const routeLabels = {
   order: 'Checkout',
   myorders: 'My Orders',
   menu: 'Menu',
+  blog: 'Blog',
   product: 'Product',
   about: 'About',
   'contact-us': 'Contact Us',

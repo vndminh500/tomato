@@ -70,7 +70,12 @@
 }
 
 .navbar .logo {
-    width: 155px;
+    width: auto;
+    height: 69px;
+    max-width: 285px;
+    object-fit: contain;
+    object-position: left center;
+    display: block;
 }
 
 .navbar .profile {
@@ -291,7 +296,8 @@
     }
 
     .navbar .logo {
-        width: min(132px, 36vw);
+        height: min(63px, 14vw);
+        max-width: min(245px, 64vw);
     }
 
     .navbar-actions {
@@ -327,6 +333,11 @@
 }
 
 @media (max-width: 400px) {
+    .navbar .logo {
+        height: 55px;
+        max-width: 205px;
+    }
+
     .logout-btn {
         padding: 0 8px;
         font-size: 12px;

@@ -14,6 +14,8 @@ import axios from 'axios'
 import AdminLogin from './components/Auth/AdminLogin'
 import OrderDetails from './pages/OrderDetails/OrderDetails'
 import Reviews from './pages/Reviews/Reviews'
+import Blog from './pages/Blog/Blog'
+import BlogForm from './pages/Blog/BlogForm'
 
 const NOTIFICATIONS_STORAGE_KEY = 'admin_order_notifications'
 const ADMIN_TOKEN_STORAGE_KEY = 'admin_token'
@@ -461,6 +463,39 @@ const App = () => {
               ) : (
                 <Navigate to={`/${role}`} replace />
               )
+            }
+          />
+          <Route
+            path="blog"
+            element={
+              hasPermission("blog.read_all") ? (
+                <Blog
+                  url={url}
+                  token={token}
+                  basePath={`/${role}`}
+                  canCreate={hasPermission("blog.create")}
+                  canUpdate={hasPermission("blog.update")}
+                  canDelete={hasPermission("blog.delete")}
+                />
+              ) : (
+                <Navigate to={`/${role}`} replace />
+              )
+            }
+          />
+          <Route
+            path="blog/add"
+            element={
+              hasPermission("blog.create")
+                ? <BlogForm url={url} token={token} basePath={`/${role}`} />
+                : <Navigate to={`/${role}`} replace />
+            }
+          />
+          <Route
+            path="blog/edit/:id"
+            element={
+              hasPermission("blog.update")
+                ? <BlogForm url={url} token={token} basePath={`/${role}`} />
+                : <Navigate to={`/${role}`} replace />
             }
           />
           <Route path="*" element={<NotFound />} />

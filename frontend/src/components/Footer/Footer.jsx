@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className='footer' id='footer'>
       <div className="footer-content">
         <div className="footer-content-left">
-            <img src={assets.logo} alt="Tomato logo" />
+            <img src={assets.logo} alt="Tomato logo" className="footer-brand-logo" />
             <p>Experience the best of fresh dining from the comfort of your home. We pride ourselves on quality service and a customer-first approach.</p>
             <div className="footer-social-icons">
                 <a href="#" aria-label="Tomato on Facebook"><img src={assets.facebook_icon} alt="Facebook" /></a>
