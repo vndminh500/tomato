@@ -277,7 +277,12 @@ const updateStatus = async (req,res) => {
                     stockDeductedAt: new Date()
                 });
             } else {
-                await orderModel.findByIdAndUpdate(req.body.orderId,{status: nextStatus});
+                const updatePayload = { status: nextStatus };
+                // COD is considered collected when the order is delivered.
+                if (nextStatus === "Delivered" && order.paymentMethod === "cod") {
+                    updatePayload.payment = true;
+                }
+                await orderModel.findByIdAndUpdate(req.body.orderId, updatePayload);
             }
         }
 

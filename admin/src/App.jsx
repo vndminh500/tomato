@@ -16,6 +16,7 @@ import OrderDetails from './pages/OrderDetails/OrderDetails'
 import Reviews from './pages/Reviews/Reviews'
 import Blog from './pages/Blog/Blog'
 import BlogForm from './pages/Blog/BlogForm'
+import RevenueHome from './pages/Home/RevenueHome'
 
 const NOTIFICATIONS_STORAGE_KEY = 'admin_order_notifications'
 const ADMIN_TOKEN_STORAGE_KEY = 'admin_token'
@@ -373,7 +374,7 @@ const App = () => {
           }
         />
         <Route path="/:role" element={<RoleLayout />}>
-          <Route index element={<div />} />
+          <Route index element={<RevenueHome url={url} token={token} canReadOrders={canReadOrders} />} />
           <Route
             path="add"
             element={
