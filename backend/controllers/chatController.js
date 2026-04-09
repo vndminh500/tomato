@@ -5,7 +5,7 @@ import foodModel from "../models/foodModel.js"
 
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173"
 
-const SYSTEM_INSTRUCTION = `You are Potato Care, the in-app assistant for Potato food delivery.
+const SYSTEM_INSTRUCTION = `You are EatUp Care, the in-app assistant for EatUp food delivery.
 
 Tone: friendly, concise, professional. Reply in English (if the user writes in another language, you may answer in that language).
 
@@ -29,7 +29,7 @@ function formatHistory(history) {
     return history
         .slice(-12)
         .map((h) => {
-            const role = h.role === "assistant" ? "Potato Care" : "Customer"
+            const role = h.role === "assistant" ? "EatUp Care" : "Customer"
             return `${role}: ${String(h.content || "").slice(0, 2000)}`
         })
         .join("\n")

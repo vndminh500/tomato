@@ -7,7 +7,7 @@ const AppDownload = () => {
     <section className='app-download' id='app-download'>
       <span className='app-download-badge'>Mobile Experience</span>
       <p className='app-download-title'>
-        For Better Experience Download <br /> Potato App
+        For Better Experience Download <br /> EatUp App
       </p>
       <p className='app-download-subtitle'>
         Order faster, track deliveries in real time, and unlock app-only offers every day.

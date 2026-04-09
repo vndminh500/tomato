@@ -8,12 +8,12 @@ const Footer = () => {
     <footer className='footer' id='footer'>
       <div className="footer-content">
         <div className="footer-content-left">
-            <img src={assets.logo} alt="Potato logo" className="footer-brand-logo" />
+            <img src={assets.logo} alt="EatUp logo" className="footer-brand-logo" />
             <p>Experience the best of fresh dining from the comfort of your home. We pride ourselves on quality service and a customer-first approach.</p>
             <div className="footer-social-icons">
-                <a href="#" aria-label="Potato on Facebook"><img src={assets.facebook_icon} alt="Facebook" /></a>
-                <a href="#" aria-label="Potato on Twitter"><img src={assets.twitter_icon} alt="Twitter" /></a>
-                <a href="#" aria-label="Potato on LinkedIn"><img src={assets.linkedin_icon} alt="LinkedIn" /></a>
+                <a href="#" aria-label="EatUp on Facebook"><img src={assets.facebook_icon} alt="Facebook" /></a>
+                <a href="#" aria-label="EatUp on Twitter"><img src={assets.twitter_icon} alt="Twitter" /></a>
+                <a href="#" aria-label="EatUp on LinkedIn"><img src={assets.linkedin_icon} alt="LinkedIn" /></a>
             </div>
         </div>
 
@@ -32,7 +32,7 @@ const Footer = () => {
             <h2>GET IN TOUCH</h2>
             <div className='footer-contact'>
               <p className='footer-contact-line'>+84 123 456 789</p>
-              <p className='footer-contact-line'>potato@gmail.com</p>
+              <p className='footer-contact-line'>eatup@gmail.com</p>
             </div>
             <div className='footer-newsletter'>
               <p>Get latest offers in your inbox</p>
@@ -45,7 +45,7 @@ const Footer = () => {
       </div>
       <hr />
       <p className='footer-copyright'>
-        Copyright 2026 © Potato.com - All Right Reserved.
+        Copyright 2026 © EatUp.com - All Right Reserved.
       </p>
     </footer>
   )

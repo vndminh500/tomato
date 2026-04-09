@@ -259,7 +259,7 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
                                 {Number(item.stock ?? 20)}
                             </p>
                             <p>{item.category}</p>
-                            <p>{item.price} VNĐ</p>
+                            <p>{item.price} VND</p>
                             {showActions ? (
                                 <div
                                     className="list-actions-cell"
@@ -389,7 +389,7 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
                                             </select>
                                         </label>
                                         <label className="list-modal-label">
-                                            Price (VNĐ)
+                                            Price (VND)
                                             <input
                                                 type="number"
                                                 min="0"

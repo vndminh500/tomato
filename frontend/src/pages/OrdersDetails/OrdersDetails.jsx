@@ -79,7 +79,7 @@ const OrdersDetails = () => {
                 </div>
                 <div className='order-details-card'>
                     <h3>Total</h3>
-                    <p>{subtotal} VNĐ</p>
+                    <p>{subtotal} VND</p>
                 </div>
                 <div className='order-details-card'>
                     <h3>Items</h3>

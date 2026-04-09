@@ -83,9 +83,9 @@ const Cart = ({ setShowLogin }) => {
                     >
                       {item.name}
                     </button>
-                    <p>{item.price} VNĐ</p>
+                    <p>{item.price} VND</p>
                     <p>{cartItems[item._id]}</p>
-                    <p>{item.price*cartItems[item._id]} VNĐ</p>
+                    <p>{item.price*cartItems[item._id]} VND</p>
                     <button onClick={()=>removeFromCart(item._id)} className='cross' type='button'>x</button>
                   </div>
                   <hr />
@@ -108,26 +108,26 @@ const Cart = ({ setShowLogin }) => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>{getTotalCartAmount()} VNĐ</p>
+              <p>{getTotalCartAmount()} VND</p>
             </div>
             <hr />
             {discount > 0 && (
                             <>
                                 <div className="cart-total-details">
                                     <p>Discount</p>
-                                    <p>- {discountAmount} VNĐ</p>
+                                    <p>- {discountAmount} VND</p>
                                 </div>
                                 <hr />
                             </>
                         )}
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>{getTotalCartAmount()===0?0:DELIVERY_FEE} VNĐ</p>
+              <p>{getTotalCartAmount()===0?0:DELIVERY_FEE} VND</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>{(getTotalCartAmount() - discountAmount + (getTotalCartAmount() === 0 ? 0 : DELIVERY_FEE))} VNĐ</b>
+              <b>{(getTotalCartAmount() - discountAmount + (getTotalCartAmount() === 0 ? 0 : DELIVERY_FEE))} VND</b>
             </div>
           </div>
 

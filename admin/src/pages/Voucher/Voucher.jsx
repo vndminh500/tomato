@@ -122,7 +122,7 @@ const Voucher = ({ url, token, canCreate = false, canDelete = false }) => {
                     <b>Code</b>
                     <b>Discount (%)</b>
                     <b>Date</b>
-                    <b>Min Order Amount (VNĐ)</b>
+                    <b>Min Order Amount (VND)</b>
                     <b>Remove</b>
                 </div>
                 {isLoading ? (

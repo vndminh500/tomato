@@ -8,7 +8,7 @@ const CHART_COLORS = ["#ff6b4a", "#4f46e5", "#10b981", "#f59e0b", "#ec4899", "#1
 const formatCurrency = (value) =>
   Number(value || 0).toLocaleString("vi-VN", {
     maximumFractionDigits: 0
-  }) + " VNĐ";
+  }) + " VND";
 
 const buildPieStyle = (segments) => {
   if (!segments.length) {

@@ -214,7 +214,7 @@ const Orders = ({url, token, canUpdate = false}) => {
               </p>
             </div>
             <p>Items: {order.items.length}</p>
-            <p>{order.amount} VNĐ</p>
+            <p>{order.amount} VND</p>
             {order.paymentMethod === "vnpay" && !order.payment ? (
               <div className="order-failed-box">Payment Failed</div>
             ) : (

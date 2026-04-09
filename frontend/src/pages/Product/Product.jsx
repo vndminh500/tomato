@@ -84,7 +84,7 @@ const Product = () => {
                     </div>
                     <p className='product-display-right-description'>{product.description}</p>
                     <div className='product-price-stock'>
-                        <div className='product-display-right-price'>{product.price} VNĐ</div>
+                        <div className='product-display-right-price'>{product.price} VND</div>
                         <span className={`product-stock-pill ${getStockClassName(stockValue)} ${isStockShaking ? 'stock-badge-shake' : ''}`}>In stock: {stockValue}</span>
                     </div>
                     {!cartItems[product._id]

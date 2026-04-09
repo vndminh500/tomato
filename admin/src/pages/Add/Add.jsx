@@ -123,7 +123,7 @@ const Add = ({url, token}) => {
                         <span>{data.category}</span>
                         <span className='add-preview-qty'>Qty {data.stock || '0'}</span>
                     </div>
-                    <b>{data.price} VNĐ</b>
+                    <b>{data.price} VND</b>
                 </div>
             </div>
             <div className='add-preview-tips'>
