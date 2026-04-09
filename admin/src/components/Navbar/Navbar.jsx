@@ -51,7 +51,7 @@ const Navbar = ({
           </button>
         ) : null}
         <Link to={basePath || '/'} className="navbar-brand">
-          <img src={assets.logo} alt="Tomato admin logo" className="logo" />
+          <img src={assets.logo} alt="Potato admin logo" className="logo" />
         </Link>
       </div>
       <div className='navbar-actions'>

@@ -5,7 +5,7 @@ import { StoreContext } from "../../context/StoreContext"
 import "./ChatWidget.css"
 
 const WELCOME =
-  "Hi! I’m Tomato Assistant — I can help with the menu, prices, your orders, and how to leave a review after delivery. What do you need?"
+  "Hi! I’m Potato Assistant — I can help with the menu, prices, your orders, and how to leave a review after delivery. What do you need?"
 
 const ChatWidget = ({ setShowLogin }) => {
   const { token, url } = useContext(StoreContext)
@@ -25,8 +25,8 @@ const ChatWidget = ({ setShowLogin }) => {
 
   useEffect(() => {
     const onExternalOpen = () => setOpen(true)
-    window.addEventListener("tomato:open-chat", onExternalOpen)
-    return () => window.removeEventListener("tomato:open-chat", onExternalOpen)
+    window.addEventListener("potato:open-chat", onExternalOpen)
+    return () => window.removeEventListener("potato:open-chat", onExternalOpen)
   }, [])
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const ChatWidget = ({ setShowLogin }) => {
     if (!text || loading) return
 
     if (!token) {
-      toast.error("Please sign in to chat with Tomato Assistant")
+      toast.error("Please sign in to chat with Potato Assistant")
       setShowLogin?.(true)
       return
     }
@@ -92,10 +92,10 @@ const ChatWidget = ({ setShowLogin }) => {
   return (
     <div className="chat-widget-root">
       {open && (
-        <div className="chat-widget-panel" role="dialog" aria-label="Tomato Assistant chat">
+        <div className="chat-widget-panel" role="dialog" aria-label="Potato Assistant chat">
           <div className="chat-widget-header">
             <div>
-              <h2>Tomato Assistant</h2>
+              <h2>Potato Assistant</h2>
               <span>Menu · Orders · Complaints</span>
             </div>
             <button
@@ -119,7 +119,7 @@ const ChatWidget = ({ setShowLogin }) => {
             ))}
             {loading && (
               <div className="chat-widget-typing" aria-live="polite">
-                <span>Tomato is typing</span>
+                <span>Potato is typing</span>
                 <span className="chat-widget-typing-dots" aria-hidden>
                   <span />
                   <span />
@@ -160,7 +160,7 @@ const ChatWidget = ({ setShowLogin }) => {
         className={`chat-widget-toggle${open ? " chat-widget-toggle--open" : ""}`}
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        aria-label={open ? "Collapse Tomato Assistant" : "Open Tomato Assistant"}
+        aria-label={open ? "Collapse Potato Assistant" : "Open Potato Assistant"}
       >
         {open ? (
           <svg

@@ -14,7 +14,7 @@ const NotFound = () => {
         <h1 className="not-found-404">404</h1>
         <img
           src={assets.logo}
-          alt="Tomato"
+          alt="Potato"
           className="not-found-avatar"
         />
       </div>

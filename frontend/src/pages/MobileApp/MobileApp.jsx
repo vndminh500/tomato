@@ -11,8 +11,8 @@ const MobileApp = () => {
   return (
     <section className='mobile-app-page'>
       <div className='mobile-app-hero'>
-        <span className='mobile-app-badge'>Tomato Mobile</span>
-        <h1>Download Tomato App</h1>
+        <span className='mobile-app-badge'>Potato Mobile</span>
+        <h1>Download Potato App</h1>
         <p>
         Enhance your trail-building experience anytime, anywhere with this fast, compact, and easy-to-use mobile app.
         </p>

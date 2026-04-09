@@ -5,7 +5,7 @@ const Delivery = () => {
     return (
         <div className="delivery-policy">
             <h1>Delivery Policy</h1>
-            <p>At Tomato, we are committed to providing you with a fast and reliable delivery service. Please read our delivery policy to understand how we process and deliver your orders.</p>
+            <p>At Potato, we are committed to providing you with a fast and reliable delivery service. Please read our delivery policy to understand how we process and deliver your orders.</p>
 
             <h2>Delivery Times</h2>
             <p>Our standard delivery time is 30-45 minutes from the time you place your order. However, delivery times may vary depending on your location, traffic conditions, and the volume of orders we are handling at the moment.</p>

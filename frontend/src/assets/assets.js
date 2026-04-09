@@ -309,7 +309,7 @@ export const food_list = [
     },
     {
         _id: "26",
-        name: "Tomato Pasta",
+        name: "Potato Pasta",
         image: food_26,
         price: 18000,
         description: "Food provides essential nutrients for overall health and well-being",

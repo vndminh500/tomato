@@ -23,7 +23,7 @@ const Blog = () => {
   return (
     <div className="blog-page">
       <h1>Blog</h1>
-      <p className="blog-sub">News, tips and stories from Tomato.</p>
+      <p className="blog-sub">News, tips and stories from Potato.</p>
       <div className="blog-grid">
         {posts.map((p) => (
           <Link key={p._id} to={`/blog/${p.slug}`} className="blog-card">

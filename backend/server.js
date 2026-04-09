@@ -53,4 +53,4 @@ app.listen(port,()=> {
 })
 
 
-//mongodb+srv://tomato_db:142836@cluster0.mlkxfh9.mongodb.net/?appName=Cluster0
+//mongodb+srv://<user>:<password>@cluster0.example.mongodb.net/?appName=Cluster0

@@ -49,7 +49,7 @@ const complaintSchema = new mongoose.Schema(
         status: { type: String, default: "in_progress", enum: COMPLAINT_STATUSES },
         responses: { type: [responseSchema], default: [] },
         appeal: { type: appealSchema, default: undefined },
-        /** Set when ticket is created via Tomato Assistant (AI). */
+        /** Set when ticket is created via Potato Assistant (AI). */
         priority: {
             type: String,
             enum: ["High", "Normal", "Low"],

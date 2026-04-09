@@ -18,7 +18,7 @@ const QUICK_TAGS = [
 const MAX_FILES = 6
 const MAX_BYTES = 8 * 1024 * 1024
 const SUPPORT_PHONE = "+84 768 519 155"
-const SUPPORT_EMAIL = "cskh_tomato@gmail.com"
+const SUPPORT_EMAIL = "cskh_potato@gmail.com"
 const ZALO_URL = "https://zalo.me/0768519155"
 
 const STAR_LABELS = {
@@ -134,7 +134,7 @@ export default function OrderReviewSection({ order, token, url }) {
 
     const openChatSupport = () => {
         if (typeof window !== "undefined") {
-            window.dispatchEvent(new CustomEvent("tomato:open-chat"))
+            window.dispatchEvent(new CustomEvent("potato:open-chat"))
         }
     }
 

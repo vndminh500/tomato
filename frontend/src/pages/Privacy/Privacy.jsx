@@ -5,7 +5,7 @@ const Privacy = () => {
     return (
         <div className="privacy-policy">
             <h1>Privacy Policy</h1>
-            <p>At Tomato, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and disclose your personal information.</p>
+            <p>At Potato, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and disclose your personal information.</p>
 
             <h2>Information We Collect</h2>
             <p>We collect information you provide directly to us, such as when you create an account, place an order, or contact us for support. This information may include your name, email address, phone number, and delivery address.</p>
