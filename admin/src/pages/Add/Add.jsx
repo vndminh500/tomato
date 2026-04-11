@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState} from 'react'
 import './Add.css'
 import { assets } from '../../assets/assets';
 import axios from "axios"
 import { toast } from 'react-toastify';
-import { safeImageFileName } from '../../utils/safeUploadName.js'
-
-const ADD_TOAST_ID = 'admin-add-food'
 
 const Add = ({url, token}) => {
 
     const[image,setImage] = useState(false);
-    const [submitting, setSubmitting] = useState(false)
     const [data,setData] = useState({
         name:"",
         description:"",
@@ -18,13 +14,6 @@ const Add = ({url, token}) => {
         category:"Salad",
         stock:"20"
     })
-
-    /** Wake Render (etc.) free-tier API early so the real upload is less likely to wait on cold start. */
-    useEffect(() => {
-        const base = String(url || '').replace(/\/$/, '')
-        if (!base) return
-        axios.get(`${base}/`, { timeout: 30_000 }).catch(() => {})
-    }, [url])
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -34,33 +23,18 @@ const Add = ({url, token}) => {
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
-        if (!image) {
-            toast.error('Please choose an image.')
-            return
-        }
-        if (submitting) return
-
         const formData = new FormData();
         formData.append("name",data.name)
         formData.append("description",data.description)
         formData.append("price",Number(data.price))
         formData.append("category",data.category)
         formData.append("stock", data.stock ?? "20")
-        formData.append("image", image, safeImageFileName(image))
+        formData.append("image",image)
         
-        setSubmitting(true)
-        toast.loading(
-            'Sending… On free hosting the API may be asleep — first request can take ~1 min.',
-            { toastId: ADD_TOAST_ID, autoClose: false }
-        )
         try {
-            const response = await axios.post(`${url}/api/food/add`, formData, {
-                headers: { token },
-                timeout: 120_000,
-                maxBodyLength: Infinity,
-                maxContentLength: Infinity,
+            const response = await axios.post(`${url}/api/food/add`,formData,{
+                headers:{token}
             });
-            toast.dismiss(ADD_TOAST_ID)
             if (response.data.success) {
                 setData ({
                     name:"",
@@ -76,21 +50,11 @@ const Add = ({url, token}) => {
                 toast.error(response.data.message)
             }
         } catch (err) {
-            toast.dismiss(ADD_TOAST_ID)
-            let msg =
+            const msg =
                 err.response?.data?.message ||
                 err.message ||
                 "Request failed. Check network or backend URL (VITE_BACKEND_URL)."
-            if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
-                msg = 'Server took too long (timeout). On Render free tier the first request after idle can take 1–2 minutes — try again.'
-            }
-            if (!err.response && err.message === 'Network Error') {
-                msg =
-                    'Network error (no response). Often: wrong API URL, CORS, or too many pending requests. Try a smaller image / JPG, wait for other requests to finish, or reload.'
-            }
             toast.error(msg)
-        } finally {
-            setSubmitting(false)
         }
     }
 
@@ -100,10 +64,6 @@ const Add = ({url, token}) => {
         <p className='add-badge'>Catalog</p>
         <h2>Add New Item</h2>
         <span>Create a complete product card before publishing.</span>
-        <p className="add-hosting-hint">
-          Free plans often <strong>sleep</strong> the server after idle time. The first save after that can take
-          about a minute while it wakes up — not a bug. Paid instances or a scheduled ping stay warm.
-        </p>
       </div>
       <form className='flex-col' onSubmit={onSubmitHandler}>
         <div className='add-form-main'>
@@ -164,9 +124,7 @@ const Add = ({url, token}) => {
                   />
               </div>
           </div>
-          <button type='submit' className='add-btn' disabled={submitting}>
-            {submitting ? 'Adding…' : 'Add Item'}
-          </button>
+          <button type='submit' className='add-btn'>Add Item</button>
         </div>
 
         <aside className='add-preview'>

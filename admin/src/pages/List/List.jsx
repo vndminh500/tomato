@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom'
 import './List.css'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { safeImageFileName } from '../../utils/safeUploadName.js'
 
 const CATEGORIES = [
     'Salad',
@@ -149,13 +148,10 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
             formData.append('category', editCategory)
             formData.append('stock', Number(editStock) || 0)
             if (editImageFile) {
-                formData.append('image', editImageFile, safeImageFileName(editImageFile))
+                formData.append('image', editImageFile)
             }
             const response = await axios.post(`${url}/api/food/update`, formData, {
-                headers: { token },
-                timeout: 120_000,
-                maxBodyLength: Infinity,
-                maxContentLength: Infinity,
+                headers: { token }
             })
             if (response.data.success) {
                 const updated = response.data.data

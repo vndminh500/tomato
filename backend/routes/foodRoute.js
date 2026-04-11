@@ -29,11 +29,6 @@ const extOk = (name) => {
 const upload = multer({
     storage,
     fileFilter: (_req, file, cb) => {
-        const mime = String(file.mimetype || "").toLowerCase();
-        // Windows / some browsers send PNG as octet-stream; still validate extension
-        if (mime === "application/octet-stream" && extOk(file.originalname)) {
-            return cb(null, true);
-        }
         if (imageMimeOk(file.mimetype) || extOk(file.originalname)) {
             return cb(null, true);
         }

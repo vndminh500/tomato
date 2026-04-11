@@ -23,14 +23,7 @@ const port = 4000
 
 
 app.use(express.json())
-app.use(
-    cors({
-        origin: true,
-        credentials: true,
-        allowedHeaders: ["Content-Type", "Authorization", "token", "X-Requested-With"],
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    })
-)
+app.use(cors())
 
 
 connectDB();

@@ -29,19 +29,6 @@
     font-size: 14px;
 }
 
-.add-hosting-hint {
-    margin: 12px 0 0;
-    max-width: 56ch;
-    font-size: 13px;
-    line-height: 1.45;
-    color: var(--text-secondary);
-}
-
-.add-hosting-hint strong {
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
 .add form {
     gap: 24px;
     background: var(--bg-secondary);
