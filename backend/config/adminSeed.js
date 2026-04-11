@@ -14,7 +14,7 @@ export async function seedAdmin() {
 
         if (!emails.length || !password) {
             console.log(
-                "[seed] Bỏ qua tạo admin: thiếu ADMIN_EMAILS (hoặc ADMIN_EMAIL) hoặc ADMIN_PASSWORD trong .env"
+                "Bỏ qua tạo admin: thiếu ADMIN_EMAILS (hoặc ADMIN_EMAIL) hoặc ADMIN_PASSWORD trong .env"
             );
             return;
         }
@@ -26,7 +26,7 @@ export async function seedAdmin() {
         for (const email of emails) {
             const existing = await userModel.findOne({ email });
             if (existing) {
-                console.log(`[seed] Admin đã tồn tại — bỏ qua (${email})`);
+                console.log(`Email Admin — (${email})`);
                 continue;
             }
 
@@ -37,9 +37,9 @@ export async function seedAdmin() {
                 role: "admin",
                 isActive: true
             });
-            console.log(`[seed] Đã tạo tài khoản admin: ${email}`);
+            console.log(`Đã tạo tài khoản admin: ${email}`);
         }
     } catch (err) {
-        console.error("[seed] Lỗi seed admin:", err);
+        console.error("Lỗi seed admin:", err);
     }
 }

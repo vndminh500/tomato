@@ -12,7 +12,7 @@ export const connectDB = async () => {
         const dbName = mongoose.connection.db?.databaseName;
         console.log("Đã kết nối với Database");
         if (dbName) {
-            console.log(`[db] Tên database trong URI: "${dbName}" (collection user → "users")`);
+            console.log(`Tên database: "${dbName}"`);
         }
         await seedAdmin();
     } catch (err) {
