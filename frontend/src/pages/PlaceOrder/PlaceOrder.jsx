@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
 const DELIVERY_FEE = 15000;
+/** Mã đơn vị hành chính TP.HCM (provinces.open-api.vn) — cửa hàng chỉ giao trong TP.HCM */
+const HCM_CITY_CODE = 79;
 
 const PlaceOrder = () => {
 
@@ -87,13 +89,20 @@ const PlaceOrder = () => {
     const fetchLocations = async () => {
       try {
         const response = await axios.get("https://provinces.open-api.vn/api/?depth=2");
-        setLocations(response.data || []);
+        const list = response.data || [];
+        setLocations(list);
+        const hcmc = list.find((p) => p.code === HCM_CITY_CODE);
+        if (hcmc?.name) {
+          setData((prev) => ({ ...prev, city: hcmc.name }));
+        }
       } catch {
         toast.error("Unable to load city and district list");
       }
     };
     fetchLocations();
   }, []);
+
+  const storeCity = locations.find((p) => p.code === HCM_CITY_CODE);
 
   useEffect(()=>{
     if (!token) {
@@ -104,7 +113,7 @@ const PlaceOrder = () => {
     }
   },[token])
 
-  const districtOptions = locations.find((item) => item.name === data.city)?.districts || [];
+  const districtOptions = storeCity?.districts || [];
 
   return (
     <form onSubmit={placeOrder} className='place-order'>
@@ -119,20 +128,26 @@ const PlaceOrder = () => {
         <input required name='email' onChange={onChangeHandler} value={data.email} type="email" placeholder='Email' />
 
         <div className='multi-fields'>
-          <select required name='city' onChange={onChangeHandler} value={data.city}>
-            <option value=''>Select city</option>
-            {locations.map((location) => (
-              <option key={location.code} value={location.name}>
-                {location.name}
-              </option>
-            ))}
+          <select
+            required
+            name="city"
+            onChange={onChangeHandler}
+            value={data.city}
+            aria-label="City"
+            disabled={!storeCity}
+          >
+            {storeCity ? (
+              <option value={storeCity.name}>{storeCity.name}</option>
+            ) : (
+              <option value="">Đang tải thành phố…</option>
+            )}
           </select>
           <select
             required
             name='district'
             onChange={onChangeHandler}
             value={data.district}
-            disabled={!data.city}
+            disabled={!storeCity}
           >
             <option value=''>Select district</option>
             {districtOptions.map((district) => (
