@@ -64,7 +64,8 @@ hr {
   flex: 1;
   min-width: 0;
   padding: 8px clamp(12px, 2.5vw, 22px) 40px;
-  overflow-x: auto;
+  /* Horizontal scroll is handled by inner tables (e.g. List); avoid clipping sticky columns & dropdowns */
+  overflow-x: visible;
   -webkit-overflow-scrolling: touch;
 }
 

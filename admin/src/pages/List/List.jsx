@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import './List.css'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -30,9 +31,10 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
     const [categoryFilter, setCategoryFilter] = useState('All')
 
     const showActions = canUpdateFood || canDeleteFood
-    const menuRef = useRef(null)
+    const portalMenuRef = useRef(null)
 
     const [openMenuFoodId, setOpenMenuFoodId] = useState(null)
+    const [menuScreenPos, setMenuScreenPos] = useState(null)
     const [editingFood, setEditingFood] = useState(null)
     const [editName, setEditName] = useState('')
     const [editDescription, setEditDescription] = useState('')
@@ -87,16 +89,33 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
     useEffect(() => {
         const onDocMouseDown = (e) => {
             if (!openMenuFoodId) return
-            if (menuRef.current && !menuRef.current.contains(e.target)) {
-                setOpenMenuFoodId(null)
-            }
+            if (portalMenuRef.current?.contains(e.target)) return
+            const trigger = e.target.closest('[data-list-menu-trigger]')
+            if (trigger && trigger.dataset.foodId === String(openMenuFoodId)) return
+            setOpenMenuFoodId(null)
+            setMenuScreenPos(null)
         }
         document.addEventListener('mousedown', onDocMouseDown)
         return () => document.removeEventListener('mousedown', onDocMouseDown)
     }, [openMenuFoodId])
 
+    useEffect(() => {
+        if (!openMenuFoodId) return
+        const close = () => {
+            setOpenMenuFoodId(null)
+            setMenuScreenPos(null)
+        }
+        window.addEventListener('scroll', close, true)
+        window.addEventListener('resize', close)
+        return () => {
+            window.removeEventListener('scroll', close, true)
+            window.removeEventListener('resize', close)
+        }
+    }, [openMenuFoodId])
+
     const openEditModal = (item) => {
         setOpenMenuFoodId(null)
+        setMenuScreenPos(null)
         setEditingFood(item)
         setEditName(item.name || '')
         setEditDescription(item.description || '')
@@ -195,6 +214,11 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
     const startIndex = (currentPage - 1) * itemsPerPage
     const paginatedItems = filteredList.slice(startIndex, startIndex + itemsPerPage)
 
+    const menuOpenItem = useMemo(
+        () => paginatedItems.find((i) => String(i._id) === String(openMenuFoodId)),
+        [paginatedItems, openMenuFoodId]
+    )
+
     return (
         <div className={`list flex-col${showActions ? ' list--with-actions' : ''}`}>
             <div className="list-toolbar">
@@ -249,7 +273,7 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
                     paginatedItems.map((item) => (
                         <div
                             key={item._id}
-                            className={`list-table-format${openMenuFoodId === item._id ? ' list-table-format--menu-open' : ''}`}
+                            className={`list-table-format${String(openMenuFoodId) === String(item._id) ? ' list-table-format--menu-open' : ''}`}
                         >
                             <img src={`${url}/images/${item.image}`} alt="" />
                             <p>{item.name}</p>
@@ -261,59 +285,84 @@ const List = ({ url, token, canUpdateFood = false, canDeleteFood = false }) => {
                             <p>{item.category}</p>
                             <p>{item.price} VND</p>
                             {showActions ? (
-                                <div
-                                    className="list-actions-cell"
-                                    ref={openMenuFoodId === item._id ? menuRef : undefined}
-                                >
+                                <div className="list-actions-cell">
                                     <button
                                         type="button"
-                                        className={`list-menu-trigger${openMenuFoodId === item._id ? ' is-open' : ''}`}
+                                        className={`list-menu-trigger${String(openMenuFoodId) === String(item._id) ? ' is-open' : ''}`}
+                                        data-list-menu-trigger
+                                        data-food-id={item._id}
                                         aria-label="Open actions menu"
-                                        aria-expanded={openMenuFoodId === item._id}
-                                        onClick={() =>
-                                            setOpenMenuFoodId((id) => (id === item._id ? null : item._id))
-                                        }
+                                        aria-expanded={String(openMenuFoodId) === String(item._id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            if (String(openMenuFoodId) === String(item._id)) {
+                                                setOpenMenuFoodId(null)
+                                                setMenuScreenPos(null)
+                                                return
+                                            }
+                                            const rect = e.currentTarget.getBoundingClientRect()
+                                            setOpenMenuFoodId(item._id)
+                                            setMenuScreenPos({
+                                                top: rect.bottom + 6,
+                                                right: window.innerWidth - rect.right
+                                            })
+                                        }}
                                         disabled={busyFoodId === item._id}
                                     >
                                         <i className="fa-solid fa-ellipsis-vertical" aria-hidden="true" />
                                     </button>
-                                    {openMenuFoodId === item._id ? (
-                                        <ul className="list-action-menu" role="menu">
-                                            {canUpdateFood ? (
-                                                <li role="none">
-                                                    <button
-                                                        type="button"
-                                                        role="menuitem"
-                                                        className="list-action-menu-item"
-                                                        onClick={() => openEditModal(item)}
-                                                    >
-                                                        Update
-                                                    </button>
-                                                </li>
-                                            ) : null}
-                                            {canDeleteFood ? (
-                                                <li role="none">
-                                                    <button
-                                                        type="button"
-                                                        role="menuitem"
-                                                        className="list-action-menu-item list-action-menu-item--danger"
-                                                        onClick={() => {
-                                                            setOpenMenuFoodId(null)
-                                                            setDeleteTarget({ id: item._id, name: item.name })
-                                                        }}
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </li>
-                                            ) : null}
-                                        </ul>
-                                    ) : null}
                                 </div>
                             ) : null}
                         </div>
                     ))
                 )}
             </div>
+
+            {showActions &&
+                openMenuFoodId &&
+                menuScreenPos &&
+                menuOpenItem &&
+                createPortal(
+                    <ul
+                        ref={portalMenuRef}
+                        className="list-action-menu list-action-menu--portal"
+                        style={{ top: menuScreenPos.top, right: menuScreenPos.right }}
+                        role="menu"
+                    >
+                        {canUpdateFood ? (
+                            <li role="none">
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    className="list-action-menu-item"
+                                    onClick={() => openEditModal(menuOpenItem)}
+                                >
+                                    Update
+                                </button>
+                            </li>
+                        ) : null}
+                        {canDeleteFood ? (
+                            <li role="none">
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    className="list-action-menu-item list-action-menu-item--danger"
+                                    onClick={() => {
+                                        setOpenMenuFoodId(null)
+                                        setMenuScreenPos(null)
+                                        setDeleteTarget({
+                                            id: menuOpenItem._id,
+                                            name: menuOpenItem.name
+                                        })
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ) : null}
+                    </ul>,
+                    document.body
+                )}
 
             {editingFood ? (
                 <div className="list-modal-overlay" role="presentation" onClick={closeEditModal}>

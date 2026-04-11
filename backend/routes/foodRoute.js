@@ -8,12 +8,34 @@ const foodRouter = express.Router();
 
 const storage = multer.diskStorage({
     destination: "uploads",
-    filename:(req,file,cb)=>{
-        return cb(null,`${Date.now()}${file.originalname}`)
+    filename: (_req, file, cb) => {
+        const safe = String(file.originalname || "image").replace(/[^\w.\-]/g, "_");
+        return cb(null, `${Date.now()}-${safe}`);
     }
 })
 
-const upload = multer({storage:storage});
+const imageMimeOk = (mime) => {
+    const m = String(mime || "").toLowerCase();
+    if (!m) return false;
+    if (m === "image/svg+xml") return false;
+    return m.startsWith("image/");
+};
+
+const extOk = (name) => {
+    const ext = String(name || "").toLowerCase().match(/\.([a-z0-9]+)$/)?.[1];
+    return ["png", "jpg", "jpeg", "webp", "gif"].includes(ext || "");
+};
+
+const upload = multer({
+    storage,
+    fileFilter: (_req, file, cb) => {
+        if (imageMimeOk(file.mimetype) || extOk(file.originalname)) {
+            return cb(null, true);
+        }
+        cb(new Error("Only image files (JPEG, PNG, WebP, GIF) are allowed."));
+    },
+    limits: { fileSize: 8 * 1024 * 1024 }
+});
 
 foodRouter.post(
     "/add",

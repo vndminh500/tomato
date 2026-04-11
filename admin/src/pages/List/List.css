@@ -65,6 +65,8 @@
     -webkit-overflow-scrolling: touch;
     background: var(--bg-secondary);
     box-shadow: var(--shadow-soft);
+    scrollbar-gutter: stable;
+    box-sizing: border-box;
 }
 
 .list .list-table-format {
@@ -81,13 +83,13 @@
 }
 
 .list--with-actions .list-table-format {
-    grid-template-columns: 0.5fr 2fr 0.95fr 1fr 1fr minmax(88px, auto);
+    grid-template-columns: 0.5fr 2fr 0.95fr 1fr 1fr minmax(88px, 1fr);
+    min-width: 860px;
 }
 
 .list--with-actions .list-table-format.title .list-actions-header {
     justify-self: end;
     text-align: right;
-    padding-right: 2px;
 }
 
 .list-table-format--menu-open {
@@ -254,6 +256,13 @@
     border: 1px solid var(--border-color);
     border-radius: 10px;
     box-shadow: var(--shadow-soft);
+}
+
+/* Rendered via createPortal — escapes overflow from scroll parents (position set inline) */
+.list-action-menu--portal {
+    position: fixed;
+    z-index: 10050;
+    margin: 0;
 }
 
 .list-action-menu-item {
@@ -679,7 +688,8 @@
     }
 
     .list--with-actions .list-table-format {
-        grid-template-columns: 0.5fr 1.2fr 0.7fr 0.75fr 0.75fr minmax(64px, auto);
+        grid-template-columns: 0.5fr 1.2fr 0.7fr 0.75fr 0.75fr minmax(72px, 100px);
+        min-width: 720px;
     }
     .list .list-table-format.title {
         display: none;

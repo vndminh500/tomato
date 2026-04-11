@@ -47,6 +47,18 @@ app.get("/",(req,res)=> {
     res.send("Kết nối API")
 })
 
+app.use((err, req, res, next) => {
+    if (
+        err?.name === "MulterError" ||
+        String(err?.message || "").includes("Only image files")
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: err.message || "Upload failed"
+        });
+    }
+    next(err)
+})
 
 app.listen(port,()=> {
     console.log(`Server đã chạy trên http://localhost:${port}`)

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import './Users.css'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -18,7 +19,7 @@ const Users = ({
     ]
 
     const showRowActions = canDeleteUser || canUpdateUserProfile
-    const menuRef = useRef(null)
+    const portalMenuRef = useRef(null)
 
     const [users, setUsers] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -33,6 +34,7 @@ const Users = ({
     const [createdPayload, setCreatedPayload] = useState(null)
 
     const [openMenuUserId, setOpenMenuUserId] = useState(null)
+    const [menuScreenPos, setMenuScreenPos] = useState(null)
     const [editingUser, setEditingUser] = useState(null)
     const [editName, setEditName] = useState('')
     const [editEmail, setEditEmail] = useState('')
@@ -63,12 +65,28 @@ const Users = ({
     useEffect(() => {
         const onDocMouseDown = (e) => {
             if (!openMenuUserId) return
-            if (menuRef.current && !menuRef.current.contains(e.target)) {
-                setOpenMenuUserId(null)
-            }
+            if (portalMenuRef.current?.contains(e.target)) return
+            const trigger = e.target.closest('[data-users-menu-trigger]')
+            if (trigger && trigger.dataset.userId === String(openMenuUserId)) return
+            setOpenMenuUserId(null)
+            setMenuScreenPos(null)
         }
         document.addEventListener('mousedown', onDocMouseDown)
         return () => document.removeEventListener('mousedown', onDocMouseDown)
+    }, [openMenuUserId])
+
+    useEffect(() => {
+        if (!openMenuUserId) return
+        const close = () => {
+            setOpenMenuUserId(null)
+            setMenuScreenPos(null)
+        }
+        window.addEventListener('scroll', close, true)
+        window.addEventListener('resize', close)
+        return () => {
+            window.removeEventListener('scroll', close, true)
+            window.removeEventListener('resize', close)
+        }
     }, [openMenuUserId])
 
     const openModal = () => {
@@ -148,6 +166,7 @@ const Users = ({
 
     const openEditModal = (item) => {
         setOpenMenuUserId(null)
+        setMenuScreenPos(null)
         setEditingUser(item)
         setEditName(item.name || '')
         setEditEmail(item.email || '')
@@ -241,6 +260,11 @@ const Users = ({
     useEffect(() => {
         fetchUsers()
     }, [])
+
+    const menuOpenUser = useMemo(
+        () => users.find((u) => String(u._id) === String(openMenuUserId)),
+        [users, openMenuUserId]
+    )
 
     return (
         <div className={`users${showRowActions ? ' users--with-actions' : ''}`}>
@@ -535,103 +559,127 @@ const Users = ({
                 </div>
             ) : null}
 
-            <div className="users-list-table title">
-                <b>ID</b>
-                <b>User Name</b>
-                <b>Email</b>
-                <b>Status</b>
-                <b>Role</b>
-                {showRowActions ? <b>Actions</b> : null}
-            </div>
-            {isLoading ? (
-                Array.from({ length: 6 }).map((_, index) => (
-                    <div key={index} className="users-list-table users-skeleton-row">
-                        <span className="users-skeleton-line short"></span>
-                        <span className="users-skeleton-line"></span>
-                        <span className="users-skeleton-line"></span>
-                        <span className="users-skeleton-pill"></span>
-                        <span className="users-skeleton-pill"></span>
-                        {showRowActions ? <span className="users-skeleton-pill" /> : null}
-                    </div>
-                ))
-            ) : users.length === 0 ? (
-                <div className="users-empty-state">
-                    <p>No users found.</p>
-                    <span>Users will appear here after they register.</span>
+            <div className="users-table-scroll">
+                <div className="users-list-table title">
+                    <b>ID</b>
+                    <b>User Name</b>
+                    <b>Email</b>
+                    <b>Status</b>
+                    <b>Role</b>
+                    {showRowActions ? <b>Actions</b> : null}
                 </div>
-            ) : (
-                users.map((item) => (
-                    <div
-                        key={item._id}
-                        className={`users-list-table${openMenuUserId === item._id ? ' users-list-table--menu-open' : ''}`}
-                    >
-                        <p>{item._id}</p>
-                        <p>{item.name}</p>
-                        <p>{item.email}</p>
-                        <div className="users-status-cell users-status-cell--readonly">
-                            <span className={`users-status-badge ${item.isActive ? 'is-active' : 'is-inactive'}`}>
-                                {item.isActive ? 'Active' : 'Inactive'}
-                            </span>
+                {isLoading ? (
+                    Array.from({ length: 6 }).map((_, index) => (
+                        <div key={index} className="users-list-table users-skeleton-row">
+                            <span className="users-skeleton-line short"></span>
+                            <span className="users-skeleton-line"></span>
+                            <span className="users-skeleton-line"></span>
+                            <span className="users-skeleton-pill"></span>
+                            <span className="users-skeleton-pill"></span>
+                            {showRowActions ? <span className="users-skeleton-pill" /> : null}
                         </div>
-                        <p className="users-role-text">{roleOptions.find((r) => r.value === (item.role || 'customer'))?.label || 'Customer'}</p>
-                        {showRowActions ? (
-                            <div
-                                className="users-actions-cell"
-                                ref={openMenuUserId === item._id ? menuRef : undefined}
-                            >
+                    ))
+                ) : users.length === 0 ? (
+                    <div className="users-empty-state">
+                        <p>No users found.</p>
+                        <span>Users will appear here after they register.</span>
+                    </div>
+                ) : (
+                    users.map((item) => (
+                        <div
+                            key={item._id}
+                            className={`users-list-table${String(openMenuUserId) === String(item._id) ? ' users-list-table--menu-open' : ''}`}
+                        >
+                            <p>{item._id}</p>
+                            <p>{item.name}</p>
+                            <p>{item.email}</p>
+                            <div className="users-status-cell users-status-cell--readonly">
+                                <span className={`users-status-badge ${item.isActive ? 'is-active' : 'is-inactive'}`}>
+                                    {item.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                            </div>
+                            <p className="users-role-text">{roleOptions.find((r) => r.value === (item.role || 'customer'))?.label || 'Customer'}</p>
+                            {showRowActions ? (
+                                <div className="users-actions-cell">
+                                    <button
+                                        type="button"
+                                        className={`users-menu-trigger${String(openMenuUserId) === String(item._id) ? ' is-open' : ''}`}
+                                        data-users-menu-trigger
+                                        data-user-id={item._id}
+                                        aria-label="Open actions menu"
+                                        aria-expanded={String(openMenuUserId) === String(item._id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            if (String(openMenuUserId) === String(item._id)) {
+                                                setOpenMenuUserId(null)
+                                                setMenuScreenPos(null)
+                                                return
+                                            }
+                                            const rect = e.currentTarget.getBoundingClientRect()
+                                            setOpenMenuUserId(item._id)
+                                            setMenuScreenPos({
+                                                top: rect.bottom + 6,
+                                                right: window.innerWidth - rect.right
+                                            })
+                                        }}
+                                        disabled={busyUserId === item._id}
+                                    >
+                                        <i className="fa-solid fa-ellipsis-vertical" aria-hidden="true" />
+                                    </button>
+                                </div>
+                            ) : null}
+                        </div>
+                    ))
+                )}
+            </div>
+
+            {showRowActions &&
+                openMenuUserId &&
+                menuScreenPos &&
+                menuOpenUser &&
+                createPortal(
+                    <ul
+                        ref={portalMenuRef}
+                        className="users-action-menu users-action-menu--portal"
+                        style={{ top: menuScreenPos.top, right: menuScreenPos.right }}
+                        role="menu"
+                    >
+                        {canUpdateUserProfile ? (
+                            <li role="none">
                                 <button
                                     type="button"
-                                    className={`users-menu-trigger${openMenuUserId === item._id ? ' is-open' : ''}`}
-                                    aria-label="Open actions menu"
-                                    aria-expanded={openMenuUserId === item._id}
-                                    onClick={() =>
-                                        setOpenMenuUserId((id) => (id === item._id ? null : item._id))
-                                    }
-                                    disabled={busyUserId === item._id}
+                                    role="menuitem"
+                                    className="users-action-menu-item"
+                                    onClick={() => openEditModal(menuOpenUser)}
                                 >
-                                    <i className="fa-solid fa-ellipsis-vertical" aria-hidden="true" />
+                                    Update
                                 </button>
-                                {openMenuUserId === item._id ? (
-                                    <ul className="users-action-menu" role="menu">
-                                        {canUpdateUserProfile ? (
-                                            <li role="none">
-                                                <button
-                                                    type="button"
-                                                    role="menuitem"
-                                                    className="users-action-menu-item"
-                                                    onClick={() => openEditModal(item)}
-                                                >
-                                                    Update
-                                                </button>
-                                            </li>
-                                        ) : null}
-                                        {canDeleteUser ? (
-                                            <li role="none">
-                                                <button
-                                                    type="button"
-                                                    role="menuitem"
-                                                    className="users-action-menu-item users-action-menu-item--danger"
-                                                    disabled={String(item._id) === String(currentUserId)}
-                                                    onClick={() => {
-                                                        setOpenMenuUserId(null)
-                                                        if (String(item._id) === String(currentUserId)) {
-                                                            toast.error('You cannot delete your own account')
-                                                            return
-                                                        }
-                                                        setDeleteTarget({ id: item._id, email: item.email })
-                                                    }}
-                                                >
-                                                    Delete
-                                                </button>
-                                            </li>
-                                        ) : null}
-                                    </ul>
-                                ) : null}
-                            </div>
+                            </li>
                         ) : null}
-                    </div>
-                ))
-            )}
+                        {canDeleteUser ? (
+                            <li role="none">
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    className="users-action-menu-item users-action-menu-item--danger"
+                                    disabled={String(menuOpenUser._id) === String(currentUserId)}
+                                    onClick={() => {
+                                        setOpenMenuUserId(null)
+                                        setMenuScreenPos(null)
+                                        if (String(menuOpenUser._id) === String(currentUserId)) {
+                                            toast.error('You cannot delete your own account')
+                                            return
+                                        }
+                                        setDeleteTarget({ id: menuOpenUser._id, email: menuOpenUser.email })
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            </li>
+                        ) : null}
+                    </ul>,
+                    document.body
+                )}
         </div>
     )
 }

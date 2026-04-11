@@ -28,24 +28,33 @@ const Add = ({url, token}) => {
         formData.append("description",data.description)
         formData.append("price",Number(data.price))
         formData.append("category",data.category)
+        formData.append("stock", data.stock ?? "20")
         formData.append("image",image)
         
-        const response = await axios.post(`${url}/api/food/add`,formData,{
-            headers:{token}
-        });
-        if (response.data.success) {
-            setData ({
-                name:"",
-                description:"",
-                price:"",
-                category:"Salad",
-                stock:"20"
-            }) 
-            setImage(false)
-            toast.success(response.data.message)
-        }
-        else {
-            toast.error(response.data.message)
+        try {
+            const response = await axios.post(`${url}/api/food/add`,formData,{
+                headers:{token}
+            });
+            if (response.data.success) {
+                setData ({
+                    name:"",
+                    description:"",
+                    price:"",
+                    category:"Salad",
+                    stock:"20"
+                }) 
+                setImage(false)
+                toast.success(response.data.message)
+            }
+            else {
+                toast.error(response.data.message)
+            }
+        } catch (err) {
+            const msg =
+                err.response?.data?.message ||
+                err.message ||
+                "Request failed. Check network or backend URL (VITE_BACKEND_URL)."
+            toast.error(msg)
         }
     }
 
@@ -64,7 +73,15 @@ const Add = ({url, token}) => {
                   <img src={image ? URL.createObjectURL(image) : assets.upload_area} alt="Upload preview"/>
                   <span>Click to upload</span>
               </label>
-              <input onChange={(e)=>setImage(e.target.files[0])} type="file" name="" id="image" hidden required />
+              <input
+                onChange={(e)=>setImage(e.target.files[0])}
+                type="file"
+                name=""
+                id="image"
+                hidden
+                required
+                accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+              />
           </div>
 
           <div className="add-product-name flex-col">

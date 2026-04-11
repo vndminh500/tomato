@@ -3,6 +3,9 @@ import foodModel from "../models/foodModel.js";
 import fs from 'fs'
 
 const addFood = async (req, res) => {
+    if (!req.file?.filename) {
+        return res.json({ success: false, message: "Missing or invalid image file" });
+    }
 
     let image_filename = `${req.file.filename}`;
 
