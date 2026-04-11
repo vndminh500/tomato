@@ -132,12 +132,6 @@ export default function OrderReviewSection({ order, token, url }) {
         e.target.value = ""
     }
 
-    const openChatSupport = () => {
-        if (typeof window !== "undefined") {
-            window.dispatchEvent(new CustomEvent("eatup:open-chat"))
-        }
-    }
-
     const onItemsRatingChange = (n) => {
         setItemsRating(n)
         if (n <= 2) setShowLowRatingPrompt(true)
@@ -362,10 +356,10 @@ export default function OrderReviewSection({ order, token, url }) {
                                 className="order-review-primary-btn"
                                 onClick={() => {
                                     setShowLowRatingPrompt(false)
-                                    openChatSupport()
+                                    setShowSupportModal(true)
                                 }}
                             >
-                                Open chat
+                                Contact support
                             </button>
                         </div>
                     </div>
